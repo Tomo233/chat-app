@@ -1,13 +1,20 @@
 import LoginInput from "./LoginInput";
+import Logo from "../../assets/logo.png";
 
 function LoginForm() {
   return (
-    <div className="relative z-10 pt-12">
+    <div className="relative z-10 pt-12 border-buttonPurple border p-24 rounded-lg mt-10">
       <div>
-        <h2 className="text-white text-3xl text-center">Create an Account</h2>
+        <h2 className="text-white text-3xl text-center flex items-center justify-center">
+          <img src={Logo} alt="Logo" className="h-20" />
+          <span> Create an Account</span>
+          <img src={Logo} alt="Logo" className="h-20" />
+        </h2>
         <p className="text-white text-center py-3">
           Already have an Account?
-          <span className="text-[#53486a] font-bold underline">Log in</span>
+          <span className="text-[#7b7092] font-bold underline pl-3">
+            Log in
+          </span>
         </p>
         <form className="grid grid-cols-1 gap-4 place-items-center">
           <div className="grid grid-cols-2 gap-4">

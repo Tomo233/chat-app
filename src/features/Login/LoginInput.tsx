@@ -8,7 +8,7 @@ function LoginInput({ pr = "p-64", ...otherProps }: LoginInputProps) {
   return (
     <input
       {...otherProps}
-      className={`bg-[#433e57] placeholder-[#6a6677]  py-3 ${pr}  pl-3 rounded-md text-white border-none outline-none`}
+      className={`bg-[#433e57] placeholder-[#6a6677]   py-3 ${pr}  pl-3 rounded-md text-white border-none outline-none`}
     />
   );
 }
