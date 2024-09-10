@@ -3,7 +3,7 @@ import Logo from "../../assets/logo.png";
 
 function LoginForm() {
   return (
-    <div className="relative z-10 pt-12 border-buttonPurple border p-24 rounded-lg mt-10">
+    <div className="pt-12 border-buttonPurple border p-24 rounded-lg mt-10">
       <div>
         <h2 className="text-white text-3xl text-center flex items-center justify-center">
           <img src={Logo} alt="Logo" className="h-20" />
