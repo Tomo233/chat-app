@@ -9,10 +9,10 @@ function LoginForm() {
           Already have an Account?
           <span className="text-[#53486a] font-bold underline">Log in</span>
         </p>
-        <form className="grid grid-cols-1 gap-4">
+        <form className="grid grid-cols-1 gap-4 place-items-center">
           <div className="grid grid-cols-2 gap-4">
-            <LoginInput type="text" placeholder="First Name" />
-            <LoginInput type="text" placeholder="Last Name" />
+            <LoginInput type="text" placeholder="First Name" pr="p-5" />
+            <LoginInput type="text" placeholder="Last Name" pr="p-5" />
           </div>
           <LoginInput type="email" className="col-span-1" placeholder="Email" />
           <LoginInput
@@ -27,17 +27,17 @@ function LoginForm() {
           />
           <button
             type="submit"
-            className="col-span-1 bg-[#6e54b5]  text-white py-3 px-3 rounded  focus:outline-none"
+            className="col-span-1 bg-buttonPurple  text-white py-3 px-36 rounded-md focus:outline-none"
           >
             Create Account
           </button>
         </form>
         <div className="flex justify-center gap-12 pt-5">
-          <button className="bg-transparent border-white border-solid px-12 py-2 rounded-md ">
-            Google
+          <button className="bg-buttonPurple border border-white border-solid px-12 py-2 rounded-md ">
+            <span className="text-white">Google</span>
           </button>
-          <button className="bg-transparent border-white border-solid  px-12 py-2 rounded-md ">
-            Apple
+          <button className="bg-buttonPurple border border-white border-solid text-white  px-12 py-2 rounded-md ">
+            <span>Apple</span>
           </button>
         </div>
       </div>
