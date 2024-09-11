@@ -5,7 +5,7 @@ import LoginHeader from "../features/Login/LoginHeader";
 
 function LoginPage() {
   return (
-    <div className="bg-primaryPurple h-screen ">
+    <div className="bg-[#2b2738] h-screen">
       <Container>
         <LoginHeader />
         <div className="border-buttonPurple">

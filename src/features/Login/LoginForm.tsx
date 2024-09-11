@@ -40,10 +40,10 @@ function LoginForm() {
           </button>
         </form>
         <div className="flex justify-center gap-12 pt-5">
-          <button className="bg-buttonPurple border border-white border-solid px-12 py-2 rounded-md ">
+          <button className="bg-buttonPurple  px-12 py-2 rounded-md ">
             <span className="text-white">Google</span>
           </button>
-          <button className="bg-buttonPurple border border-white border-solid text-white  px-12 py-2 rounded-md ">
+          <button className="bg-buttonPurple text-white  px-12 py-2 rounded-md ">
             <span>Apple</span>
           </button>
         </div>
