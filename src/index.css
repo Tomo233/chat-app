@@ -1,3 +1,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import "typeface-montserrat"; /* Ensure this import is present if you use a different global CSS */
+
+body {
+  @apply font-montserrat;
+}

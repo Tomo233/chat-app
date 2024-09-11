@@ -5,6 +5,9 @@ module.exports = {
       colors: {
         buttonPurple: "#6e54b5",
       },
+      fontFamily: {
+        montserrat: ["Montserrat", "sans-serif"],
+      },
     },
   },
   plugins: [],
