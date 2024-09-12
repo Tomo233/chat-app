@@ -1,5 +1,11 @@
+import ChatSideBar from "../features/Chat/ChatSideBar";
+
 function ChatPage() {
-  return <></>;
+  return (
+    <>
+      <ChatSideBar />
+    </>
+  );
 }
 
 export default ChatPage;
