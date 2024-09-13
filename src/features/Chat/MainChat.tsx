@@ -3,7 +3,19 @@ import SendRoundedIcon from "@mui/icons-material/SendRounded";
 function MainChat() {
   return (
     <section className="bg-buttonPurple rounded-2xl">
-      <div className="grid grid-cols-2 place-items-start mt-8 max-h-[720px] overflow-auto">
+      <div className="flex justify-between border-b border-white  p-3">
+        <div className="flex gap-3">
+          <img src={Profile} alt="Profile Image" className="h-12 rounded-3xl" />
+          <div className="pt-2">
+            <h3 className="text-white text-lg ">John Smith</h3>
+            <p className="text-green-500">online</p>
+          </div>
+        </div>
+        <button className="bg-[#2b2738] text-white px-8  rounded-lg">
+          View Profile
+        </button>
+      </div>
+      <div className="grid grid-cols-2 place-items-start mt-8 max-h-[600px] overflow-auto">
         <div className="flex gap-5 items-center text-white p-10">
           <div>
             <img
