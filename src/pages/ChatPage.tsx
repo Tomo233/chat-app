@@ -3,7 +3,7 @@ import MainChat from "../features/Chat/MainChat";
 
 function ChatPage() {
   return (
-    <div className="flex gap-36">
+    <div className="flex justify-between">
       <ChatSideBar />
       <MainChat />
     </div>
