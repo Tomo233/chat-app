@@ -4,7 +4,7 @@ function MainChat() {
   return (
     <section className="bg-primaryPurple rounded-2xl w-2/3 grid grid-rows-[100px_auto_100px]">
       {/* Profile */}
-      <div className="flex justify-between border-b border-white p-3 h-20">
+      <div className="flex justify-between border-b border-borderColor p-3 h-20">
         <div className="flex gap-3">
           <img src={Profile} alt="Profile Image" className="h-12 rounded-3xl" />
           <div className="pt-2">
@@ -44,7 +44,7 @@ function MainChat() {
       </div>
 
       {/* Send Message Input and button  */}
-      <div className="flex gap-5 px-10 items-end h-20 border-t pt-3  border-white">
+      <div className="flex gap-5 px-10 items-end h-20 border-t pt-3  border-borderColor">
         <input
           type="text"
           placeholder="Type a Message"

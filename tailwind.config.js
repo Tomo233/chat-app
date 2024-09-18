@@ -6,6 +6,7 @@ module.exports = {
         backgroundColor: "#2b2738",
         primaryPurple: "#3f3568",
         secondaryPurple: "#6e54b5",
+        borderColor: "#7c7676",
       },
       fontFamily: {
         montserrat: ["Montserrat", "sans-serif"],
