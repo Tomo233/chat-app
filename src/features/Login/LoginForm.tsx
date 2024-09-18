@@ -3,7 +3,7 @@ import Logo from "../../assets/logo.png";
 
 function LoginForm() {
   return (
-    <div className="pt-12 border-buttonPurple border p-24 rounded-lg mt-10">
+    <div className="pt-12 border-secondaryPurple border p-24 rounded-lg mt-10">
       <div>
         <h2 className="text-white text-3xl text-center flex items-center justify-center">
           <img src={Logo} alt="Logo" className="h-20" />
@@ -34,16 +34,16 @@ function LoginForm() {
           />
           <button
             type="submit"
-            className="col-span-1 bg-buttonPurple  text-white py-3 px-36 rounded-md focus:outline-none"
+            className="col-span-1 bg-secondaryPurple  text-white py-3 px-36 rounded-md focus:outline-none"
           >
             Create Account
           </button>
         </form>
         <div className="flex justify-center gap-12 pt-5">
-          <button className="bg-buttonPurple  px-12 py-2 rounded-md ">
+          <button className="bg-secondaryPurple  px-12 py-2 rounded-md ">
             <span className="text-white">Google</span>
           </button>
-          <button className="bg-buttonPurple text-white  px-12 py-2 rounded-md ">
+          <button className="bg-secondaryPurple text-white  px-12 py-2 rounded-md ">
             <span>Apple</span>
           </button>
         </div>

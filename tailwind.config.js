@@ -3,7 +3,9 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        buttonPurple: "#6e54b5",
+        backgroundColor: "#2b2738",
+        primaryPurple: "#3f3568",
+        secondaryPurple: "#6e54b5",
       },
       fontFamily: {
         montserrat: ["Montserrat", "sans-serif"],
