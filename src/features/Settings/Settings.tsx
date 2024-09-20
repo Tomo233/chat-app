@@ -1,8 +1,8 @@
 import DefaultUserImage from "../../assets/default-user.png";
-
+import EditIcon from "@mui/icons-material/Edit";
 function Settings() {
   return (
-    <div className="grid gap-y-8   text-white bg-primaryPurple p-6">
+    <div className="grid gap-y-8 text-white bg-primaryPurple p-6">
       <h2 className="font-bold text-3xl ">My Profile</h2>
       <section className="flex justify-between items-center border border-secondaryPurple rounded-lg p-3">
         <div className="flex items-center">
@@ -12,12 +12,18 @@ function Settings() {
             <p>London, UK</p>
           </div>
         </div>
-        <button>Edit</button>
+        <button className="border border-secondaryPurple px-9 py-3 flex gap-2 rounded-3xl">
+          <EditIcon />
+          Edit
+        </button>
       </section>
       <section className="border border-secondaryPurple rounded-lg p-3">
         <div className="flex justify-between items-center">
           <h2 className="font-bold text-3xl py-7">Personal Information</h2>
-          <button>Edit</button>
+          <button className="border border-secondaryPurple px-9 py-3 flex gap-2 rounded-3xl">
+            <EditIcon />
+            Edit
+          </button>
         </div>
         <div className="grid grid-cols-2 gap-y-6">
           <div>
