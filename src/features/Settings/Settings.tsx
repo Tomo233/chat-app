@@ -17,7 +17,7 @@ function Settings() {
           Edit
         </button>
       </section>
-      <section className="border border-secondaryPurple rounded-lg p-3">
+      <section className="border border-secondaryPurple rounded-lg p-3 pb-10 pl-7">
         <div className="flex justify-between items-center">
           <h2 className="font-bold text-3xl py-7">Personal Information</h2>
           <button className="border border-secondaryPurple px-9 py-3 flex gap-2 rounded-3xl">
@@ -28,20 +28,36 @@ function Settings() {
         <div className="grid grid-cols-2 gap-y-6">
           <div>
             <p>First Name</p>
-            <p className="font-medium">John</p>
+            <input
+              className="font-medium p-3 bg-secondaryPurple"
+              value={"John"}
+              disabled
+            />
           </div>
           <div>
             <p>Last Name</p>
-            <p className="font-medium">Smith</p>
+            <input
+              className="font-medium p-3 bg-secondaryPurple"
+              value={"Smith"}
+              disabled
+            />
           </div>
 
           <div>
             <p>Email</p>
-            <p className="font-medium">johnsmith@gmail.com</p>
+            <input
+              className="font-medium p-3 bg-secondaryPurple"
+              value={"johnsmith@gmail.com"}
+              disabled
+            />
           </div>
           <div>
             <p className="font-medium">Phone</p>
-            <p>+30290301930139</p>
+            <input
+              className="font-medium p-3 bg-secondaryPurple"
+              value={"+3019301930139"}
+              disabled
+            />
           </div>
         </div>
       </section>

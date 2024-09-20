@@ -2,7 +2,7 @@ import Logo from "../assets/logo.png";
 import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNoneOutlined";
 function Header() {
   return (
-    <header className="pt-5">
+    <header className="pt-5 mb-10">
       <div className="flex justify-between items-center">
         <div className="flex items-center">
           <img src={Logo} alt="Logo" className="h-20" />

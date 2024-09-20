@@ -2,7 +2,7 @@ import Profile from "../../assets/profile.png";
 
 function ChatSideBar() {
   return (
-    <div className="mt-8">
+    <div>
       <input
         type="text"
         placeholder="Search Contacts"
