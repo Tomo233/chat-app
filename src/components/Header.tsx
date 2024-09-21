@@ -10,7 +10,7 @@ function Header() {
         </div>
         <nav>
           <ul className="flex justify-between items-center  gap-10 font-semibold">
-            <li className="text-white">Chat</li>
+            <li className="text-white">Home</li>
             <li className="text-white">Contacts</li>
             <li className="text-white">Settings</li>
             <NotificationsNoneOutlinedIcon
