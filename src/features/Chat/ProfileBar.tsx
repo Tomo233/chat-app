@@ -1,3 +1,5 @@
+import Profile from "../../assets/profile.png";
+
 function ProfileBar() {
   return (
     <div className="flex justify-between border-b border-borderColor p-3 h-20">
