@@ -1,8 +1,9 @@
 import SendRoundedIcon from "@mui/icons-material/SendRounded";
-
+import UploadFileIcon from "@mui/icons-material/UploadFile";
 function SendMessage() {
   return (
-    <div className="flex gap-5 px-10 items-end h-20 border-t pt-3  border-borderColor">
+    <div className="flex gap-5 px-10 items-center h-20 border-t pt-5  border-borderColor">
+      <UploadFileIcon sx={{ color: "white", fontSize: 40 }} />
       <input
         type="text"
         placeholder="Type a Message"
