@@ -1,5 +1,6 @@
 import Logo from "../assets/logo.png";
-import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNoneOutlined";
+import Notifications from "./Notifications";
+
 function Header() {
   return (
     <header className="pt-5 mb-10">
@@ -13,9 +14,7 @@ function Header() {
             <li className="text-white">Home</li>
             <li className="text-white">Contacts</li>
             <li className="text-white">Settings</li>
-            <NotificationsNoneOutlinedIcon
-              sx={{ fontSize: 35, color: "#fff" }}
-            />
+            <Notifications />
           </ul>
         </nav>
       </div>

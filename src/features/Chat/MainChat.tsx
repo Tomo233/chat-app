@@ -10,6 +10,9 @@ function MainChat() {
     { status: "receiver", message: "Hi there I'm receiver" },
     { status: "receiver", message: "Hi there I'm sender again" },
     { status: "sender", message: "Hi there I'm sender once more 15" },
+    { status: "receiver", message: "Hi there I'm sender again" },
+    { status: "receiver", message: "Hi there I'm sender again" },
+    { status: "receiver", message: "Hi there I'm sender again" },
     { status: "sender", message: "Hi there I'm sender once more 15" },
     { status: "receiver", message: "Hi there I'm receiver again" },
   ]);
