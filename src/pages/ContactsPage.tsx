@@ -1,9 +1,9 @@
-import Contacts from "../features/Contacts/Contacts";
+import ContactsTable from "../features/Contacts/ContactsTable";
 
 function ContactsPage() {
   return (
     <>
-      <Contacts />
+      <ContactsTable />
     </>
   );
 }

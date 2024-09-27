@@ -1,4 +1,4 @@
-import Contacts from "../features/Contacts/Contacts";
+import Contacts from "../features/Contacts/ContactsTable";
 import Container from "./Container";
 import Header from "./Header";
 

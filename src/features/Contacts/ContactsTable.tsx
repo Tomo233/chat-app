@@ -1,10 +1,11 @@
 import TablePagination from "@mui/material/TablePagination";
 import { MouseEvent, useState } from "react";
 import ProfileImage from "../../assets/profile.png";
-
+import SwapVertIcon from "@mui/icons-material/SwapVert";
+import TuneIcon from "@mui/icons-material/Tune";
 export default function Contacts() {
   const [page, setPage] = useState(0);
-  const rowsPerPage = 10;
+  const rowsPerPage = 8;
 
   // Handle page change for pagination
   const handleChangePage = (
@@ -34,6 +35,19 @@ export default function Contacts() {
 
   return (
     <div className="max-w-full  bg-primaryPurple text-white overflow-hidden">
+      <div className="flex justify-between items-center p-3">
+        <h1 className="text-3xl font-medium">Contacts List</h1>
+        <div className="flex gap-3">
+          <button className="border border-secondaryPurple px-8 py-2 rounded-3xl">
+            <SwapVertIcon sx={{ fontSize: "2rem" }} />
+            <span>Sort</span>
+          </button>
+          <button className="border border-secondaryPurple px-8 py-2 rounded-3xl">
+            <TuneIcon sx={{ fontSize: "1.5rem" }} />
+            <span>Sort</span>
+          </button>
+        </div>
+      </div>
       <table className="w-full text-left">
         <thead className="bg-secondaryPurple">
           <tr>

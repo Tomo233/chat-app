@@ -3,7 +3,7 @@ import Notifications from "./Notifications";
 
 function Header() {
   return (
-    <header className="pt-5 mb-10">
+    <header className="pt-5 mb-8">
       <div className="flex justify-between items-center">
         <div className="flex items-center">
           <img src={Logo} alt="Logo" className="h-20" />
