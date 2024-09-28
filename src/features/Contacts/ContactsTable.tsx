@@ -86,6 +86,9 @@ export default function Contacts() {
             <td colSpan={4}>
               <TablePagination
                 className="bg-secondaryPurple"
+                sx={{
+                  color: "white",
+                }}
                 component="div"
                 rowsPerPageOptions={[]} // Disable dropdown for rows per page
                 count={rows.length} // Total number of rows
