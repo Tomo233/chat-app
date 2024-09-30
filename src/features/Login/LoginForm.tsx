@@ -1,7 +1,17 @@
 import LoginInput from "./LoginInput";
 import Logo from "../../assets/logo.png";
+import { useSignUp } from "./useSignUp";
+import { FormEvent } from "react";
 
 function LoginForm() {
+  const { signUp, isLoading } = useSignUp();
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    signUp();
+  };
+
+  if (isLoading) return <p>Loading...</p>;
+
   return (
     <div className="pt-12 border-secondaryPurple border p-24 rounded-lg mt-10">
       <div>
@@ -16,7 +26,10 @@ function LoginForm() {
             Log in
           </span>
         </p>
-        <form className="grid grid-cols-1 gap-4 place-items-center">
+        <form
+          className="grid grid-cols-1 gap-4 place-items-center"
+          onSubmit={handleSubmit}
+        >
           <div className="grid grid-cols-2 gap-4">
             <LoginInput type="text" placeholder="First Name" pr="p-5" />
             <LoginInput type="text" placeholder="Last Name" pr="p-5" />

@@ -4,6 +4,7 @@ import App from "./App.tsx";
 import "./reset.css";
 import "typeface-montserrat";
 import "./index.css";
+import "./firebaseConfig";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
