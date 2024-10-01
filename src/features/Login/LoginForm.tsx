@@ -1,13 +1,33 @@
 import LoginInput from "./LoginInput";
 import Logo from "../../assets/logo.png";
 import { useSignUp } from "./useSignUp";
-import { FormEvent } from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { BaseSyntheticEvent } from "react";
+
+type Inputs = {
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+};
 
 function LoginForm() {
   const { signUp, isLoading } = useSignUp();
-  const handleSubmit = (e: FormEvent) => {
-    e.preventDefault();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<Inputs>();
+  console.log(errors);
+  const submitHandler: SubmitHandler<Inputs> = (
+    data,
+    e?: BaseSyntheticEvent
+  ) => {
+    if (e) e.preventDefault();
     signUp();
+    console.log(data);
+    console.log("e");
   };
 
   if (isLoading) return <p>Loading...</p>;
@@ -27,24 +47,77 @@ function LoginForm() {
           </span>
         </p>
         <form
-          className="grid grid-cols-1 gap-4 place-items-center"
-          onSubmit={handleSubmit}
+          className="grid grid-cols-1 gap-4"
+          onSubmit={handleSubmit(submitHandler)}
         >
-          <div className="grid grid-cols-2 gap-4">
-            <LoginInput type="text" placeholder="First Name" pr="p-5" />
-            <LoginInput type="text" placeholder="Last Name" pr="p-5" />
+          <div className="grid grid-cols-2 gap-4 place-items-end">
+            <div>
+              {errors.firstName && (
+                <p className="text-white">{errors.firstName.message}</p>
+              )}
+              <LoginInput
+                type="text"
+                placeholder="First Name"
+                pr="p-3"
+                {...register("firstName", {
+                  required: "This field is required",
+                })}
+              />
+            </div>
+            <div>
+              {errors.firstName && (
+                <p className="text-white">{errors.firstName.message}</p>
+              )}
+              <LoginInput
+                type="text"
+                placeholder="Last Name"
+                pr="p-3"
+                {...register("lastName", {
+                  required: "This field is required",
+                })}
+              />
+            </div>
           </div>
-          <LoginInput type="email" className="col-span-1" placeholder="Email" />
-          <LoginInput
-            type="password"
-            className="col-span-1"
-            placeholder="Password"
-          />
-          <LoginInput
-            type="password"
-            className="col-span-1"
-            placeholder="Confirm Password"
-          />
+          <div>
+            {errors.email && (
+              <p className="text-white">{errors.email.message}</p>
+            )}
+            <LoginInput
+              type="email"
+              className="col-span-1"
+              placeholder="Email"
+              {...register("email", {
+                required: "This field is required",
+              })}
+            />
+          </div>
+          <div>
+            {errors.password && (
+              <p className="text-white">{errors.password.message}</p>
+            )}
+            <LoginInput
+              type="password"
+              className="col-span-1"
+              placeholder="Password"
+              {...register("password", {
+                required: "This field is required",
+              })}
+            />
+          </div>
+          <div>
+            {errors.confirmPassword && (
+              <p className="text-white">{errors.confirmPassword.message}</p>
+            )}
+            <LoginInput
+              type="password"
+              className="col-span-1"
+              placeholder="Confirm Password"
+              {...register("confirmPassword", {
+                required: "This field is required",
+              })}
+            />
+          </div>
+
           <button
             type="submit"
             className="col-span-1 bg-secondaryPurple  text-white py-3 px-36 rounded-md focus:outline-none"
