@@ -65,8 +65,8 @@ function LoginForm() {
               />
             </div>
             <div>
-              {errors.firstName && (
-                <p className="text-white">{errors.firstName.message}</p>
+              {errors.lastName && (
+                <p className="text-white">{errors.lastName.message}</p>
               )}
               <LoginInput
                 type="text"
@@ -88,6 +88,10 @@ function LoginForm() {
               placeholder="Email"
               {...register("email", {
                 required: "This field is required",
+                pattern: {
+                  value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                  message: "invalid email address",
+                },
               })}
             />
           </div>
