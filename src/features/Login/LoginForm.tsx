@@ -13,24 +13,23 @@ type Inputs = {
 };
 
 function LoginForm() {
-  const { signUp, isLoading } = useSignUp();
+  const { signUp, isPending } = useSignUp();
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<Inputs>();
-  console.log(errors);
+
   const submitHandler: SubmitHandler<Inputs> = (
     data,
     e?: BaseSyntheticEvent
   ) => {
     if (e) e.preventDefault();
-    signUp();
-    console.log(data);
-    console.log("e");
+    const { email, password } = data;
+    signUp({ email, password });
   };
 
-  if (isLoading) return <p>Loading...</p>;
+  if (isPending) return <p>Loading...</p>;
 
   return (
     <div className="pt-12 border-secondaryPurple border p-24 rounded-lg mt-10">
@@ -61,6 +60,8 @@ function LoginForm() {
                 pr="p-3"
                 {...register("firstName", {
                   required: "This field is required",
+                  minLength: 5,
+                  maxLength: 30,
                 })}
               />
             </div>
@@ -74,6 +75,8 @@ function LoginForm() {
                 pr="p-3"
                 {...register("lastName", {
                   required: "This field is required",
+                  minLength: 5,
+                  maxLength: 30,
                 })}
               />
             </div>
@@ -92,6 +95,8 @@ function LoginForm() {
                   value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
                   message: "invalid email address",
                 },
+                minLength: 5,
+                maxLength: 30,
               })}
             />
           </div>
@@ -105,6 +110,8 @@ function LoginForm() {
               placeholder="Password"
               {...register("password", {
                 required: "This field is required",
+                minLength: 5,
+                maxLength: 30,
               })}
             />
           </div>
@@ -118,6 +125,8 @@ function LoginForm() {
               placeholder="Confirm Password"
               {...register("confirmPassword", {
                 required: "This field is required",
+                minLength: 5,
+                maxLength: 30,
               })}
             />
           </div>

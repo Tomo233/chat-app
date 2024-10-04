@@ -1,10 +1,13 @@
 import { auth } from "../firebaseConfig";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, User } from "firebase/auth";
 
-export const signupWithEmailPassword = async (
-  email: string,
-  password: string
-) => {
+export const signupWithEmailPassword = async ({
+  email,
+  password,
+}: {
+  email: string;
+  password: string;
+}): Promise<User | null> => {
   try {
     const userCredential = await createUserWithEmailAndPassword(
       auth,
@@ -18,5 +21,6 @@ export const signupWithEmailPassword = async (
     } else {
       console.log("Unknown error", error);
     }
+    return null;
   }
 };
