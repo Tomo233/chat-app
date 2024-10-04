@@ -18,6 +18,7 @@ function LoginForm() {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm<Inputs>();
 
   const submitHandler: SubmitHandler<Inputs> = (
@@ -27,6 +28,7 @@ function LoginForm() {
     if (e) e.preventDefault();
     const { email, password } = data;
     signUp({ email, password });
+    reset();
   };
 
   if (isPending) return <p>Loading...</p>;
