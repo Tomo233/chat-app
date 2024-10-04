@@ -1,5 +1,6 @@
 import LoginInput from "./LoginInput";
 import Logo from "../../assets/logo.png";
+import Loader from "../../components/Loader";
 import { useSignUp } from "./useSignUp";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { BaseSyntheticEvent } from "react";
@@ -31,8 +32,15 @@ function LoginForm() {
     reset();
   };
 
-  if (isPending) return <p>Loading...</p>;
-
+  if (isPending)
+    return (
+      <div className="bg-backgroundColor h-screen flex justify-center items-center">
+        <p className="text-white text-5xl">
+          Loading...
+          <Loader />
+        </p>
+      </div>
+    );
   return (
     <div className="pt-12 border-secondaryPurple border p-24 rounded-lg mt-10">
       <div>
