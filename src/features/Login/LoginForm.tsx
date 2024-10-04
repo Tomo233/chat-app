@@ -34,11 +34,9 @@ function LoginForm() {
 
   if (isPending)
     return (
-      <div className="bg-backgroundColor h-screen flex justify-center items-center">
-        <p className="text-white text-5xl">
-          Loading...
-          <Loader />
-        </p>
+      <div className="bg-backgroundColor flex justify-center items-center">
+        <p className="text-white text-5xl">Loading...</p>
+        <Loader />
       </div>
     );
   return (

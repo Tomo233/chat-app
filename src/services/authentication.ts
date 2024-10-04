@@ -1,13 +1,11 @@
+import { SignUpProps } from "../features/Login/useSignUp";
 import { auth } from "../firebaseConfig";
 import { createUserWithEmailAndPassword, User } from "firebase/auth";
 
 export const signupWithEmailPassword = async ({
   email,
   password,
-}: {
-  email: string;
-  password: string;
-}): Promise<User | null> => {
+}: SignUpProps): Promise<User> => {
   try {
     const userCredential = await createUserWithEmailAndPassword(
       auth,
@@ -17,10 +15,9 @@ export const signupWithEmailPassword = async ({
     return userCredential.user;
   } catch (error: unknown) {
     if (error instanceof Error) {
-      console.log(error.message);
+      throw new Error("Account with this email already exist!");
     } else {
-      console.log("Unknown error", error);
+      throw new Error("Something went wrong try again later!");
     }
-    return null;
   }
 };
