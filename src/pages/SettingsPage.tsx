@@ -1,4 +1,4 @@
-import Settings from "../features/Settings/Settings";
+import Settings from "../features/settings/Settings";
 
 function SettingsPage() {
   return (

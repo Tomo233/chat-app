@@ -1,9 +1,9 @@
-import LoginInput from "./LoginInput";
+import { BaseSyntheticEvent } from "react";
 import Logo from "../../assets/logo.png";
 import Loader from "../../components/Loader";
+import LoginInput from "./LoginInput";
 import { useSignUp } from "./useSignUp";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { BaseSyntheticEvent } from "react";
 
 type Inputs = {
   firstName: string;
@@ -13,7 +13,7 @@ type Inputs = {
   confirmPassword: string;
 };
 
-function LoginForm() {
+function SignUpForm() {
   const { signUp, isPending } = useSignUp();
   const {
     register,
@@ -195,4 +195,4 @@ function LoginForm() {
   );
 }
 
-export default LoginForm;
+export default SignUpForm;

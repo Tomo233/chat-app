@@ -1,5 +1,5 @@
-import ChatSideBar from "../features/Chat/ChatSideBar";
-import MainChat from "../features/Chat/MainChat";
+import ChatSideBar from "../features/chat/ChatSideBar";
+import MainChat from "../features/chat/MainChat";
 
 function ChatPage() {
   return (

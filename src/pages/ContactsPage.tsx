@@ -1,4 +1,4 @@
-import ContactsTable from "../features/Contacts/ContactsTable";
+import ContactsTable from "../features/contacts/ContactsTable";
 
 function ContactsPage() {
   return (

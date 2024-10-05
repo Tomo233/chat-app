@@ -1,4 +1,4 @@
-import { SignUpProps } from "../features/Login/useSignUp";
+import { SignUpProps } from "../features/authentication/useSignUp";
 import { auth } from "../firebaseConfig";
 import { createUserWithEmailAndPassword, User } from "firebase/auth";
 
