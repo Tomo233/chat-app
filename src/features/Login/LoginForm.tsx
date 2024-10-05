@@ -19,9 +19,11 @@ function LoginForm() {
     register,
     handleSubmit,
     formState: { errors },
+    getValues,
     reset,
   } = useForm<Inputs>();
 
+  console.log(errors);
   const submitHandler: SubmitHandler<Inputs> = (
     data,
     e?: BaseSyntheticEvent
@@ -39,6 +41,7 @@ function LoginForm() {
         <Loader />
       </div>
     );
+
   return (
     <div className="pt-12 border-secondaryPurple border p-24 rounded-lg mt-10">
       <div>
@@ -68,8 +71,14 @@ function LoginForm() {
                 pr="p-3"
                 {...register("firstName", {
                   required: "This field is required",
-                  minLength: 5,
-                  maxLength: 30,
+                  minLength: {
+                    value: 5,
+                    message: "Field value is too short",
+                  },
+                  maxLength: {
+                    value: 20,
+                    message: "Field value is too long",
+                  },
                 })}
               />
             </div>
@@ -83,8 +92,14 @@ function LoginForm() {
                 pr="p-3"
                 {...register("lastName", {
                   required: "This field is required",
-                  minLength: 5,
-                  maxLength: 30,
+                  minLength: {
+                    value: 5,
+                    message: "Field value is too short",
+                  },
+                  maxLength: {
+                    value: 20,
+                    message: "Field value is too long",
+                  },
                 })}
               />
             </div>
@@ -103,8 +118,14 @@ function LoginForm() {
                   value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
                   message: "invalid email address",
                 },
-                minLength: 5,
-                maxLength: 30,
+                minLength: {
+                  value: 5,
+                  message: "Field value is too short",
+                },
+                maxLength: {
+                  value: 20,
+                  message: "Field value is too long",
+                },
               })}
             />
           </div>
@@ -118,8 +139,17 @@ function LoginForm() {
               placeholder="Password"
               {...register("password", {
                 required: "This field is required",
-                minLength: 5,
-                maxLength: 30,
+                minLength: {
+                  value: 5,
+                  message: "Field value is too short",
+                },
+                maxLength: {
+                  value: 20,
+                  message: "Field value is too long",
+                },
+                validate: (value) =>
+                  value === getValues("confirmPassword") ||
+                  "Passwords do not match",
               })}
             />
           </div>
@@ -133,8 +163,14 @@ function LoginForm() {
               placeholder="Confirm Password"
               {...register("confirmPassword", {
                 required: "This field is required",
-                minLength: 5,
-                maxLength: 30,
+                minLength: {
+                  value: 5,
+                  message: "Field value is too short",
+                },
+                maxLength: {
+                  value: 20,
+                  message: "Field value is too long",
+                },
               })}
             />
           </div>
