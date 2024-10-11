@@ -33,7 +33,6 @@ function SignUpForm() {
     reset();
   };
 
-
   if (isPending)
     return (
       <div className="bg-backgroundColor flex justify-center items-center">
@@ -173,6 +172,16 @@ function SignUpForm() {
                 },
               })}
             />
+          </div>
+          <div>
+            <div className="flex flex-col items-center">
+              <label className="flex flex-col items-center justify-center w-full py-6 border-2 border-dashed border-secondaryPurple rounded-lg cursor-pointer">
+                <span className="text-[#6a6677]">
+                  Drag and drop your files here or click to select files
+                </span>
+                <input type="file" className="hidden" />
+              </label>
+            </div>
           </div>
 
           <button
