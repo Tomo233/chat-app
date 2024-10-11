@@ -12,6 +12,7 @@ export const signupWithEmailPassword = async ({
       email,
       password
     );
+
     return userCredential.user;
   } catch (error: unknown) {
     if (error instanceof Error) {

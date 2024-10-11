@@ -23,7 +23,6 @@ function SignUpForm() {
     reset,
   } = useForm<Inputs>();
 
-  console.log(errors);
   const submitHandler: SubmitHandler<Inputs> = (
     data,
     e?: BaseSyntheticEvent
@@ -33,6 +32,7 @@ function SignUpForm() {
     signUp({ email, password });
     reset();
   };
+
 
   if (isPending)
     return (
@@ -123,7 +123,7 @@ function SignUpForm() {
                   message: "Field value is too short",
                 },
                 maxLength: {
-                  value: 20,
+                  value: 30,
                   message: "Field value is too long",
                 },
               })}
