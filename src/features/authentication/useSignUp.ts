@@ -2,17 +2,12 @@ import { useMutation } from "@tanstack/react-query";
 import { signupWithEmailPassword } from "../../services/authentication";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-
-export type SignUpProps = {
-  email: string;
-  password: string;
-};
+import { Inputs } from "./SignupForm";
 
 export const useSignUp = () => {
   const navigate = useNavigate();
   const { mutate: signUp, isPending } = useMutation({
-    mutationFn: ({ email, password }: SignUpProps) =>
-      signupWithEmailPassword({ email, password }),
+    mutationFn: (data: Inputs) => signupWithEmailPassword(data),
     onSuccess: () => {
       toast.success("User successfully signed up");
       navigate("/chat");

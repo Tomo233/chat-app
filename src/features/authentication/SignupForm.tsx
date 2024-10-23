@@ -5,7 +5,7 @@ import LoginInput from "./LoginInput";
 import { useSignUp } from "./useSignUp";
 import { SubmitHandler, useForm } from "react-hook-form";
 
-type Inputs = {
+export type Inputs = {
   firstName: string;
   lastName: string;
   email: string;
@@ -28,8 +28,7 @@ function SignUpForm() {
     e?: BaseSyntheticEvent
   ) => {
     if (e) e.preventDefault();
-    const { email, password } = data;
-    signUp({ email, password });
+    signUp(data);
     reset();
   };
 
@@ -177,7 +176,7 @@ function SignUpForm() {
             <div className="flex flex-col items-center">
               <label className="flex flex-col items-center justify-center w-full py-6 border-2 border-dashed border-secondaryPurple rounded-lg cursor-pointer">
                 <span className="text-[#6a6677]">
-                  Drag and drop your files here or click to select files
+                  Drag and drop your profile image here or select file
                 </span>
                 <input type="file" className="hidden" />
               </label>
