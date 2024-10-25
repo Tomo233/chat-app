@@ -1,4 +1,4 @@
-import { BaseSyntheticEvent } from "react";
+import { BaseSyntheticEvent, ChangeEvent, useState } from "react";
 import Logo from "../../assets/logo.png";
 import Loader from "../../components/Loader";
 import LoginInput from "./LoginInput";
@@ -11,24 +11,38 @@ export type Inputs = {
   email: string;
   password: string;
   confirmPassword: string;
+  avatar: File | null;
 };
 
 function SignUpForm() {
-  const { signUp, isPending } = useSignUp();
+  const { isPending } = useSignUp();
   const {
     register,
     handleSubmit,
     formState: { errors },
     getValues,
     reset,
+    setValue,
   } = useForm<Inputs>();
+  const [file, setFile] = useState<string>();
+
+  const handleChangeAvatar = (e: ChangeEvent<HTMLInputElement>) => {
+    const avatar = e.target.files?.[0] || null;
+    if (avatar) {
+      const fileURL = URL.createObjectURL(avatar);
+      console.log(fileURL);
+      setFile(fileURL);
+    }
+    setValue("avatar", avatar);
+  };
 
   const submitHandler: SubmitHandler<Inputs> = (
     data,
     e?: BaseSyntheticEvent
   ) => {
     if (e) e.preventDefault();
-    signUp(data);
+    console.log(data);
+    // signUp(data);
     reset();
   };
 
@@ -172,13 +186,23 @@ function SignUpForm() {
               })}
             />
           </div>
-          <div>
+          <div className="">
             <div className="flex flex-col items-center">
-              <label className="flex flex-col items-center justify-center w-full py-6 border-2 border-dashed border-secondaryPurple rounded-lg cursor-pointer">
-                <span className="text-[#6a6677]">
-                  Drag and drop your profile image here or select file
-                </span>
-                <input type="file" className="hidden" />
+              <label className="flex flex-col items-center justify-center w-full  py-6 border-2 border-dashed border-secondaryPurple rounded-lg cursor-pointer">
+                {file ? (
+                  <img src={file} alt="" className="w-32" />
+                ) : (
+                  <span className="text-[#6a6677]">
+                    Drag and drop your profile image here or select file
+                  </span>
+                )}
+                <input
+                  type="file"
+                  className="hidden"
+                  {...register("avatar")}
+                  accept="image/*"
+                  onChange={handleChangeAvatar}
+                />
               </label>
             </div>
           </div>
