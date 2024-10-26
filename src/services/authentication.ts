@@ -21,7 +21,7 @@ export const signupWithEmailPassword = async ({
     // );
     const randomNumber = Math.random();
     const storageRef = ref(storage, `avatars/${avatar?.name}-${randomNumber}`);
-    if (avatar) {
+    if (avatar && avatar instanceof FileList && avatar.length > 0) {
       const uploadTask = uploadBytesResumable(storageRef, avatar);
       uploadTask.on(
         "state_changed",
