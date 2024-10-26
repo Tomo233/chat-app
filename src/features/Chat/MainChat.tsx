@@ -24,7 +24,6 @@ function MainChat() {
 
       <div className="max-h-[550px] overflow-auto p-5">
         {messages.map((msg, index) => {
-          console.log(messages.length - 1);
           const isLastMessageByUser =
             index === messages.length - 1 ||
             messages[index + 1].status !== msg.status;

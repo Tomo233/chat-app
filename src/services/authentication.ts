@@ -19,13 +19,13 @@ export const signupWithEmailPassword = async ({
     //   email,
     //   password
     // );
-
-    const storageRef = ref(storage, `avatars/${avatar?.name}`);
+    const randomNumber = Math.random();
+    const storageRef = ref(storage, `avatars/${avatar?.name}-${randomNumber}`);
     if (avatar) {
       const uploadTask = uploadBytesResumable(storageRef, avatar);
       uploadTask.on(
         "state_changed",
-
+        () => {},
         (err) => console.log(err),
         () => {
           getDownloadURL(uploadTask.snapshot.ref).then((url) => {
