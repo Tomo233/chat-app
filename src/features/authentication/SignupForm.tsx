@@ -15,7 +15,7 @@ export type Inputs = {
 };
 
 function SignUpForm() {
-  const { isPending } = useSignUp();
+  const { signUp, isPending } = useSignUp();
   const {
     register,
     handleSubmit,
@@ -29,11 +29,10 @@ function SignUpForm() {
   const handleChangeAvatar = (e: ChangeEvent<HTMLInputElement>) => {
     const avatar = e.target.files?.[0] || null;
     if (avatar) {
+      setValue("avatar", avatar);
       const fileURL = URL.createObjectURL(avatar);
-      console.log(fileURL);
       setFile(fileURL);
     }
-    setValue("avatar", avatar);
   };
 
   const submitHandler: SubmitHandler<Inputs> = (
@@ -41,8 +40,7 @@ function SignUpForm() {
     e?: BaseSyntheticEvent
   ) => {
     if (e) e.preventDefault();
-    console.log(data);
-    // signUp(data);
+    signUp(data);
     reset();
   };
 
