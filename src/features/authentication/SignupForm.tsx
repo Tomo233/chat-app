@@ -1,4 +1,5 @@
 import { BaseSyntheticEvent, ChangeEvent, useState } from "react";
+import CloseIcon from "@mui/icons-material/Close";
 import Logo from "../../assets/logo.png";
 import Loader from "../../components/Loader";
 import LoginInput from "./LoginInput";
@@ -23,8 +24,18 @@ function SignUpForm() {
     getValues,
     reset,
     setValue,
-  } = useForm<Inputs>();
+  } = useForm<Inputs>({
+    defaultValues: {
+      avatar: null,
+    },
+  });
+
   const [file, setFile] = useState<string>();
+
+  const handleRemoveAvatar = () => {
+    setValue("avatar", null);
+    setFile("");
+  };
 
   const handleChangeAvatar = (e: ChangeEvent<HTMLInputElement>) => {
     const avatar = e.target.files?.[0] || null;
@@ -40,6 +51,7 @@ function SignUpForm() {
     e?: BaseSyntheticEvent
   ) => {
     if (e) e.preventDefault();
+    console.log(data.avatar);
     signUp(data);
     reset();
   };
@@ -53,14 +65,14 @@ function SignUpForm() {
     );
 
   return (
-    <div className="pt-12 border-secondaryPurple border p-24 rounded-lg mt-10">
+    <div className="py-10  border-secondaryPurple border px-24  rounded-lg mt-10">
       <div>
         <h2 className="text-white text-3xl text-center flex items-center justify-center">
           <img src={Logo} alt="Logo" className="h-20" />
           <span> Create an Account</span>
           <img src={Logo} alt="Logo" className="h-20" />
         </h2>
-        <p className="text-white text-center py-3">
+        <p className="text-white text-center pb-3">
           Already have an Account?
           <span className="text-[#7b7092] font-bold underline pl-3">
             Log in
@@ -184,16 +196,23 @@ function SignUpForm() {
               })}
             />
           </div>
-          <div className="">
-            <div className="flex flex-col items-center">
-              <label className="flex flex-col items-center justify-center w-full  py-6 border-2 border-dashed border-secondaryPurple rounded-lg cursor-pointer">
+          <div>
+            <div className="flex justify-center gap-3  items-center">
+              <label
+                className={`flex gap-3 items-center justify-center w-${
+                  file ? "4/5" : "full"
+                } py-6 border-2 border-dashed border-secondaryPurple rounded-lg cursor-pointer`}
+              >
                 {file ? (
-                  <img src={file} alt="" className="w-32" />
+                  <>
+                    <img src={file} alt="" className="max-w-12" />
+                  </>
                 ) : (
                   <span className="text-[#6a6677]">
                     Drag and drop your profile image here or select file
                   </span>
                 )}
+
                 <input
                   type="file"
                   className="hidden"
@@ -202,6 +221,16 @@ function SignUpForm() {
                   onChange={handleChangeAvatar}
                 />
               </label>
+              {file && (
+                <button onClick={handleRemoveAvatar}>
+                  <CloseIcon
+                    sx={{
+                      color: "white",
+                      fontSize: "2rem",
+                    }}
+                  />
+                </button>
+              )}
             </div>
           </div>
 
