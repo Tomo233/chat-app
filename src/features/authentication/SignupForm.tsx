@@ -5,6 +5,7 @@ import Loader from "../../components/Loader";
 import LoginInput from "./LoginInput";
 import { useSignUp } from "./useSignUp";
 import { SubmitHandler, useForm } from "react-hook-form";
+import { useLoginWithGoogle } from "./useLogInWithGoogle";
 
 export type Inputs = {
   firstName: string;
@@ -17,6 +18,7 @@ export type Inputs = {
 
 function SignUpForm() {
   const { signUp, isPending } = useSignUp();
+  const { loginWithGoogle, isPendingGoogle } = useLoginWithGoogle();
   const {
     register,
     handleSubmit,
@@ -35,6 +37,10 @@ function SignUpForm() {
   const handleRemoveAvatar = () => {
     setValue("avatar", null);
     setFile("");
+  };
+
+  const handleSignUpWithGoogle = () => {
+    loginWithGoogle();
   };
 
   const handleChangeAvatar = (e: ChangeEvent<HTMLInputElement>) => {
@@ -56,7 +62,7 @@ function SignUpForm() {
     reset();
   };
 
-  if (isPending)
+  if (isPending || isPendingGoogle)
     return (
       <div className="bg-backgroundColor flex justify-center items-center">
         <p className="text-white text-5xl">Loading...</p>
@@ -242,7 +248,10 @@ function SignUpForm() {
           </button>
         </form>
         <div className="flex justify-center gap-12 pt-5">
-          <button className="bg-secondaryPurple  px-12 py-2 rounded-md ">
+          <button
+            className="bg-secondaryPurple px-12 py-2 rounded-md"
+            onClick={handleSignUpWithGoogle}
+          >
             <span className="text-white">Google</span>
           </button>
           <button className="bg-secondaryPurple text-white  px-12 py-2 rounded-md ">

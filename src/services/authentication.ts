@@ -1,5 +1,10 @@
 import { auth, db } from "../firebaseConfig";
-import { createUserWithEmailAndPassword, User } from "firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+  GoogleAuthProvider,
+  signInWithPopup,
+  User,
+} from "firebase/auth";
 import { storage } from "../firebaseConfig";
 import { Inputs } from "../features/authentication/SignupForm";
 import { addDoc, collection } from "firebase/firestore/lite";
@@ -46,6 +51,26 @@ export const signupWithEmailPassword = async ({
       throw new Error("Account with this email already exists!");
     } else {
       throw new Error("Something went wrong, try again later!");
+    }
+  }
+};
+
+const provider = new GoogleAuthProvider();
+
+export const loginWithGoogle = async () => {
+  try {
+    const result = await signInWithPopup(auth, provider);
+    // const { email, displayName, photoUrl } = result.user;
+    // const firstName = displayName?.split(" ").at(0);
+    // const lastName = displayName?.split(" ").at(1);
+    // await addDoc(collection(db, "users"), {
+    //   email,
+    //   firstName,
+    //   lastName,
+    // });
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      throw new Error("Something went wrong try again");
     }
   }
 };
