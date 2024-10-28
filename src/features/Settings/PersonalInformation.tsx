@@ -37,12 +37,24 @@ function PersonalInformation() {
           />
         </div>
         <div>
-          <p className="font-medium">Phone</p>
-          <input
-            className="font-medium p-3 bg-secondaryPurple"
-            value={"+3019301930139"}
-            disabled
-          />
+          <div className="flex gap-5">
+            <div>
+              <p className="font-medium">Current Password</p>
+              <input
+                className="font-medium p-3 bg-secondaryPurple"
+                value={"**********"}
+                disabled
+              />
+            </div>
+            <div>
+              <p className="font-medium">New Password</p>
+              <input
+                className="font-medium p-3 bg-secondaryPurple"
+                value={"**********"}
+                disabled
+              />
+            </div>
+          </div>
         </div>
       </div>
     </section>

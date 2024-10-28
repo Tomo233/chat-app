@@ -1,26 +1,26 @@
-// import { auth, db } from "../firebaseConfig";
-// import { createUserWithEmailAndPassword, User } from "firebase/auth";
+import { auth, db } from "../firebaseConfig";
+import { createUserWithEmailAndPassword, User } from "firebase/auth";
 import { storage } from "../firebaseConfig";
 import { Inputs } from "../features/authentication/SignupForm";
-// import { addDoc, collection } from "firebase/firestore/lite";
+import { addDoc, collection } from "firebase/firestore/lite";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 
 export const signupWithEmailPassword = async ({
-  // email,
-  // password,
-  // firstName,
-  // lastName,
+  email,
+  password,
+  firstName,
+  lastName,
   avatar,
-}: Inputs): Promise<void> => {
-  // }: Inputs): Promise<User> => {
+}: Inputs): Promise<User> => {
   try {
-    // const userCredential = await createUserWithEmailAndPassword(
-    //   auth,
-    //   email,
-    //   password
-    // );
+    const userCredential = await createUserWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
     const randomNumber = Math.random();
     const storageRef = ref(storage, `avatars/${avatar?.name}-${randomNumber}`);
+
     if (avatar && avatar instanceof File) {
       const uploadTask = uploadBytesResumable(storageRef, avatar);
       uploadTask.on(
@@ -34,15 +34,13 @@ export const signupWithEmailPassword = async ({
         }
       );
     }
-    // // const docRef = await addDoc(collection(db, "users"), {
-    // //   email,
-    // //   password,
-    // //   firstName,
-    // //   lastName,
-    // // });
-    // console.log(docRef);
+    await addDoc(collection(db, "users"), {
+      email,
+      firstName,
+      lastName,
+    });
 
-    // return userCredential.user;
+    return userCredential.user;
   } catch (error: unknown) {
     if (error instanceof Error) {
       throw new Error("Account with this email already exists!");
