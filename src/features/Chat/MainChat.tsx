@@ -2,6 +2,7 @@ import { useState } from "react";
 import Profile from "../../assets/profile.png";
 import ProfileBar from "./ProfileBar";
 import SendMessage from "./SendMessage";
+import { useUser } from "../authentication/useUser";
 
 function MainChat() {
   const [messages] = useState([
@@ -16,6 +17,10 @@ function MainChat() {
     { status: "sender", message: "Hi there I'm sender once more 15" },
     { status: "receiver", message: "Hi there I'm receiver again" },
   ]);
+
+  const { user, isLoading } = useUser();
+  if (isLoading) return <p>loading...</p>;
+  console.log(user);
 
   return (
     <div className="bg-primaryPurple rounded-2xl w-2/3 grid grid-rows-[100px_auto_100px]">

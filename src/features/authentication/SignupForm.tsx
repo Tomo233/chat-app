@@ -5,7 +5,7 @@ import Loader from "../../components/Loader";
 import LoginInput from "./LoginInput";
 import { useSignUp } from "./useSignUp";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { useLoginWithGoogle } from "./useLogInWithGoogle";
+import { useLoginWithGoogle } from "./useLoginWithGoogle";
 
 export type Inputs = {
   firstName: string;

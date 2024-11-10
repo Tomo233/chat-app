@@ -1,9 +1,9 @@
 import { auth, db } from "../firebaseConfig";
 import {
   createUserWithEmailAndPassword,
+  getAuth,
   GoogleAuthProvider,
   signInWithPopup,
-  User,
 } from "firebase/auth";
 import { storage } from "../firebaseConfig";
 import { Inputs } from "../features/authentication/SignupForm";
@@ -16,61 +16,84 @@ export const signupWithEmailPassword = async ({
   firstName,
   lastName,
   avatar,
-}: Inputs): Promise<User> => {
+}: Inputs): Promise<void> => {
   try {
-    const userCredential = await createUserWithEmailAndPassword(
-      auth,
-      email,
-      password
-    );
+    await createUserWithEmailAndPassword(auth, email, password);
     const randomNumber = Math.random();
-    const storageRef = ref(storage, `avatars/${avatar?.name}-${randomNumber}`);
-
     if (avatar && avatar instanceof File) {
+      const storageRef = ref(storage, `avatars/${avatar.name}-${randomNumber}`);
       const uploadTask = uploadBytesResumable(storageRef, avatar);
+
       uploadTask.on(
         "state_changed",
-        () => {},
-        (err) => console.log(err),
-        () => {
-          getDownloadURL(uploadTask.snapshot.ref).then((url) => {
-            console.log(url);
-          });
+        () => {}, // Progress handler
+        (error) => {
+          console.error("Upload error:", error); // Logging error for debugging
+          throw new Error("Failed to upload avatar. Please try again."); // Custom error message
+        },
+        async () => {
+          const url = await getDownloadURL(uploadTask.snapshot.ref);
+          console.log("Avatar URL:", url);
         }
       );
     }
+
     await addDoc(collection(db, "users"), {
       email,
       firstName,
       lastName,
     });
-
-    return userCredential.user;
   } catch (error: unknown) {
     if (error instanceof Error) {
       throw new Error("Account with this email already exists!");
-    } else {
-      throw new Error("Something went wrong, try again later!");
     }
+    throw new Error("Something went wrong, try again later!");
   }
 };
 
 const provider = new GoogleAuthProvider();
 
-export const loginWithGoogle = async () => {
+export const loginWithGoogle = async (): Promise<void> => {
   try {
-    const result = await signInWithPopup(auth, provider);
-    // const { email, displayName, photoUrl } = result.user;
-    // const firstName = displayName?.split(" ").at(0);
-    // const lastName = displayName?.split(" ").at(1);
-    // await addDoc(collection(db, "users"), {
-    //   email,
-    //   firstName,
-    //   lastName,
-    // });
+    await signInWithPopup(auth, provider);
   } catch (error: unknown) {
     if (error instanceof Error) {
-      throw new Error("Something went wrong try again");
+      throw new Error("Something went wrong, please try again.");
     }
+  }
+};
+
+type UserInfo = {
+  id: string;
+  firstName: string | undefined;
+  lastName: string | undefined;
+  email: string | null;
+  photoURL: string | null;
+};
+
+export const getUser = async (): Promise<UserInfo | null> => {
+  try {
+    const auth = getAuth();
+    const user = auth.currentUser;
+
+    if (user !== null) {
+      const [firstName, lastName] = user.displayName?.split(" ") || [
+        undefined,
+        undefined,
+      ];
+      return {
+        id: user.uid,
+        firstName,
+        lastName,
+        email: user.email,
+        photoURL: user.photoURL,
+      };
+    }
+    return null;
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      throw new Error(error.message);
+    }
+    return null;
   }
 };

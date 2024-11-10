@@ -6,7 +6,11 @@ import { Inputs } from "./SignupForm";
 
 export const useSignUp = () => {
   const navigate = useNavigate();
-  const { mutate: signUp, isPending } = useMutation({
+  const {
+    mutate: signUp,
+    isPending,
+    data: user,
+  } = useMutation({
     mutationFn: (data: Inputs) => signupWithEmailPassword(data),
     onSuccess: () => {
       toast.success("User successfully signed up");
@@ -14,5 +18,5 @@ export const useSignUp = () => {
     },
     onError: (error: Error) => toast.error(error.message),
   });
-  return { signUp, isPending };
+  return { signUp, isPending, user };
 };
