@@ -1,7 +1,6 @@
 import { auth, db } from "../firebaseConfig";
 import {
   createUserWithEmailAndPassword,
-  getAuth,
   GoogleAuthProvider,
   signInWithPopup,
 } from "firebase/auth";
@@ -60,40 +59,5 @@ export const loginWithGoogle = async (): Promise<void> => {
     if (error instanceof Error) {
       throw new Error("Something went wrong, please try again.");
     }
-  }
-};
-
-type UserInfo = {
-  id: string;
-  firstName: string | undefined;
-  lastName: string | undefined;
-  email: string | null;
-  photoURL: string | null;
-};
-
-export const getUser = async (): Promise<UserInfo | null> => {
-  try {
-    const auth = getAuth();
-    const user = auth.currentUser;
-
-    if (user !== null) {
-      const [firstName, lastName] = user.displayName?.split(" ") || [
-        undefined,
-        undefined,
-      ];
-      return {
-        id: user.uid,
-        firstName,
-        lastName,
-        email: user.email,
-        photoURL: user.photoURL,
-      };
-    }
-    return null;
-  } catch (error: unknown) {
-    if (error instanceof Error) {
-      throw new Error(error.message);
-    }
-    return null;
   }
 };

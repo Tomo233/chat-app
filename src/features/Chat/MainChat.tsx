@@ -18,8 +18,7 @@ function MainChat() {
     { status: "receiver", message: "Hi there I'm receiver again" },
   ]);
 
-  const { user, isLoading } = useUser();
-  if (isLoading) return <p>loading...</p>;
+  const user = useUser();
   console.log(user);
 
   return (
