@@ -11,20 +11,19 @@ type UserInfo = {
 export const useUser = () => {
   const auth = getAuth();
   const user = auth.currentUser;
+  console.log(user);
+  if (user === null) return null;
 
-  if (user !== null) {
-    const [firstName, lastName] = user.displayName?.split(" ") || [
-      undefined,
-      undefined,
-    ];
-    const userProfile: UserInfo = {
-      id: user.uid,
-      firstName,
-      lastName,
-      email: user.email,
-      photoURL: user.photoURL,
-    };
-    return userProfile;
-  }
-  return null;
+  const [firstName, lastName] = user.displayName?.split(" ") || [
+    undefined,
+    undefined,
+  ];
+  const userProfile: UserInfo = {
+    id: user.uid,
+    firstName,
+    lastName,
+    email: user.email,
+    photoURL: user.photoURL,
+  };
+  return userProfile;
 };
