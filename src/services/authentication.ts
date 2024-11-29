@@ -63,26 +63,30 @@ export const loginWithGoogle = async (): Promise<void> => {
 };
 
 export type UserInfo = {
-  id?: string | null;
-  email?: string | null;
-  firstName?: string | null;
-  lastName?: string | null;
-  photoURL?: string | null;
+  id: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+  photoURL: string | null;
 };
 
-export const getUser = (): Promise<UserInfo | Error> => {
+export const getUser = (): Promise<UserInfo> => {
   return new Promise((resolve, reject) => {
     const unsubscribe = onAuthStateChanged(
       auth,
       (user) => {
-        const userInfo: UserInfo = {
-          id: user?.uid,
-          email: user?.email,
-          firstName: user?.displayName?.split(" ")[0],
-          lastName: user?.displayName?.split(" ")[1],
-          photoURL: user?.photoURL,
-        };
-        resolve(userInfo);
+        if (user === null) {
+          reject(new Error("No user authenticated"));
+        } else {
+          const userInfo: UserInfo = {
+            id: user.uid,
+            email: user.email!,
+            firstName: user.displayName!.split(" ")[0],
+            lastName: user.displayName!.split(" ")[1],
+            photoURL: user.photoURL ?? null,
+          };
+          resolve(userInfo);
+        }
         unsubscribe();
       },
       (error) => {

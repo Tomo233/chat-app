@@ -8,7 +8,7 @@ function ProtectedRoute({ children }: { children: ReactNode }) {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (user instanceof Error) {
+    if (user instanceof Error || undefined) {
       navigate("/");
     }
   }, [user, navigate]);

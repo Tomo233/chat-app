@@ -1,6 +1,11 @@
 import EditIcon from "@mui/icons-material/Edit";
+import { useUser } from "../authentication/useUser";
 
 function PersonalInformation() {
+  const { user, isLoading } = useUser();
+
+  if (isLoading) return <p>loading...</p>;
+
   return (
     <section className="border border-secondaryPurple rounded-lg p-3 pb-10 pl-7">
       <div className="flex justify-between items-center">
@@ -15,7 +20,7 @@ function PersonalInformation() {
           <p>First Name</p>
           <input
             className="font-medium p-3 bg-secondaryPurple"
-            value={"John"}
+            value={user?.firstName}
             disabled
           />
         </div>
@@ -23,7 +28,7 @@ function PersonalInformation() {
           <p>Last Name</p>
           <input
             className="font-medium p-3 bg-secondaryPurple"
-            value={"Smith"}
+            value={user?.lastName}
             disabled
           />
         </div>
@@ -32,7 +37,8 @@ function PersonalInformation() {
           <p>Email</p>
           <input
             className="font-medium p-3 bg-secondaryPurple"
-            value={"johnsmith@gmail.com"}
+            type="text"
+            value={user?.email}
             disabled
           />
         </div>
