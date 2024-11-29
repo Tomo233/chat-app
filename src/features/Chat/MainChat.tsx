@@ -18,9 +18,8 @@ function MainChat() {
     { status: "receiver", message: "Hi there I'm receiver again" },
   ]);
 
-  const user = useUser();
+  const { user } = useUser();
   console.log(user);
-
   return (
     <div className="bg-primaryPurple rounded-2xl w-2/3 grid grid-rows-[100px_auto_100px]">
       {/* Profile */}

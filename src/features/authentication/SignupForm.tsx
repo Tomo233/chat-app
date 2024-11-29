@@ -31,7 +31,6 @@ function SignUpForm() {
       avatar: null,
     },
   });
-
   const [file, setFile] = useState<string>();
 
   const handleRemoveAvatar = () => {

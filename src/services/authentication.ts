@@ -8,7 +8,7 @@ import { storage } from "../firebaseConfig";
 import { Inputs } from "../features/authentication/SignupForm";
 import { addDoc, collection } from "firebase/firestore/lite";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
-
+import { onAuthStateChanged } from "firebase/auth";
 export const signupWithEmailPassword = async ({
   email,
   password,
@@ -60,4 +60,35 @@ export const loginWithGoogle = async (): Promise<void> => {
       throw new Error("Something went wrong, please try again.");
     }
   }
+};
+
+export type UserInfo = {
+  id?: string | null;
+  email?: string | null;
+  firstName?: string | null;
+  lastName?: string | null;
+  photoURL?: string | null;
+};
+
+export const getUser = (): Promise<UserInfo | Error> => {
+  return new Promise((resolve, reject) => {
+    const unsubscribe = onAuthStateChanged(
+      auth,
+      (user) => {
+        const userInfo: UserInfo = {
+          id: user?.uid,
+          email: user?.email,
+          firstName: user?.displayName?.split(" ")[0],
+          lastName: user?.displayName?.split(" ")[1],
+          photoURL: user?.photoURL,
+        };
+        resolve(userInfo);
+        unsubscribe();
+      },
+      (error) => {
+        reject(error);
+        unsubscribe();
+      }
+    );
+  });
 };
