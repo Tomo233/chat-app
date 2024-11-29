@@ -1,18 +1,15 @@
-import { ReactNode, useEffect, useState } from "react";
+import { ReactNode, useEffect } from "react";
 import { useUser } from "../features/authentication/useUser";
 import { useNavigate } from "react-router-dom";
 import Loader from "./Loader";
 
 function ProtectedRoute({ children }: { children: ReactNode }) {
-  const [isLoading, setIsLoading] = useState(true);
-  const user = useUser();
+  const { user, isLoading } = useUser();
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (user.user instanceof Error) {
+    if (user instanceof Error) {
       navigate("/");
-    } else {
-      setIsLoading(false);
     }
   }, [user, navigate]);
 
