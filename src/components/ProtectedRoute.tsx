@@ -8,10 +8,10 @@ function ProtectedRoute({ children }: { children: ReactNode }) {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (user instanceof Error || undefined) {
+    if (!isLoading && !user) {
       navigate("/");
     }
-  }, [user, navigate]);
+  }, [user, isLoading, navigate]);
 
   if (isLoading)
     return (

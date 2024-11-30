@@ -70,22 +70,22 @@ export type UserInfo = {
   photoURL: string | null;
 };
 
-export const getUser = (): Promise<UserInfo> => {
+export const getUser = (): Promise<UserInfo | null> => {
   return new Promise((resolve, reject) => {
     const unsubscribe = onAuthStateChanged(
       auth,
       (user) => {
-        if (user === null) {
-          reject(new Error("No user authenticated"));
-        } else {
+        if (user) {
           const userInfo: UserInfo = {
             id: user.uid,
-            email: user.email!,
-            firstName: user.displayName!.split(" ")[0],
-            lastName: user.displayName!.split(" ")[1],
+            email: user.email || "",
+            firstName: user.displayName?.split(" ")[0] || "",
+            lastName: user.displayName?.split(" ")[1] || "",
             photoURL: user.photoURL ?? null,
           };
           resolve(userInfo);
+        } else {
+          resolve(null);
         }
         unsubscribe();
       },
