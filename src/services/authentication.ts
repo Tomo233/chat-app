@@ -78,14 +78,14 @@ export const getUser = (): Promise<UserInfo | null> => {
         if (user) {
           const userInfo: UserInfo = {
             id: user.uid,
-            email: user.email || "",
-            firstName: user.displayName?.split(" ")[0] || "",
-            lastName: user.displayName?.split(" ")[1] || "",
+            email: user.email!,
+            firstName: user.displayName!.split(" ")[0],
+            lastName: user.displayName!.split(" ")[1],
             photoURL: user.photoURL ?? null,
           };
           resolve(userInfo);
         } else {
-          resolve(null);
+          resolve(null); // No user logged in
         }
         unsubscribe();
       },
