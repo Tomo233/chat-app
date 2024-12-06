@@ -2,6 +2,7 @@ import { ReactNode, useEffect } from "react";
 import { useUser } from "../features/authentication/useUser";
 import { useNavigate } from "react-router-dom";
 import Loader from "./Loader";
+import toast from "react-hot-toast";
 
 function ProtectedRoute({ children }: { children: ReactNode }) {
   const { user, isLoading } = useUser();
@@ -12,6 +13,10 @@ function ProtectedRoute({ children }: { children: ReactNode }) {
       navigate("/");
     }
   }, [user, isLoading, navigate]);
+
+  if (!user) {
+    toast.error("You are not logged in");
+  }
 
   if (isLoading || !user)
     return (
