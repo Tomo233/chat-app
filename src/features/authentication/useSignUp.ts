@@ -14,7 +14,7 @@ export const useSignUp = () => {
     mutationFn: (data: Inputs) => signupWithEmailPassword(data),
     onSuccess: () => {
       toast.success("User successfully signed up");
-      navigate("/chat");
+      navigate("/chat", { replace: true });
     },
     onError: (error: Error) => toast.error(error.message),
   });

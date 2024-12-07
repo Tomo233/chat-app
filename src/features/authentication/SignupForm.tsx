@@ -6,7 +6,6 @@ import LoginInput from "./LoginInput";
 import { useSignUp } from "./useSignUp";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useLoginWithGoogle } from "./useLoginWithGoogle";
-import { useUser } from "./useUser";
 
 export type Inputs = {
   firstName: string;
@@ -34,8 +33,6 @@ function SignUpForm() {
   });
   const [file, setFile] = useState<string>();
 
-  const { user } = useUser();
-  console.log(user);
   const handleRemoveAvatar = () => {
     setValue("avatar", null);
     setFile("");

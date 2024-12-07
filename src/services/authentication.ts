@@ -50,24 +50,32 @@ export const signupWithEmailPassword = async ({
   }
 };
 
-const provider = new GoogleAuthProvider();
-
-export const loginWithGoogle = async (): Promise<void> => {
-  try {
-    await signInWithPopup(auth, provider);
-  } catch (error: unknown) {
-    if (error instanceof Error) {
-      throw new Error("Something went wrong, please try again.");
-    }
-  }
-};
-
 export type UserInfo = {
   id: string;
   email: string;
   firstName: string;
   lastName: string;
   photoURL: string | null;
+};
+
+const provider = new GoogleAuthProvider();
+
+export const loginWithGoogle = async (): Promise<UserInfo | undefined> => {
+  try {
+    const { user } = await signInWithPopup(auth, provider);
+    const userInfo: UserInfo = {
+      id: user.uid,
+      email: user.email!,
+      firstName: user.displayName!.split(" ")[0],
+      lastName: user.displayName!.split(" ")[1],
+      photoURL: user.photoURL ?? null,
+    };
+    return userInfo;
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      throw new Error("Something went wrong, please try again.");
+    }
+  }
 };
 
 export const getUser = (): Promise<UserInfo | null> => {
@@ -83,6 +91,7 @@ export const getUser = (): Promise<UserInfo | null> => {
             lastName: user.displayName!.split(" ")[1],
             photoURL: user.photoURL ?? null,
           };
+          console.log("user logged in");
           resolve(userInfo);
         } else {
           resolve(null); // No user logged in
