@@ -1,23 +1,43 @@
-import { auth, db } from "../firebaseConfig";
+import { auth } from "../firebaseConfig";
 import {
   createUserWithEmailAndPassword,
   GoogleAuthProvider,
   signInWithPopup,
+  updateProfile,
 } from "firebase/auth";
 import { storage } from "../firebaseConfig";
 import { Inputs } from "../features/authentication/SignupForm";
-import { addDoc, collection } from "firebase/firestore/lite";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { onAuthStateChanged } from "firebase/auth";
+
+export type UserInfo = {
+  id: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+  photoURL: string | null;
+};
+
 export const signupWithEmailPassword = async ({
   email,
   password,
   firstName,
   lastName,
   avatar,
-}: Inputs): Promise<void> => {
+}: Inputs): Promise<UserInfo> => {
   try {
-    await createUserWithEmailAndPassword(auth, email, password);
+    const { user } = await createUserWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
+
+    await updateProfile(user, {
+      displayName: `${firstName} ${lastName}`,
+    }).catch((error) => {
+      console.log(`${error} ee`);
+    });
+
     const randomNumber = Math.random();
     if (avatar && avatar instanceof File) {
       const storageRef = ref(storage, `avatars/${avatar.name}-${randomNumber}`);
@@ -32,30 +52,31 @@ export const signupWithEmailPassword = async ({
         },
         async () => {
           const url = await getDownloadURL(uploadTask.snapshot.ref);
-          console.log("Avatar URL:", url);
+
+          await updateProfile(user, {
+            photoURL: url,
+          }).catch((error) => {
+            console.log(`error while setting photo`, error);
+          });
         }
       );
     }
 
-    await addDoc(collection(db, "users"), {
-      email,
-      firstName,
-      lastName,
-    });
+    const userInfo: UserInfo = {
+      id: user.uid,
+      email: user.email!,
+      firstName: user.displayName!.split(" ")[0],
+      lastName: user.displayName!.split(" ")[1],
+      photoURL: user.photoURL ?? null,
+    };
+
+    return userInfo;
   } catch (error: unknown) {
     if (error instanceof Error) {
-      throw new Error("Account with this email already exists!");
+      throw new Error(error.message);
     }
     throw new Error("Something went wrong, try again later!");
   }
-};
-
-export type UserInfo = {
-  id: string;
-  email: string;
-  firstName: string;
-  lastName: string;
-  photoURL: string | null;
 };
 
 const provider = new GoogleAuthProvider();
@@ -70,6 +91,7 @@ export const loginWithGoogle = async (): Promise<UserInfo | undefined> => {
       lastName: user.displayName!.split(" ")[1],
       photoURL: user.photoURL ?? null,
     };
+    console.log(user);
     return userInfo;
   } catch (error: unknown) {
     if (error instanceof Error) {
@@ -84,6 +106,7 @@ export const getUser = (): Promise<UserInfo | null> => {
       auth,
       (user) => {
         if (user) {
+          console.log(user.displayName);
           const userInfo: UserInfo = {
             id: user.uid,
             email: user.email!,
@@ -91,7 +114,6 @@ export const getUser = (): Promise<UserInfo | null> => {
             lastName: user.displayName!.split(" ")[1],
             photoURL: user.photoURL ?? null,
           };
-          console.log("user logged in");
           resolve(userInfo);
         } else {
           resolve(null); // No user logged in

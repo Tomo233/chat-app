@@ -7,7 +7,6 @@ import Loader from "./Loader";
 function ProtectedRoute({ children }: { children: ReactNode }) {
   const { user, isLoading } = useUser();
   const navigate = useNavigate();
-
   useEffect(() => {
     if (!isLoading && !user) {
       console.log("user is loading or user is not authenticated");
@@ -18,6 +17,8 @@ function ProtectedRoute({ children }: { children: ReactNode }) {
   // if (!user) {
   //   toast.error("You are not logged in");
   // }
+
+  console.log(user);
 
   if (isLoading || !user)
     return (
