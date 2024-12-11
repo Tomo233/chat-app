@@ -9,6 +9,7 @@ import { storage } from "../firebaseConfig";
 import { Inputs } from "../features/authentication/SignupForm";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { onAuthStateChanged } from "firebase/auth";
+import { transfromUser } from "../utils/transformUser";
 
 export type UserInfo = {
   id: string;
@@ -61,14 +62,7 @@ export const signupWithEmailPassword = async ({
         }
       );
     }
-
-    const userInfo: UserInfo = {
-      id: user.uid,
-      email: user.email!,
-      firstName: user.displayName!.split(" ")[0],
-      lastName: user.displayName!.split(" ")[1],
-      photoURL: user.photoURL ?? null,
-    };
+    const userInfo = transfromUser(user);
 
     return userInfo;
   } catch (error: unknown) {
@@ -84,14 +78,7 @@ const provider = new GoogleAuthProvider();
 export const loginWithGoogle = async (): Promise<UserInfo | undefined> => {
   try {
     const { user } = await signInWithPopup(auth, provider);
-    const userInfo: UserInfo = {
-      id: user.uid,
-      email: user.email!,
-      firstName: user.displayName!.split(" ")[0],
-      lastName: user.displayName!.split(" ")[1],
-      photoURL: user.photoURL ?? null,
-    };
-    console.log(user);
+    const userInfo = transfromUser(user);
     return userInfo;
   } catch (error: unknown) {
     if (error instanceof Error) {
@@ -106,14 +93,7 @@ export const getUser = (): Promise<UserInfo | null> => {
       auth,
       (user) => {
         if (user) {
-          console.log(user.displayName);
-          const userInfo: UserInfo = {
-            id: user.uid,
-            email: user.email!,
-            firstName: user.displayName!.split(" ")[0],
-            lastName: user.displayName!.split(" ")[1],
-            photoURL: user.photoURL ?? null,
-          };
+          const userInfo = transfromUser(user);
           resolve(userInfo);
         } else {
           resolve(null); // No user logged in
