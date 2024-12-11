@@ -12,7 +12,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 
 const router = createBrowserRouter([
   {
-    path: "/",
+    path: "/login",
     element: <LoginPage />,
   },
 
@@ -28,7 +28,7 @@ const router = createBrowserRouter([
     ),
     children: [
       {
-        path: "/chat",
+        path: "/",
         element: <ChatPage />,
       },
       {

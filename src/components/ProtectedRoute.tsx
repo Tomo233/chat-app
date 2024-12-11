@@ -10,7 +10,7 @@ function ProtectedRoute({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (!isLoading && !user) {
       console.log("user is loading or user is not authenticated");
-      navigate("/");
+      navigate("/login");
     }
   }, [user, isLoading, navigate]);
 
