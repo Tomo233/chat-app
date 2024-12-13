@@ -8,7 +8,7 @@ import { useLoginWithGoogle } from "./useLoginWithGoogle";
 import FormTitle from "./FormTitle";
 import FormFooter from "./FormFooter";
 
-export type Inputs = {
+export type SignupInputs = {
   firstName: string;
   lastName: string;
   email: string;
@@ -27,7 +27,7 @@ function SignUpForm() {
     getValues,
     reset,
     setValue,
-  } = useForm<Inputs>({
+  } = useForm<SignupInputs>({
     defaultValues: {
       avatar: null,
     },
@@ -48,7 +48,7 @@ function SignUpForm() {
     }
   };
 
-  const submitHandler: SubmitHandler<Inputs> = (
+  const submitHandler: SubmitHandler<SignupInputs> = (
     data,
     e?: BaseSyntheticEvent
   ) => {

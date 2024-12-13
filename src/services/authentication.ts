@@ -6,7 +6,7 @@ import {
   updateProfile,
 } from "firebase/auth";
 import { storage } from "../firebaseConfig";
-import { Inputs } from "../features/authentication/SignupForm";
+import { SignupInputs } from "../features/authentication/SignupForm";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { onAuthStateChanged } from "firebase/auth";
 import { transfromUser } from "../utils/transformUser";
@@ -25,7 +25,7 @@ export const signupWithEmailPassword = async ({
   firstName,
   lastName,
   avatar,
-}: Inputs): Promise<UserInfo> => {
+}: SignupInputs): Promise<UserInfo> => {
   try {
     const { user } = await createUserWithEmailAndPassword(
       auth,

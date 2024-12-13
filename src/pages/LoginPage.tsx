@@ -1,8 +1,8 @@
 import phone from "../assets/phone.png";
 import Container from "../components/Container";
-import LoginForm from "../features/authentication/LoginForm";
+// import LoginForm from "../features/authentication/LoginForm";
 import LoginPageHeader from "../features/authentication/LoginPageHeader";
-// import SignUpForm from "../features/authentication/SignupForm";
+import SignUpForm from "../features/authentication/SignupForm";
 
 function LoginPage() {
   return (
@@ -14,7 +14,7 @@ function LoginPage() {
             <div className="w-2/4">
               <img src={phone} alt="Phone Image" />
             </div>
-            <LoginForm />
+            <SignUpForm />
           </div>
         </div>
       </Container>

@@ -1,19 +1,29 @@
-import { useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import LoginInput from "./LoginInput";
-import { Inputs } from "./SignupForm";
 import FormTitle from "./FormTitle";
 import FormFooter from "./FormFooter";
+import { BaseSyntheticEvent } from "react";
+
+export type LoginInputs = {
+  email: string;
+  password: string;
+};
 
 function LoginForm() {
   const {
     register,
     formState: { errors },
-    getValues,
-  } = useForm<Inputs>({
-    defaultValues: {
-      avatar: null,
-    },
-  });
+    handleSubmit,
+  } = useForm<LoginInputs>();
+
+  const loginSubmitHandler: SubmitHandler<LoginInputs> = (
+    data,
+    e?: BaseSyntheticEvent
+  ) => {
+    console.log(data);
+    if (e) e.preventDefault();
+    console.log("e");
+  };
 
   return (
     <div className="py-16  grid gap-10  border-secondaryPurple border px-20  rounded-lg mt-10">
@@ -22,7 +32,7 @@ function LoginForm() {
         linkText="SignUp"
         paragraph="Do not have an Account?"
       />
-      <div className="grid gap-5">
+      <form className="grid gap-5" onSubmit={handleSubmit(loginSubmitHandler)}>
         <div>
           {errors.email && <p className="text-white">{errors.email.message}</p>}
           <LoginInput
@@ -64,9 +74,6 @@ function LoginForm() {
                 value: 20,
                 message: "Field value is too long",
               },
-              validate: (value) =>
-                value === getValues("confirmPassword") ||
-                "Passwords do not match",
             })}
           />
         </div>
@@ -76,7 +83,7 @@ function LoginForm() {
         >
           Login
         </button>
-      </div>
+      </form>
       <FormFooter />
     </div>
   );
