@@ -2,6 +2,7 @@ import { useForm } from "react-hook-form";
 import LoginInput from "./LoginInput";
 import { Inputs } from "./SignupForm";
 import FormTitle from "./FormTitle";
+import FormFooter from "./FormFooter";
 
 function LoginForm() {
   const {
@@ -76,19 +77,7 @@ function LoginForm() {
           Login
         </button>
       </div>
-      <div>
-        <div className="flex justify-center gap-12 pt-5">
-          <button
-            className="bg-secondaryPurple px-12 py-2 rounded-md"
-            // onClick={handleSignUpWithGoogle}
-          >
-            <span className="text-white">Google</span>
-          </button>
-          <button className="bg-secondaryPurple text-white  px-12 py-2 rounded-md ">
-            <span>Github</span>
-          </button>
-        </div>
-      </div>
+      <FormFooter />
     </div>
   );
 }
