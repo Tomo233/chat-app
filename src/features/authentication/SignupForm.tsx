@@ -1,11 +1,11 @@
 import { BaseSyntheticEvent, ChangeEvent, useState } from "react";
 import CloseIcon from "@mui/icons-material/Close";
-import Logo from "../../assets/logo.png";
 import Loader from "../../components/Loader";
 import LoginInput from "./LoginInput";
 import { useSignUp } from "./useSignUp";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useLoginWithGoogle } from "./useLoginWithGoogle";
+import FormTitle from "./FormTitle";
 
 export type Inputs = {
   firstName: string;
@@ -72,17 +72,11 @@ function SignUpForm() {
   return (
     <div className="py-10  border-secondaryPurple border px-24  rounded-lg mt-10">
       <div>
-        <h2 className="text-white text-3xl text-center flex items-center justify-center">
-          <img src={Logo} alt="Logo" className="h-20" />
-          <span> Create an Account</span>
-          <img src={Logo} alt="Logo" className="h-20" />
-        </h2>
-        <p className="text-white text-center pb-3">
-          Already have an Account?
-          <span className="text-[#7b7092] font-bold underline pl-3">
-            Log in
-          </span>
-        </p>
+        <FormTitle
+          title="Sign Up"
+          linkText="Login"
+          paragraph="Have an Account?"
+        />
         <form
           className="grid grid-cols-1 gap-4"
           onSubmit={handleSubmit(submitHandler)}

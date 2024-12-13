@@ -1,6 +1,6 @@
 import Logo from "../../assets/logo.png";
 
-function LoginHeader() {
+function LoginPageHeader() {
   return (
     <div className="flex justify-center items-center">
       <div className="flex justify-between items-center">
@@ -12,4 +12,4 @@ function LoginHeader() {
   );
 }
 
-export default LoginHeader;
+export default LoginPageHeader;
