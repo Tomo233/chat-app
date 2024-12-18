@@ -2,6 +2,7 @@ import { auth } from "../firebaseConfig";
 import {
   createUserWithEmailAndPassword,
   GoogleAuthProvider,
+  signInWithEmailAndPassword,
   signInWithPopup,
   updateProfile,
 } from "firebase/auth";
@@ -10,6 +11,7 @@ import { SignupInputs } from "../features/authentication/SignupForm";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { onAuthStateChanged } from "firebase/auth";
 import { transfromUser } from "../utils/transformUser";
+import { LoginInputs } from "../features/authentication/LoginForm";
 
 export type UserInfo = {
   id: string;
@@ -106,4 +108,16 @@ export const getUser = (): Promise<UserInfo | null> => {
       }
     );
   });
+};
+
+export const loginWithPassword = async ({ email, password }: LoginInputs) => {
+  try {
+    const { user } = await signInWithEmailAndPassword(auth, email, password);
+    const userInfo = transfromUser(user);
+    return userInfo;
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      throw new Error("Account with this email and password does not exist");
+    }
+  }
 };

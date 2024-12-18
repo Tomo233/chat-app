@@ -1,8 +1,10 @@
+import { BaseSyntheticEvent } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import LoginInput from "./LoginInput";
 import FormTitle from "./FormTitle";
 import FormFooter from "./FormFooter";
-import { BaseSyntheticEvent } from "react";
+import Loader from "../../components/Loader";
+import { useLogin } from "./useLogin";
 
 export type LoginInputs = {
   email: string;
@@ -15,6 +17,7 @@ function LoginForm() {
     formState: { errors },
     handleSubmit,
   } = useForm<LoginInputs>();
+  const { login, isPending } = useLogin();
 
   const loginSubmitHandler: SubmitHandler<LoginInputs> = (
     data,
@@ -22,8 +25,16 @@ function LoginForm() {
   ) => {
     console.log(data);
     if (e) e.preventDefault();
-    console.log("e");
+    login(data);
   };
+
+  if (isPending)
+    return (
+      <div className="bg-backgroundColor flex justify-center items-center">
+        <p className="text-white text-5xl">Loading...</p>
+        <Loader />
+      </div>
+    );
 
   return (
     <div className="py-16  grid gap-10  border-secondaryPurple border px-20  rounded-lg mt-10">
