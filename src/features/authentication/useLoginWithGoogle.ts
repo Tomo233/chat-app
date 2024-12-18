@@ -15,8 +15,7 @@ export const useLoginWithGoogle = () => {
     onSuccess: (user) => {
       queryClient.setQueryData(["user"], user);
       toast.success("User successfully logged in");
-      console.log("User logged in");
-      navigate("/chat", { replace: true });
+      navigate("/", { replace: true });
     },
     onError: (error) => {
       toast.error(error.message);
