@@ -1,10 +1,12 @@
+import { useLocation } from "react-router-dom";
 import phone from "../assets/phone.png";
 import Container from "../components/Container";
-// import LoginForm from "../features/authentication/LoginForm";
+import LoginForm from "../features/authentication/LoginForm";
 import LoginPageHeader from "../features/authentication/LoginPageHeader";
 import SignUpForm from "../features/authentication/SignupForm";
 
 function LoginPage() {
+  const { pathname } = useLocation();
   return (
     <div className="bg-backgroundColor h-screen">
       <Container>
@@ -14,7 +16,7 @@ function LoginPage() {
             <div className="w-2/4">
               <img src={phone} alt="Phone Image" />
             </div>
-            <SignUpForm />
+            {pathname === "/signup" ? <SignUpForm /> : <LoginForm />}
           </div>
         </div>
       </Container>

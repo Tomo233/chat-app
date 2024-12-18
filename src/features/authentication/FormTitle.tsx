@@ -1,9 +1,10 @@
+import { Link } from "react-router-dom";
 import Logo from "../../assets/logo.png";
 
 type FormTitleProps = {
   title: string;
   paragraph: string;
-  linkText: string;
+  linkText: "Login" | "SignUp";
 };
 
 function FormTitle({ title, paragraph, linkText }: FormTitleProps) {
@@ -17,9 +18,12 @@ function FormTitle({ title, paragraph, linkText }: FormTitleProps) {
         </h2>
         <p className="text-white text-center pb-3">
           {paragraph}
-          <span className="text-[#7b7092] font-bold underline pl-3">
+          <Link
+            className="text-[#7b7092] font-bold underline pl-3"
+            to={linkText === "Login" ? "/login" : "/signup"}
+          >
             {linkText}
-          </span>
+          </Link>
         </p>
       </div>
     </div>
