@@ -14,13 +14,7 @@ function ProtectedRoute({ children }: { children: ReactNode }) {
     }
   }, [user, isLoading, navigate]);
 
-  if (isLoading || !user)
-    return (
-      <div className="bg-backgroundColor h-screen flex justify-center items-center">
-        <p className="text-white text-5xl">Loading...</p>
-        <Loader />
-      </div>
-    );
+  if (isLoading || !user) return <Loader />;
   return <div>{children}</div>;
 }
 

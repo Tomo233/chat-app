@@ -59,13 +59,7 @@ function SignUpForm() {
   };
 
   if (isPending || isPendingGoogle) {
-    console.log("e");
-    return (
-      <div className="bg-backgroundColor flex justify-center items-center">
-        <p className="text-white text-5xl">Loading...</p>
-        <Loader />
-      </div>
-    );
+    return <Loader />;
   }
 
   return (

@@ -12,13 +12,7 @@ function LoginPage() {
   const { user, isLoading } = useUser();
   const navigate = useNavigate();
 
-  if (isLoading)
-    return (
-      <div className="bg-backgroundColor h-screen flex justify-center items-center">
-        <p className="text-white text-5xl">Loading...</p>
-        <Loader />
-      </div>
-    );
+  if (isLoading) return <Loader />;
 
   if (user) navigate("/");
 

@@ -28,13 +28,7 @@ function LoginForm() {
     login(data);
   };
 
-  if (isPending)
-    return (
-      <div className="bg-backgroundColor flex justify-center items-center">
-        <p className="text-white text-5xl">Loading...</p>
-        <Loader />
-      </div>
-    );
+  if (isPending) return <Loader />;
 
   return (
     <div className="py-16  grid gap-10  border-secondaryPurple border px-20  rounded-lg mt-10">

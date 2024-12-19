@@ -1,10 +1,11 @@
 import EditIcon from "@mui/icons-material/Edit";
 import { useUser } from "../authentication/useUser";
+import Loader from "../../components/Loader";
 
 function PersonalInformation() {
   const { user, isLoading } = useUser();
 
-  if (isLoading) return <p>loading...</p>;
+  if (isLoading) return <Loader />;
 
   return (
     <section className="border border-secondaryPurple rounded-lg p-3 pb-10 pl-7">
