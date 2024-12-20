@@ -1,10 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
-import { getUser } from "../../services/authentication";
+import { getCurrentUser } from "../../services/authentication";
 
-export const useUser = () => {
+export const useCurrentUser = () => {
   const { data: user, isLoading } = useQuery({
     queryKey: ["user"],
-    queryFn: getUser,
+    queryFn: getCurrentUser,
   });
   return { user, isLoading };
 };

@@ -5,11 +5,11 @@ import Loader from "../components/Loader";
 import LoginForm from "../features/authentication/LoginForm";
 import LoginPageHeader from "../features/authentication/LoginPageHeader";
 import SignUpForm from "../features/authentication/SignupForm";
-import { useUser } from "../features/authentication/useUser";
+import { useCurrentUser } from "../features/authentication/useCurrentUser";
 
 function LoginPage() {
   const { pathname } = useLocation();
-  const { user, isLoading } = useUser();
+  const { user, isLoading } = useCurrentUser();
   const navigate = useNavigate();
 
   if (isLoading) return <Loader />;

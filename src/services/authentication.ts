@@ -89,7 +89,7 @@ export const loginWithGoogle = async (): Promise<UserInfo | undefined> => {
   }
 };
 
-export const getUser = (): Promise<UserInfo | null> => {
+export const getCurrentUser = (): Promise<UserInfo | null> => {
   return new Promise((resolve, reject) => {
     const unsubscribe = onAuthStateChanged(
       auth,

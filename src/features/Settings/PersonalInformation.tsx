@@ -1,9 +1,9 @@
+import { useCurrentUser } from "../authentication/useCurrentUser";
 import EditIcon from "@mui/icons-material/Edit";
-import { useUser } from "../authentication/useUser";
 import Loader from "../../components/Loader";
 
 function PersonalInformation() {
-  const { user, isLoading } = useUser();
+  const { user, isLoading } = useCurrentUser();
 
   if (isLoading) return <Loader />;
 

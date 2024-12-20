@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import Logo from "../assets/logo.png";
 import Notifications from "./Notifications";
 
@@ -11,9 +12,15 @@ function Header() {
         </div>
         <nav>
           <ul className="flex justify-between items-center  gap-10 font-semibold">
-            <li className="text-white">Home</li>
-            <li className="text-white">Contacts</li>
-            <li className="text-white">Settings</li>
+            <Link className="text-white" to={""}>
+              Home
+            </Link>
+            <Link className="text-white" to={""}>
+              Contacts
+            </Link>
+            <Link className="text-white" to={"/settings"}>
+              Settings
+            </Link>
             <Notifications />
           </ul>
         </nav>

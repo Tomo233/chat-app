@@ -1,11 +1,11 @@
 import { ReactNode, useEffect } from "react";
-import { useUser } from "../features/authentication/useUser";
-import { useNavigate } from "react-router-dom";
-import Loader from "./Loader";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
+import { useCurrentUser } from "../features/authentication/useCurrentUser";
+import Loader from "./Loader";
 
 function ProtectedRoute({ children }: { children: ReactNode }) {
-  const { user, isLoading } = useUser();
+  const { user, isLoading } = useCurrentUser();
   const navigate = useNavigate();
   useEffect(() => {
     if (!isLoading && !user) {
