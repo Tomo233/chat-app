@@ -44,27 +44,30 @@ export const signupWithEmailPassword = async ({
     const randomNumber = Math.random();
     if (avatar && avatar instanceof File) {
       const storageRef = ref(storage, `avatars/${avatar.name}-${randomNumber}`);
-      const uploadTask = uploadBytesResumable(storageRef, avatar);
 
-      uploadTask.on(
-        "state_changed",
-        () => {}, // Progress handler
-        (error) => {
-          console.error("Upload error:", error); // Logging error for debugging
-          throw new Error("Failed to upload avatar. Please try again."); // Custom error message
-        },
-        async () => {
-          const url = await getDownloadURL(uploadTask.snapshot.ref);
+      const photoURL = await new Promise<string>((resolve, reject) => {
+        const uploadTask = uploadBytesResumable(storageRef, avatar);
 
-          await updateProfile(user, {
-            photoURL: url,
-          }).catch((error) => {
-            console.log(`error while setting photo`, error);
-          });
-        }
-      );
+        uploadTask.on(
+          "state_changed",
+          () => {}, // Progress handler (optional)
+          (error) => {
+            console.error("Upload error:", error);
+            reject(new Error("Failed to upload avatar. Please try again."));
+          },
+          async () => {
+            const url = await getDownloadURL(uploadTask.snapshot.ref);
+            resolve(url);
+          }
+        );
+      });
+
+      await updateProfile(user, {
+        photoURL,
+      });
     }
     const userInfo = transfromUser(user);
+    console.log(userInfo);
 
     return userInfo;
   } catch (error: unknown) {

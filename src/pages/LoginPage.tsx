@@ -6,6 +6,7 @@ import LoginForm from "../features/authentication/LoginForm";
 import LoginPageHeader from "../features/authentication/LoginPageHeader";
 import SignUpForm from "../features/authentication/SignupForm";
 import { useCurrentUser } from "../features/authentication/useCurrentUser";
+import { useEffect } from "react";
 
 function LoginPage() {
   const { pathname } = useLocation();
@@ -14,7 +15,9 @@ function LoginPage() {
 
   if (isLoading) return <Loader />;
 
-  if (user) navigate("/");
+  useEffect(() => {
+    if (user) navigate("/");
+  }, [user, navigate]);
 
   return (
     <div className="bg-backgroundColor h-screen">
