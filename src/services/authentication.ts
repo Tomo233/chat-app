@@ -12,6 +12,7 @@ import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { onAuthStateChanged } from "firebase/auth";
 import { transfromUser } from "../utils/transformUser";
 import { LoginInputs } from "../features/authentication/LoginForm";
+import { addUserToFirebase } from "../utils/addUserToFirestore";
 
 export type UserInfo = {
   id: string;
@@ -67,7 +68,8 @@ export const signupWithEmailPassword = async ({
       });
     }
     const userInfo = transfromUser(user);
-    console.log(userInfo);
+
+    addUserToFirebase(userInfo);
 
     return userInfo;
   } catch (error: unknown) {
@@ -84,6 +86,9 @@ export const loginWithGoogle = async (): Promise<UserInfo | undefined> => {
   try {
     const { user } = await signInWithPopup(auth, provider);
     const userInfo = transfromUser(user);
+
+    addUserToFirebase(userInfo);
+
     return userInfo;
   } catch (error: unknown) {
     if (error instanceof Error) {
@@ -117,6 +122,7 @@ export const loginWithPassword = async ({ email, password }: LoginInputs) => {
   try {
     const { user } = await signInWithEmailAndPassword(auth, email, password);
     const userInfo = transfromUser(user);
+
     return userInfo;
   } catch (error: unknown) {
     if (error instanceof Error) {
