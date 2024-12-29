@@ -69,7 +69,7 @@ export const signupWithEmailPassword = async ({
     }
     const userInfo = transfromUser(user);
 
-    addUserToFirebase(userInfo);
+    await addUserToFirebase(userInfo);
 
     return userInfo;
   } catch (error: unknown) {
@@ -87,7 +87,7 @@ export const loginWithGoogle = async (): Promise<UserInfo | undefined> => {
     const { user } = await signInWithPopup(auth, provider);
     const userInfo = transfromUser(user);
 
-    addUserToFirebase(userInfo);
+    await addUserToFirebase(userInfo);
 
     return userInfo;
   } catch (error: unknown) {

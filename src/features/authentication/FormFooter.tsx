@@ -3,7 +3,6 @@ import { useLoginWithGoogle } from "./useLoginWithGoogle";
 function FormFooter() {
   const { loginWithGoogle } = useLoginWithGoogle();
   const handleSignUpWithGoogle = () => {
-    console.log("ee");
     loginWithGoogle();
   };
 

@@ -23,7 +23,6 @@ function LoginForm() {
     data,
     e?: BaseSyntheticEvent
   ) => {
-    console.log(data);
     if (e) e.preventDefault();
     login(data);
   };

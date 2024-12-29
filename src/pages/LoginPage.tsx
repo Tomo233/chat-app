@@ -1,23 +1,23 @@
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import phone from "../assets/phone.png";
 import Container from "../components/Container";
-import Loader from "../components/Loader";
+// import Loader from "../components/Loader";
 import LoginForm from "../features/authentication/LoginForm";
 import LoginPageHeader from "../features/authentication/LoginPageHeader";
 import SignUpForm from "../features/authentication/SignupForm";
-import { useCurrentUser } from "../features/authentication/useCurrentUser";
-import { useEffect } from "react";
+// import { useCurrentUser } from "../features/authentication/useCurrentUser";
+// import { useEffect } from "react";
 
 function LoginPage() {
   const { pathname } = useLocation();
-  const { user, isLoading } = useCurrentUser();
-  const navigate = useNavigate();
+  // const { user, isLoading } = useCurrentUser();
+  // const navigate = useNavigate();
 
-  if (isLoading) return <Loader />;
+  // if (isLoading) return <Loader />;
 
-  useEffect(() => {
-    if (user) navigate("/");
-  }, [user, navigate]);
+  // useEffect(() => {
+  //   if (user) navigate("/");
+  // }, [user, navigate]);
 
   return (
     <div className="bg-backgroundColor h-screen">
