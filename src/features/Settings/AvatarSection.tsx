@@ -14,8 +14,12 @@ function AvatarSection() {
 
   return (
     <section className="flex justify-between items-center border border-secondaryPurple rounded-lg p-3">
-      <div className="flex items-center">
-        <img src={DefaultUserImage} alt="User Image" className="h-24" />
+      <div className="flex items-center gap-5">
+        <img
+          src={user?.photoURL ? user.photoURL : DefaultUserImage}
+          alt="User Image"
+          className="h-20 rounded-full"
+        />
         <h3 className="font-semibold">
           {user?.firstName} {user?.lastName}
         </h3>
