@@ -4,8 +4,8 @@ import { UserInfo } from "../services/authentication";
 
 export const addUserToFirebase = async (user: UserInfo) => {
   try {
-    console.log(user);
     await addDoc(collection(db, "users"), {
+      id: user.id,
       firstName: user.firstName,
       lastName: user.lastName,
       email: user.email,

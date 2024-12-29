@@ -1,4 +1,4 @@
-import { auth } from "../firebaseConfig";
+import { auth, db } from "../firebaseConfig";
 import {
   createUserWithEmailAndPassword,
   GoogleAuthProvider,
@@ -13,6 +13,7 @@ import { onAuthStateChanged } from "firebase/auth";
 import { transfromUser } from "../utils/transformUser";
 import { LoginInputs } from "../features/authentication/LoginForm";
 import { addUserToFirebase } from "../utils/addUserToFirestore";
+import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
 
 export type UserInfo = {
   id: string;
@@ -67,6 +68,7 @@ export const signupWithEmailPassword = async ({
         photoURL,
       });
     }
+
     const userInfo = transfromUser(user);
 
     await addUserToFirebase(userInfo);
@@ -87,12 +89,18 @@ export const loginWithGoogle = async (): Promise<UserInfo | undefined> => {
     const { user } = await signInWithPopup(auth, provider);
     const userInfo = transfromUser(user);
 
-    await addUserToFirebase(userInfo);
+    const usersCollectionRef = collection(db, "users");
 
+    const userQuery = query(usersCollectionRef, where("id", "==", userInfo.id));
+    const querySnapshot = await getDocs(userQuery);
+
+    if (querySnapshot.empty) {
+      await addDoc(usersCollectionRef, userInfo);
+    }
     return userInfo;
   } catch (error: unknown) {
     if (error instanceof Error) {
-      throw new Error("Something went wrong, please try again.");
+      throw new Error(error.message);
     }
   }
 };

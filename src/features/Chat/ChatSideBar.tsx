@@ -14,7 +14,10 @@ function ChatSideBar() {
       <div className="mt-8 bg-primaryPurple max-w-96 max-h-[650px]  rounded-2xl p-2 overflow-y-auto">
         {users.map((item) => {
           return (
-            <div className="flex gap-5 items-center p-6 border-b border-borderColor">
+            <div
+              className="flex gap-5 items-center p-6 border-b border-borderColor"
+              key={item.id}
+            >
               <img
                 src={Profile}
                 alt="Profile Image"
