@@ -7,6 +7,6 @@ export const addUserToFirebase = async (user: UserInfo) => {
     firstName: user.firstName,
     lastName: user.lastName,
     email: user.email,
-    photUrl: user.photoURL,
+    photoURL: user.photoURL,
   });
 };
