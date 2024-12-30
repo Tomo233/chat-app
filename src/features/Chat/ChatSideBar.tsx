@@ -16,7 +16,7 @@ function ChatSideBar() {
     <div>
       <input
         type="text"
-        placeholder="Search Contacts"
+        placeholder="Search Recent Chats"
         className="bg-primaryPurple w-96 h-14 pl-3 rounded-2xl outline-none text-white "
       />
       <div className="mt-8 bg-primaryPurple max-w-96 max-h-[650px]  rounded-2xl p-2 overflow-y-auto">

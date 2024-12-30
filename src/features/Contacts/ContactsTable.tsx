@@ -3,35 +3,30 @@ import { MouseEvent, useState } from "react";
 import DefaultUserImage from "../../assets/default-user.png";
 import SwapVertIcon from "@mui/icons-material/SwapVert";
 import TuneIcon from "@mui/icons-material/Tune";
+import { useFirestoreCollection } from "../../hooks/useFirestoreCollection";
+import { UserInfo } from "../../services/authentication";
 export default function Contacts() {
   const [page, setPage] = useState(0);
   const rowsPerPage = 8;
 
-  // Handle page change for pagination
+  const users = useFirestoreCollection<UserInfo>("users");
+
+  // Calculate empty rows for pagination
+  const emptyRows =
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - users.length) : 0;
+
+  // Slice rows based on current paged
+  const paginatedRows = users.slice(
+    page * rowsPerPage,
+    page * rowsPerPage + rowsPerPage
+  );
+
   const handleChangePage = (
     _: MouseEvent<HTMLButtonElement> | null,
     newPage: number
   ) => {
     setPage(newPage);
   };
-
-  // Example data for contacts - make sure this array has enough entries
-  const rows = Array.from({ length: 25 }, (_, index) => ({
-    userName: `User ${index + 1}`,
-    firstName: `First ${index + 1}`,
-    lastName: `Last ${index + 1}`,
-    email: `user${index + 1}@example.com`,
-  }));
-
-  // Calculate empty rows for pagination
-  const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
-
-  // Slice rows based on current page
-  const paginatedRows = rows.slice(
-    page * rowsPerPage,
-    page * rowsPerPage + rowsPerPage
-  );
 
   return (
     <div className="max-w-full  bg-primaryPurple text-white overflow-hidden">
@@ -67,7 +62,9 @@ export default function Contacts() {
                     className="h-12 w-12 rounded-full"
                     alt="DefaultUserImage"
                   />
-                  <span>{row.userName}</span>
+                  <span>
+                    {row.firstName} {row.lastName}
+                  </span>
                 </div>
               </td>
               <td className="p-2">{row.firstName}</td>
@@ -91,7 +88,7 @@ export default function Contacts() {
                 }}
                 component="div"
                 rowsPerPageOptions={[]} // Disable dropdown for rows per page
-                count={rows.length} // Total number of rows
+                count={users.length} // Total number of rows
                 rowsPerPage={rowsPerPage} // Fixed to 10 rows per page
                 page={page}
                 onPageChange={handleChangePage}
