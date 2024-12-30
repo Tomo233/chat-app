@@ -15,7 +15,7 @@ function Header() {
             <Link className="text-white" to={""}>
               Home
             </Link>
-            <Link className="text-white" to={""}>
+            <Link className="text-white" to={"/contacts"}>
               Contacts
             </Link>
             <Link className="text-white" to={"/settings"}>

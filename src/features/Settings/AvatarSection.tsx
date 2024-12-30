@@ -16,7 +16,7 @@ function AvatarSection() {
     <section className="flex justify-between items-center border border-secondaryPurple rounded-lg p-3">
       <div className="flex items-center gap-5">
         <img
-          src={user?.photoURL ? user.photoURL : DefaultUserImage}
+          src={user?.photoURL || DefaultUserImage}
           alt="User Image"
           className="h-20 rounded-full"
         />

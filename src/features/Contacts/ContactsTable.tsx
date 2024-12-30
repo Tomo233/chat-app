@@ -1,6 +1,6 @@
 import TablePagination from "@mui/material/TablePagination";
 import { MouseEvent, useState } from "react";
-import ProfileImage from "../../assets/profile.png";
+import DefaultUserImage from "../../assets/default-user.png";
 import SwapVertIcon from "@mui/icons-material/SwapVert";
 import TuneIcon from "@mui/icons-material/Tune";
 export default function Contacts() {
@@ -63,9 +63,9 @@ export default function Contacts() {
               <td className="p-2">
                 <div className="flex items-center gap-3">
                   <img
-                    src={ProfileImage}
+                    src={DefaultUserImage}
                     className="h-12 w-12 rounded-full"
-                    alt="Profile"
+                    alt="DefaultUserImage"
                   />
                   <span>{row.userName}</span>
                 </div>

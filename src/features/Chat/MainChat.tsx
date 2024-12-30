@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Profile from "../../assets/profile.png";
+import DefaultUserImage from "../../assets/default-user.png";
 import ProfileBar from "./ProfileBar";
 import SendMessage from "./SendMessage";
 
@@ -19,7 +19,6 @@ function MainChat() {
 
   return (
     <div className="bg-primaryPurple rounded-2xl w-2/3 grid grid-rows-[100px_auto_100px]">
-      {/* Profile */}
       <ProfileBar />
 
       <div className="max-h-[550px] overflow-auto p-5">
@@ -40,8 +39,8 @@ function MainChat() {
               {msg.status === "sender" && isLastMessageByUser && (
                 <div>
                   <img
-                    src={Profile}
-                    alt="Profile Image"
+                    src={DefaultUserImage}
+                    alt="DefaultUserImage Image"
                     className="h-12 rounded-3xl"
                   />
                   <p className="text-white text-center">9:00</p>

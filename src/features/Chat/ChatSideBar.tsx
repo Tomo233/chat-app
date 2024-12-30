@@ -1,4 +1,4 @@
-import Profile from "../../assets/profile.png";
+import DefaultUserImage from "../../assets/default-user.png";
 import Loader from "../../components/Loader";
 import { useFirestoreCollection } from "../../hooks/useFirestoreCollection";
 import { UserInfo } from "../../services/authentication";
@@ -27,7 +27,7 @@ function ChatSideBar() {
               key={item.id}
             >
               <img
-                src={Profile}
+                src={item.photoURL || DefaultUserImage}
                 alt="Profile Image"
                 className="h-12 rounded-3xl"
               />
