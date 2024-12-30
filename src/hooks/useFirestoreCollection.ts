@@ -13,17 +13,8 @@ export const useFirestoreCollection = <T>(collectionName: string) => {
         setData(newData);
       }
     );
-
     return () => unsubscribe();
   }, [collectionName]);
 
   return data;
 };
-
-// export type UserInfo = {
-//   id: string;
-//   email: string;
-//   firstName: string;
-//   lastName: string;
-//   photoURL: string | null;
-// };
