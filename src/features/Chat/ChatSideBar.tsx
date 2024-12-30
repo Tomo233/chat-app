@@ -1,10 +1,11 @@
 import Profile from "../../assets/profile.png";
 import Loader from "../../components/Loader";
 import { useFirestoreCollection } from "../../hooks/useFirestoreCollection";
+import { UserInfo } from "../../services/authentication";
 import { useCurrentUser } from "../authentication/useCurrentUser";
 
 function ChatSideBar() {
-  const users = useFirestoreCollection("users");
+  const users = useFirestoreCollection<UserInfo>("users");
   const { user, isLoading } = useCurrentUser();
 
   const filteredUsers = users.filter((element) => element.id !== user?.id);

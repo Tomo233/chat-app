@@ -1,15 +1,15 @@
 import { useEffect, useState } from "react";
-import { collection, DocumentData, onSnapshot } from "firebase/firestore";
+import { collection, onSnapshot } from "firebase/firestore";
 import { db } from "../firebaseConfig";
 
-export const useFirestoreCollection = (collectionName: string) => {
-  const [data, setData] = useState<DocumentData[]>([]);
+export const useFirestoreCollection = <T>(collectionName: string) => {
+  const [data, setData] = useState<T[]>([]);
 
   useEffect(() => {
     const unsubscribe = onSnapshot(
       collection(db, collectionName),
       (querySnapshot) => {
-        const newData = querySnapshot.docs.map((doc) => doc.data());
+        const newData = querySnapshot.docs.map((doc) => doc.data() as T);
         setData(newData);
       }
     );
@@ -19,3 +19,11 @@ export const useFirestoreCollection = (collectionName: string) => {
 
   return data;
 };
+
+// export type UserInfo = {
+//   id: string;
+//   email: string;
+//   firstName: string;
+//   lastName: string;
+//   photoURL: string | null;
+// };
