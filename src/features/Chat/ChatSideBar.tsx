@@ -1,8 +1,15 @@
 import Profile from "../../assets/profile.png";
+import Loader from "../../components/Loader";
 import { useFirestoreCollection } from "../../hooks/useFirestoreCollection";
+import { useCurrentUser } from "../authentication/useCurrentUser";
 
 function ChatSideBar() {
   const users = useFirestoreCollection("users");
+  const { user, isLoading } = useCurrentUser();
+
+  const filteredUsers = users.filter((element) => element.id !== user?.id);
+
+  if (isLoading) return <Loader />;
 
   return (
     <div>
@@ -12,7 +19,7 @@ function ChatSideBar() {
         className="bg-primaryPurple w-96 h-14 pl-3 rounded-2xl outline-none text-white "
       />
       <div className="mt-8 bg-primaryPurple max-w-96 max-h-[650px]  rounded-2xl p-2 overflow-y-auto">
-        {users.map((item) => {
+        {filteredUsers.map((item) => {
           return (
             <div
               className="flex gap-5 items-center p-6 border-b border-borderColor"
