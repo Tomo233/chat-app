@@ -5,14 +5,19 @@ import { useFirestoreCollection } from "../../hooks/useFirestoreCollection";
 import { UserInfo } from "../../services/authentication";
 import SwapVertIcon from "@mui/icons-material/SwapVert";
 import { Box, Menu, MenuItem } from "@mui/material";
+import { useSearchParams } from "react-router-dom";
 
 export default function Contacts() {
   const [page, setPage] = useState(0);
-  const rowsPerPage = 8;
-
-  const users = useFirestoreCollection<UserInfo>("users");
-
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const users = useFirestoreCollection<UserInfo>("users", "firstName");
+  const rowsPerPage = 8;
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const handleParams = (order: "asc" | "desc") => {
+    searchParams.set("firstName", order);
+    setSearchParams(searchParams);
+  };
 
   const handleOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget); // Sets the clicked button as the anchor element
@@ -74,6 +79,10 @@ export default function Contacts() {
                     backgroundColor: "#6e54b5",
                   },
                 }}
+                onClick={() => {
+                  handleParams("asc");
+                  handleClose();
+                }}
               >
                 Name A-Z
               </MenuItem>
@@ -86,6 +95,10 @@ export default function Contacts() {
                   "&:hover": {
                     backgroundColor: "#6e54b5",
                   },
+                }}
+                onClick={() => {
+                  handleParams("desc");
+                  handleClose();
                 }}
               >
                 Name Z-A
