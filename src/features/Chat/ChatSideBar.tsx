@@ -8,9 +8,9 @@ function ChatSideBar() {
   const users = useFirestoreCollection<UserInfo>("users");
   const { user, isLoading } = useCurrentUser();
 
-  const filteredUsers = users.filter((element) => element.id !== user?.id);
-
   if (isLoading) return <Loader />;
+
+  const filteredUsers = users.filter((element) => element.id !== user?.id);
 
   return (
     <div>
@@ -27,7 +27,7 @@ function ChatSideBar() {
               key={item.id}
             >
               <img
-                src={item.photoURL || DefaultUserImage}
+                src={item?.photoURL || DefaultUserImage}
                 alt="Profile Image"
                 className="h-12 rounded-3xl"
               />

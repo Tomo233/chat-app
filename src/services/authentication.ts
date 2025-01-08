@@ -97,6 +97,7 @@ export const loginWithGoogle = async (): Promise<UserInfo | undefined> => {
     if (querySnapshot.empty) {
       await addDoc(usersCollectionRef, userInfo);
     }
+
     return userInfo;
   } catch (error: unknown) {
     if (error instanceof Error) {
