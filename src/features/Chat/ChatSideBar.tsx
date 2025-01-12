@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import DefaultUserImage from "../../assets/default-user.png";
 import Loader from "../../components/Loader";
 import { useFirestoreCollection } from "../../hooks/useFirestoreCollection";
@@ -26,11 +27,13 @@ function ChatSideBar() {
               className="flex gap-5 items-center p-6 border-b border-borderColor"
               key={item.id}
             >
-              <img
-                src={item?.photoURL || DefaultUserImage}
-                alt="Profile Image"
-                className="h-12 rounded-3xl"
-              />
+              <Link to={`/chat/${item.id}`}>
+                <img
+                  src={item?.photoURL || DefaultUserImage}
+                  alt="Profile Image"
+                  className="h-12 rounded-3xl"
+                />
+              </Link>
               <h3 className="text-white">{item.firstName}</h3>
               <p className="text-white">Hi there,How are you?</p>
               <p className="text-white">9:00</p>

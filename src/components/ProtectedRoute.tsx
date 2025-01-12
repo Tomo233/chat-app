@@ -15,6 +15,7 @@ function ProtectedRoute({ children }: { children: ReactNode }) {
   }, [user, isLoading, navigate]);
 
   if (isLoading || !user) return <Loader />;
+
   return <div>{children}</div>;
 }
 

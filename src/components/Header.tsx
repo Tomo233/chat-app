@@ -12,7 +12,7 @@ function Header() {
         </div>
         <nav>
           <ul className="flex justify-between items-center  gap-10 font-semibold">
-            <Link className="text-white" to={""}>
+            <Link className="text-white" to={"/chat"}>
               Home
             </Link>
             <Link className="text-white" to={"/contacts"}>

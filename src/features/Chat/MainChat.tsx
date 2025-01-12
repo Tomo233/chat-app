@@ -3,6 +3,7 @@ import DefaultUserImage from "../../assets/default-user.png";
 import ProfileBar from "./ProfileBar";
 import SendMessage from "./SendMessage";
 import { useParams } from "react-router-dom";
+import EmptyChat from "./EmptyChat";
 
 function MainChat() {
   const [messages] = useState([
@@ -18,7 +19,9 @@ function MainChat() {
     { status: "receiver", message: "Hi there I'm receiver again" },
   ]);
   const { id } = useParams();
-  console.log(id);
+
+  if (!id) return <EmptyChat />;
+
   return (
     <div className="bg-primaryPurple rounded-2xl w-2/3 grid grid-rows-[100px_auto_100px]">
       <ProfileBar />
