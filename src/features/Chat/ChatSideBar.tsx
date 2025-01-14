@@ -6,12 +6,12 @@ import { UserInfo } from "../../services/authentication";
 import { useCurrentUser } from "../authentication/useCurrentUser";
 
 function ChatSideBar() {
-  const users = useFirestoreCollection<UserInfo>("users");
+  const { users, isLoadingUsers } = useFirestoreCollection<UserInfo>("users");
   const { user, isLoading } = useCurrentUser();
 
-  if (isLoading) return <Loader />;
+  if (isLoading || isLoadingUsers) return <Loader />;
 
-  const filteredUsers = users.filter((element) => element.id !== user?.id);
+  const filteredUsers = users?.filter((element) => element.id !== user?.id);
 
   return (
     <div>
@@ -21,7 +21,7 @@ function ChatSideBar() {
         className="bg-primaryPurple w-96 h-14 pl-3 rounded-2xl outline-none text-white "
       />
       <div className="mt-8 bg-primaryPurple max-w-96 max-h-[650px]  rounded-2xl p-2 overflow-y-auto">
-        {filteredUsers.map((item) => {
+        {filteredUsers?.map((item) => {
           return (
             <div key={item.id}>
               <Link

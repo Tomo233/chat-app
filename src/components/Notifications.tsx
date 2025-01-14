@@ -8,12 +8,12 @@ import Loader from "./Loader";
 
 function Notifications() {
   const [isOpened, setIsOpened] = useState(false);
-  const users = useFirestoreCollection<UserInfo>("users");
+  const { users, isLoadingUsers } = useFirestoreCollection<UserInfo>("users");
   const { user, isLoading } = useCurrentUser();
 
-  if (isLoading) return <Loader />;
+  if (isLoading || isLoadingUsers) return <Loader />;
 
-  const filteredUsers = users.filter((element) => element.id !== user?.id);
+  const filteredUsers = users?.filter((element) => element.id !== user?.id);
 
   return (
     <div className="relative">
@@ -22,7 +22,7 @@ function Notifications() {
       </button>
       {isOpened && (
         <div className="absolute right-1  mt-8 bg-primaryPurple w-[380px] border border-secondaryPurple  max-h-96  rounded-2xl p-2 overflow-y-auto">
-          {filteredUsers.map((user) => {
+          {filteredUsers?.map((user) => {
             return (
               <div className="flex gap-5 items-center p-6 border-b border-borderColor">
                 <img
