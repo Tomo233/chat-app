@@ -11,7 +11,10 @@ export const useGetUserById = () => {
   const collectionRef = collection(db, "users");
 
   useEffect(() => {
-    if (!id) return;
+    if (!id) {
+      setIsLoading(false);
+      return;
+    }
 
     const q = query(collectionRef, where("id", "==", id));
     const unsubscribe = onSnapshot(q, (querySnapshot) => {

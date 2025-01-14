@@ -6,10 +6,10 @@ function Header() {
   return (
     <header className="pt-5 mb-8">
       <div className="flex justify-between items-center">
-        <div className="flex items-center">
+        <Link className="flex items-center" to={"/chat"}>
           <img src={Logo} alt="Logo" className="h-20" />
           <h1 className="text-3xl text-white font-semibold">Chat App</h1>
-        </div>
+        </Link>
         <nav>
           <ul className="flex justify-between items-center  gap-10 font-semibold">
             <Link className="text-white" to={"/chat"}>

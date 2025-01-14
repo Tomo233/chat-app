@@ -1,16 +1,21 @@
 import DefaultUserImage from "../../assets/default-user.png";
+import { useGetUserById } from "../authentication/useGetUserById";
 
 function ProfileBar() {
+  const { user } = useGetUserById();
+
   return (
     <div className="flex justify-between border-b border-borderColor p-3 h-20">
       <div className="flex gap-3">
         <img
-          src={DefaultUserImage}
+          src={user?.photoURL || DefaultUserImage}
           alt="Profile Image"
           className="h-12 rounded-3xl"
         />
         <div className="pt-2">
-          <h3 className="text-white text-lg">John Smith</h3>
+          <h3 className="text-white text-lg">
+            {user?.firstName} {user?.lastName}
+          </h3>
           <p className="text-green-500">online</p>
         </div>
       </div>

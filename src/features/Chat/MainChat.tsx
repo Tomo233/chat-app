@@ -4,6 +4,8 @@ import ProfileBar from "./ProfileBar";
 import SendMessage from "./SendMessage";
 import { useParams } from "react-router-dom";
 import EmptyChat from "./EmptyChat";
+import { useGetUserById } from "../authentication/useGetUserById";
+import { Box, CircularProgress } from "@mui/material";
 
 function MainChat() {
   const [messages] = useState([
@@ -19,6 +21,24 @@ function MainChat() {
     { status: "receiver", message: "Hi there I'm receiver again" },
   ]);
   const { id } = useParams();
+  const { user, isLoading } = useGetUserById();
+
+  if (isLoading) {
+    return (
+      <div className="bg-backgroundColor flex mr-48 items-center">
+        <p className="text-white text-5xl">Loading...</p>
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <CircularProgress size={90} />
+        </Box>
+      </div>
+    );
+  }
 
   if (!id) return <EmptyChat />;
 
@@ -44,7 +64,7 @@ function MainChat() {
               {msg.status === "sender" && isLastMessageByUser && (
                 <div>
                   <img
-                    src={DefaultUserImage}
+                    src={user?.photoURL || DefaultUserImage}
                     alt="DefaultUserImage Image"
                     className="h-12 rounded-3xl"
                   />
