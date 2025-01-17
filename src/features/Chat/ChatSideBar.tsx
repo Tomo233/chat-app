@@ -6,10 +6,9 @@ import { UserInfo } from "../../services/authentication";
 import { useCurrentUser } from "../authentication/useCurrentUser";
 
 function ChatSideBar() {
-  const { users, isLoadingUsers } = useFirestoreCollection<UserInfo>("users");
+  const users = useFirestoreCollection<UserInfo>("users");
   const { user, isLoading } = useCurrentUser();
-
-  if (isLoading || isLoadingUsers) return <Loader />;
+  if (isLoading) return <Loader />;
 
   const filteredUsers = users?.filter((element) => element.id !== user?.id);
 

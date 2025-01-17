@@ -4,13 +4,17 @@ import DefaultUserImage from "../../assets/default-user.png";
 import { useFirestoreCollection } from "../../hooks/useFirestoreCollection";
 import { UserInfo } from "../../services/authentication";
 import SwapVertIcon from "@mui/icons-material/SwapVert";
-import { Box, Menu, MenuItem } from "@mui/material";
+import { Box, CircularProgress, Menu, MenuItem } from "@mui/material";
 import { useSearchParams } from "react-router-dom";
+import Loader from "../../components/Loader";
 
 export default function Contacts() {
   const [page, setPage] = useState(0);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const users = useFirestoreCollection<UserInfo>("users", "firstName");
+  const { users, isLoadingUsers } = useFirestoreCollection<UserInfo>(
+    "users",
+    "firstName"
+  );
   const rowsPerPage = 8;
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -27,12 +31,14 @@ export default function Contacts() {
     setAnchorEl(null); // Closes the menu by resetting the anchor element
   };
 
+  if (isLoadingUsers) return <Loader />;
+
   // Calculate empty rows for pagination
   const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - users.length) : 0;
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - (users?.length ?? 0)) : 0;
 
   // Slice rows based on current paged
-  const paginatedRows = users.slice(
+  const paginatedRows = users?.slice(
     page * rowsPerPage,
     page * rowsPerPage + rowsPerPage
   );
@@ -117,7 +123,7 @@ export default function Contacts() {
           </tr>
         </thead>
         <tbody>
-          {paginatedRows.map((row, index) => (
+          {paginatedRows?.map((row, index) => (
             <tr key={index} className="border-b border-gray-700">
               <td className="p-2">
                 <div className="flex items-center gap-3">
@@ -152,7 +158,7 @@ export default function Contacts() {
                 }}
                 component="div"
                 rowsPerPageOptions={[]} // Disable dropdown for rows per page
-                count={users.length} // Total number of rows
+                count={users?.length ?? 0}
                 rowsPerPage={rowsPerPage} // Fixed to 10 rows per page
                 page={page}
                 onPageChange={handleChangePage}
