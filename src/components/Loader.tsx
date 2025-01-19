@@ -1,10 +1,18 @@
 import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box";
 
-export default function Loader() {
+type LoaderProps = {
+  fontSize?: "text-2xl" | "text-3xl";
+  circularProgressSize?: number;
+};
+
+export default function Loader({
+  fontSize,
+  circularProgressSize,
+}: LoaderProps) {
   return (
-    <div className="bg-backgroundColor h-screen flex justify-center items-center">
-      <p className="text-white text-5xl">Loading...</p>
+    <div className="flex justify-center items-center">
+      <p className={`text-white ${fontSize || "text-5xl"}`}>Loading...</p>
       <Box
         sx={{
           display: "flex",
@@ -12,7 +20,7 @@ export default function Loader() {
           justifyContent: "center",
         }}
       >
-        <CircularProgress size={90} />
+        <CircularProgress size={circularProgressSize || 90} />
       </Box>
     </div>
   );

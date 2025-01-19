@@ -14,9 +14,14 @@ function ProtectedRoute({ children }: { children: ReactNode }) {
     }
   }, [user, isLoading, navigate]);
 
-  if (isLoading || !user) return <Loader />;
+  if (isLoading || !user)
+    return (
+      <div className="flex justify-center items-center h-screen bg-backgroundColor">
+        <Loader />
+      </div>
+    );
 
-  return <div>{children}</div>;
+  return <div className="bg-backgroundColor">{children}</div>;
 }
 
 export default ProtectedRoute;

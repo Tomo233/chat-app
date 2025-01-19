@@ -4,7 +4,7 @@ import Header from "./Header";
 
 function AppLayout() {
   return (
-    <div className="bg-[#2b2738] h-screen">
+    <div className="h-screen">
       <Container>
         <Header />
         <Outlet />

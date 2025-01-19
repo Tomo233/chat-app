@@ -1,16 +1,12 @@
 import DefaultUserImage from "../../assets/default-user.png";
 import EditIcon from "@mui/icons-material/Edit";
 import { auth } from "../../firebaseConfig";
-import { useCurrentUser } from "../authentication/useCurrentUser";
-import Loader from "../../components/Loader";
-function AvatarSection() {
-  const { user, isLoading } = useCurrentUser();
+import { UserInfo } from "../../services/authentication";
 
+function AvatarSection({ user }: { user: UserInfo }) {
   const handleSignOut = () => {
     auth.signOut();
   };
-
-  if (isLoading) return <Loader />;
 
   return (
     <section className="flex justify-between items-center border border-secondaryPurple rounded-lg p-3">

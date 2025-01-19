@@ -9,8 +9,10 @@ export const useFirestoreCollection = <T>(
 ) => {
   const [data, setData] = useState<T[]>([]);
   const [searchParams] = useSearchParams();
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    setLoading(true); // Set loading to true when the hook is called
     const sortBy: "asc" | "desc" =
       paramName && searchParams.get(paramName) === "desc" ? "desc" : "asc";
 
@@ -23,9 +25,10 @@ export const useFirestoreCollection = <T>(
     const unsubscribe = onSnapshot(sortedQuery, (querySnapshot) => {
       const newData = querySnapshot.docs.map((doc) => doc.data() as T);
       setData(newData);
+      setLoading(false); // Data is fetched successfully
     });
     return () => unsubscribe();
   }, [collectionName, searchParams, paramName]);
 
-  return data;
+  return { data, loading };
 };

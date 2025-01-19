@@ -1,12 +1,7 @@
-import { useCurrentUser } from "../authentication/useCurrentUser";
 import EditIcon from "@mui/icons-material/Edit";
-import Loader from "../../components/Loader";
+import { UserInfo } from "../../services/authentication";
 
-function PersonalInformation() {
-  const { user, isLoading } = useCurrentUser();
-
-  if (isLoading) return <Loader />;
-
+function PersonalInformation({ user }: { user: UserInfo }) {
   return (
     <section className="border border-secondaryPurple rounded-lg p-3 pb-10 pl-7">
       <div className="flex justify-between items-center">

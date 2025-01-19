@@ -4,14 +4,14 @@ import DefaultUserImage from "../../assets/default-user.png";
 import { useFirestoreCollection } from "../../hooks/useFirestoreCollection";
 import { UserInfo } from "../../services/authentication";
 import SwapVertIcon from "@mui/icons-material/SwapVert";
-import { Box, CircularProgress, Menu, MenuItem } from "@mui/material";
+import { Box, Menu, MenuItem } from "@mui/material";
 import { useSearchParams } from "react-router-dom";
 import Loader from "../../components/Loader";
 
 export default function Contacts() {
   const [page, setPage] = useState(0);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const { users, isLoadingUsers } = useFirestoreCollection<UserInfo>(
+  const { data: users, loading } = useFirestoreCollection<UserInfo>(
     "users",
     "firstName"
   );
@@ -31,7 +31,12 @@ export default function Contacts() {
     setAnchorEl(null); // Closes the menu by resetting the anchor element
   };
 
-  if (isLoadingUsers) return <Loader />;
+  if (loading)
+    return (
+      <div className="mt-60">
+        <Loader />
+      </div>
+    );
 
   // Calculate empty rows for pagination
   const emptyRows =

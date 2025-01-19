@@ -5,7 +5,7 @@ import SendMessage from "./SendMessage";
 import { useParams } from "react-router-dom";
 import EmptyChat from "./EmptyChat";
 import { useGetUserById } from "../authentication/useGetUserById";
-import { Box, CircularProgress } from "@mui/material";
+import Loader from "../../components/Loader";
 
 function MainChat() {
   const [messages] = useState([
@@ -25,17 +25,8 @@ function MainChat() {
 
   if (isLoading) {
     return (
-      <div className="bg-backgroundColor flex mr-48 items-center">
-        <p className="text-white text-5xl">Loading...</p>
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <CircularProgress size={90} />
-        </Box>
+      <div className="flex items-center mr-48">
+        <Loader />
       </div>
     );
   }
