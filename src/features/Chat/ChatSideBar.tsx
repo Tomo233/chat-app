@@ -6,7 +6,8 @@ import { UserInfo } from "../../services/authentication";
 import { useCurrentUser } from "../authentication/useCurrentUser";
 
 function ChatSideBar() {
-  const { data: users, loading } = useFirestoreCollection<UserInfo>("users");
+  const { data: users, isLoading: isLoadingUsers } =
+    useFirestoreCollection<UserInfo>("users");
   const { user, isLoading } = useCurrentUser();
 
   const filteredUsers = users?.filter((element) => element.id !== user?.id);
@@ -19,7 +20,7 @@ function ChatSideBar() {
         className="bg-primaryPurple w-96 h-14 pl-3 rounded-2xl outline-none text-white "
       />
       <div className="mt-8 bg-primaryPurple max-w-96 max-h-[650px]  rounded-2xl p-2 overflow-y-auto">
-        {isLoading || loading ? (
+        {isLoading || isLoadingUsers ? (
           <div className="flex items-center p-20 justify-center">
             <Loader circularProgressSize={45} fontSize="text-3xl" />
           </div>

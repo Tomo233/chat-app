@@ -8,7 +8,8 @@ import Loader from "./Loader";
 
 function Notifications() {
   const [isOpened, setIsOpened] = useState(false);
-  const { data: users, loading } = useFirestoreCollection<UserInfo>("users");
+  const { data: users, isLoading: IsLoadingUsers } =
+    useFirestoreCollection<UserInfo>("users");
   const { user, isLoading } = useCurrentUser();
 
   const filteredUsers = users?.filter((element) => element.id !== user?.id);
@@ -20,7 +21,7 @@ function Notifications() {
       </button>
       {isOpened && (
         <div className="absolute z-10 right-1 mt-8 bg-[#3d2f64] w-[380px] border border-secondaryPurple max-h-96 rounded-2xl p-2 overflow-y-auto">
-          {isLoading || loading ? (
+          {isLoading || IsLoadingUsers ? (
             <div className="p-20">
               <Loader fontSize="text-2xl" circularProgressSize={45} />
             </div>

@@ -11,7 +11,7 @@ import Loader from "../../components/Loader";
 export default function Contacts() {
   const [page, setPage] = useState(0);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const { data: users, loading } = useFirestoreCollection<UserInfo>(
+  const { data: users, isLoading } = useFirestoreCollection<UserInfo>(
     "users",
     "firstName"
   );
@@ -31,7 +31,7 @@ export default function Contacts() {
     setAnchorEl(null); // Closes the menu by resetting the anchor element
   };
 
-  if (loading)
+  if (isLoading)
     return (
       <div className="mt-60">
         <Loader />
