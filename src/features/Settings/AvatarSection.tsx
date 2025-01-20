@@ -1,11 +1,20 @@
 import DefaultUserImage from "../../assets/default-user.png";
 import EditIcon from "@mui/icons-material/Edit";
-import { auth } from "../../firebaseConfig";
 import { UserInfo } from "../../services/authentication";
+import { signOut } from "firebase/auth";
+import { auth } from "../../firebaseConfig";
+import { useQueryClient } from "@tanstack/react-query";
 
 function AvatarSection({ user }: { user: UserInfo }) {
-  const handleSignOut = () => {
-    auth.signOut();
+  const queryClient = useQueryClient();
+
+  const handleSignOut = async () => {
+    try {
+      await signOut(auth);
+      queryClient.refetchQueries({ queryKey: ["user"] });
+    } catch (error) {
+      console.error("Error signing out:", error);
+    }
   };
 
   return (
