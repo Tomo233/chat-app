@@ -9,7 +9,9 @@ const InformationInput = forwardRef<HTMLInputElement, InformationInputProps>(
   ({ value, isEditing }, ref) => {
     return (
       <input
-        className="font-medium p-3 bg-secondaryPurple outline-none"
+        className={`font-medium p-3 bg-secondaryPurple outline-none  ${
+          !isEditing && "cursor-not-allowed"
+        }`}
         value={value}
         ref={ref}
         disabled={!isEditing}
