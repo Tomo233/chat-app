@@ -1,22 +1,28 @@
 import CloseIcon from "@mui/icons-material/Close";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, forwardRef, useState } from "react";
+import { UseFormSetValue } from "react-hook-form";
+import { SignupInputs } from "../features/authentication/SignupForm";
 
 type FileInputProps = {
   isEditing?: boolean;
+  setValue: UseFormSetValue<SignupInputs>;
 };
 
-function FileInput({ isEditing }: FileInputProps) {
+const FileInput = forwardRef<HTMLInputElement, FileInputProps>(function (
+  { isEditing, setValue },
+  ref
+) {
   const [file, setFile] = useState<string>();
 
   const handleRemoveAvatar = () => {
-    // setValue("avatar", null);
+    setValue("avatar", null);
     setFile("");
   };
 
   const handleChangeAvatar = (e: ChangeEvent<HTMLInputElement>) => {
     const avatar = e.target.files?.[0] || null;
     if (avatar) {
-      //   setValue("avatar", avatar);
+      setValue("avatar", avatar);
       const fileURL = URL.createObjectURL(avatar);
       setFile(fileURL);
     }
@@ -41,10 +47,10 @@ function FileInput({ isEditing }: FileInputProps) {
         <input
           type="file"
           className="hidden"
-          //   {...register("avatar")}
           accept="image/*"
           onChange={handleChangeAvatar}
           disabled={!isEditing}
+          ref={ref}
         />
       </label>
       {file && (
@@ -59,6 +65,6 @@ function FileInput({ isEditing }: FileInputProps) {
       )}
     </div>
   );
-}
+});
 
 export default FileInput;

@@ -1,18 +1,17 @@
-import { forwardRef } from "react";
+import { ComponentPropsWithoutRef, forwardRef } from "react";
 
-type InformationInputProps = {
-  value: string;
+type InformationProps = {
   isEditing: boolean;
-};
+} & ComponentPropsWithoutRef<"input">;
 
-const InformationInput = forwardRef<HTMLInputElement, InformationInputProps>(
-  ({ value, isEditing }, ref) => {
+const InformationInput = forwardRef<HTMLInputElement, InformationProps>(
+  ({ isEditing, ...otherProps }, ref) => {
     return (
       <input
         className={`font-medium p-3 bg-secondaryPurple outline-none  ${
           !isEditing && "cursor-not-allowed"
         }`}
-        value={value}
+        {...otherProps}
         ref={ref}
         disabled={!isEditing}
       />
