@@ -7,6 +7,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { useLoginWithGoogle } from "./useLoginWithGoogle";
 import FormTitle from "./FormTitle";
 import FormFooter from "./FormFooter";
+import FileInput from "../../components/FileInput";
 
 export type SignupInputs = {
   firstName: string;
@@ -32,28 +33,13 @@ function SignUpForm() {
       avatar: null,
     },
   });
-  const [file, setFile] = useState<string>();
-
-  const handleRemoveAvatar = () => {
-    setValue("avatar", null);
-    setFile("");
-  };
-
-  const handleChangeAvatar = (e: ChangeEvent<HTMLInputElement>) => {
-    const avatar = e.target.files?.[0] || null;
-    if (avatar) {
-      setValue("avatar", avatar);
-      const fileURL = URL.createObjectURL(avatar);
-      setFile(fileURL);
-    }
-  };
 
   const submitHandler: SubmitHandler<SignupInputs> = (
     data,
     e?: BaseSyntheticEvent
   ) => {
     if (e) e.preventDefault();
-    console.log(data.avatar);
+
     signUp(data);
     reset();
   };
@@ -188,43 +174,11 @@ function SignUpForm() {
               })}
             />
           </div>
-          <div>
-            <div className="flex justify-center gap-3  items-center">
-              <label
-                className={`flex gap-3 items-center justify-center w-${
-                  file ? "4/5" : "full"
-                } py-6 border-2 border-dashed border-secondaryPurple rounded-lg cursor-pointer`}
-              >
-                {file ? (
-                  <>
-                    <img src={file} alt="" className="max-w-12" />
-                  </>
-                ) : (
-                  <span className="text-[#6a6677]">
-                    Drag and drop your profile image here or select file
-                  </span>
-                )}
-
-                <input
-                  type="file"
-                  className="hidden"
-                  {...register("avatar")}
-                  accept="image/*"
-                  onChange={handleChangeAvatar}
-                />
-              </label>
-              {file && (
-                <button onClick={handleRemoveAvatar}>
-                  <CloseIcon
-                    sx={{
-                      color: "white",
-                      fontSize: "2rem",
-                    }}
-                  />
-                </button>
-              )}
-            </div>
-          </div>
+          <FileInput
+            {...register("avatar")}
+            setValue={setValue}
+            isFullWidth={true}
+          />
 
           <button
             type="submit"

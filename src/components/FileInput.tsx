@@ -6,10 +6,11 @@ import { SignupInputs } from "../features/authentication/SignupForm";
 type FileInputProps = {
   isEditing?: boolean;
   setValue: UseFormSetValue<SignupInputs>;
+  isFullWidth?: boolean;
 };
 
 const FileInput = forwardRef<HTMLInputElement, FileInputProps>(function (
-  { isEditing, setValue },
+  { isEditing = true, setValue, isFullWidth },
   ref
 ) {
   const [file, setFile] = useState<string>();
@@ -28,7 +29,9 @@ const FileInput = forwardRef<HTMLInputElement, FileInputProps>(function (
     }
   };
   return (
-    <div className="max-w-56 flex justify-between">
+    <div
+      className={`${isFullWidth ? "w-full" : "max-w-56"} flex justify-between`}
+    >
       <label
         className={`flex gap-3 items-center justify-center ${
           !file && "py-3"
@@ -38,7 +41,7 @@ const FileInput = forwardRef<HTMLInputElement, FileInputProps>(function (
       >
         {file ? (
           <>
-            <img src={file} alt="" className="max-w-12" />
+            <img src={file} alt="" className="max-h-12" />
           </>
         ) : (
           <span className="text-[#6a6677]">Select File</span>

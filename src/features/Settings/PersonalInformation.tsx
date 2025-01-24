@@ -51,7 +51,6 @@ function PersonalInformation({ user }: { user: UserInfo }) {
             isEditing={isEditing}
             {...register("avatar")}
             setValue={setValue}
-            // register={register}
           />
         </div>
         <div>
