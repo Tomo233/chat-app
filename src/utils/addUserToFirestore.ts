@@ -1,10 +1,10 @@
-import { addDoc, collection } from "firebase/firestore";
+import { doc, setDoc } from "firebase/firestore";
 import { db } from "../firebaseConfig";
 import { UserInfo } from "../services/authentication";
 
 export const addUserToFirebase = async (user: UserInfo) => {
   try {
-    await addDoc(collection(db, "users"), {
+    await setDoc(doc(db, "users", user.id), {
       id: user.id,
       firstName: user.firstName,
       lastName: user.lastName,

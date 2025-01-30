@@ -1,5 +1,4 @@
-import { BaseSyntheticEvent, ChangeEvent, useState } from "react";
-import CloseIcon from "@mui/icons-material/Close";
+import { BaseSyntheticEvent } from "react";
 import Loader from "../../components/Loader";
 import LoginInput from "./LoginInput";
 import { useSignUp } from "./useSignUp";
