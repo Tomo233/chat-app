@@ -5,6 +5,8 @@ import { useState } from "react";
 import FileInput from "../../components/FileInput";
 import { SignupInputs } from "../authentication/SignupForm";
 import { useForm } from "react-hook-form";
+import { auth } from "../../firebaseConfig";
+import { uploadAvatar } from "../../services/uploadAvatar";
 
 function PersonalInformation({ user }: { user: UserInfo }) {
   const [isEditing, setIsEditing] = useState(false);
@@ -18,9 +20,12 @@ function PersonalInformation({ user }: { user: UserInfo }) {
     },
   });
 
-  const handleSave = (data: SignupInputs) => {
+  const handleSave = async (data: SignupInputs) => {
+    if (isEditing) {
+      const user = auth.currentUser;
+      await uploadAvatar(data?.avatar, user);
+    }
     setIsEditing((prev) => !prev);
-    console.log(data);
   };
 
   return (
@@ -31,8 +36,10 @@ function PersonalInformation({ user }: { user: UserInfo }) {
           className="border border-secondaryPurple px-9 py-3 flex gap-2 rounded-3xl"
           onClick={handleSubmit(handleSave)}
         >
-          <EditIcon />
-          {!isEditing ? "Edit" : "Save"}
+          <span>
+            <EditIcon />
+            {!isEditing ? "Edit" : "Save"}
+          </span>
         </button>
       </div>
       <form className="grid grid-cols-3 gap-y-6 items-end">

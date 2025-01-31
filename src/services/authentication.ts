@@ -6,14 +6,13 @@ import {
   signInWithPopup,
   updateProfile,
 } from "firebase/auth";
-import { storage } from "../firebaseConfig";
 import { SignupInputs } from "../features/authentication/SignupForm";
-import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { onAuthStateChanged } from "firebase/auth";
 import { transfromUser } from "../utils/transformUser";
 import { LoginInputs } from "../features/authentication/LoginForm";
 import { addUserToFirebase } from "../utils/addUserToFirestore";
-import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
+import { collection, getDocs, query, where } from "firebase/firestore";
+import { uploadAvatar } from "./uploadAvatar";
 
 export type UserInfo = {
   id: string;
@@ -43,26 +42,8 @@ export const signupWithEmailPassword = async ({
       console.log(`${error} ee`);
     });
 
-    const randomNumber = Math.random();
     if (avatar && avatar instanceof File) {
-      const storageRef = ref(storage, `avatars/${avatar.name}-${randomNumber}`);
-
-      const photoURL = await new Promise<string>((resolve, reject) => {
-        const uploadTask = uploadBytesResumable(storageRef, avatar);
-
-        uploadTask.on(
-          "state_changed",
-          () => {}, // Progress handler (optional)
-          (error) => {
-            console.error("Upload error:", error);
-            reject(new Error("Failed to upload avatar. Please try again."));
-          },
-          async () => {
-            const url = await getDownloadURL(uploadTask.snapshot.ref);
-            resolve(url);
-          }
-        );
-      });
+      const photoURL = await uploadAvatar(avatar);
 
       await updateProfile(user, {
         photoURL,
@@ -88,14 +69,13 @@ export const loginWithGoogle = async (): Promise<UserInfo | undefined> => {
   try {
     const { user } = await signInWithPopup(auth, provider);
     const userInfo = transfromUser(user);
-
     const usersCollectionRef = collection(db, "users");
 
     const userQuery = query(usersCollectionRef, where("id", "==", userInfo.id));
     const querySnapshot = await getDocs(userQuery);
 
     if (querySnapshot.empty) {
-      await addDoc(usersCollectionRef, userInfo);
+      await addUserToFirebase(userInfo);
     }
 
     return userInfo;
