@@ -4,13 +4,12 @@ import { UseFormSetValue } from "react-hook-form";
 import { SignupInputs } from "../features/authentication/SignupForm";
 
 type FileInputProps = {
-  isEditing?: boolean;
   setValue: UseFormSetValue<SignupInputs>;
   isFullWidth?: boolean;
 };
 
 const FileInput = forwardRef<HTMLInputElement, FileInputProps>(function (
-  { isEditing = true, setValue, isFullWidth },
+  { setValue, isFullWidth },
   ref
 ) {
   const [file, setFile] = useState<string>();
@@ -35,9 +34,7 @@ const FileInput = forwardRef<HTMLInputElement, FileInputProps>(function (
       <label
         className={`flex gap-3 items-center justify-center ${
           !file && "py-3"
-        } border-2 border-dashed border-secondaryPurple rounded-lg ${
-          !isEditing ? "cursor-not-allowed" : "cursor-pointer"
-        } w-full`}
+        } border-2 border-dashed border-secondaryPurple rounded-lg cursor-pointer w-full`}
       >
         {file ? (
           <>
@@ -52,7 +49,6 @@ const FileInput = forwardRef<HTMLInputElement, FileInputProps>(function (
           className="hidden"
           accept="image/*"
           onChange={handleChangeAvatar}
-          disabled={!isEditing}
           ref={ref}
         />
       </label>

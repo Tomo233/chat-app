@@ -6,6 +6,8 @@ import { useCurrentUser } from "../authentication/useCurrentUser";
 function Settings() {
   const { user, isLoading } = useCurrentUser();
 
+  console.log(user);
+
   return (
     <div className="grid gap-y-8 text-white bg-primaryPurple p-6">
       <h2 className="font-bold text-3xl">My Profile</h2>
