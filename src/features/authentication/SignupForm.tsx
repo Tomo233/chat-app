@@ -8,12 +8,12 @@ import FormTitle from "./FormTitle";
 import FormFooter from "./FormFooter";
 import FileInput from "../../components/FileInput";
 
-export type SignupInputs = {
+export type SignupAndProfileInputs = {
   firstName: string;
   lastName: string;
   email: string;
   password: string;
-  confirmPassword: string;
+  confirmOrNewPassword: string;
   avatar: File | null;
 };
 
@@ -27,13 +27,13 @@ function SignUpForm() {
     getValues,
     reset,
     setValue,
-  } = useForm<SignupInputs>({
+  } = useForm<SignupAndProfileInputs>({
     defaultValues: {
       avatar: null,
     },
   });
 
-  const submitHandler: SubmitHandler<SignupInputs> = (
+  const submitHandler: SubmitHandler<SignupAndProfileInputs> = (
     data,
     e?: BaseSyntheticEvent
   ) => {
@@ -147,20 +147,22 @@ function SignUpForm() {
                   message: "Field value is too long",
                 },
                 validate: (value) =>
-                  value === getValues("confirmPassword") ||
+                  value === getValues("confirmOrNewPassword") ||
                   "Passwords do not match",
               })}
             />
           </div>
           <div>
-            {errors.confirmPassword && (
-              <p className="text-white">{errors.confirmPassword.message}</p>
+            {errors.confirmOrNewPassword && (
+              <p className="text-white">
+                {errors.confirmOrNewPassword.message}
+              </p>
             )}
             <LoginInput
               type="password"
               className="col-span-1"
               placeholder="Confirm Password"
-              {...register("confirmPassword", {
+              {...register("confirmOrNewPassword", {
                 required: "This field is required",
                 minLength: {
                   value: 5,

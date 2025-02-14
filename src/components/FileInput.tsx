@@ -1,10 +1,8 @@
 import CloseIcon from "@mui/icons-material/Close";
 import { ChangeEvent, forwardRef, useState } from "react";
-import { UseFormSetValue } from "react-hook-form";
-import { SignupInputs } from "../features/authentication/SignupForm";
 
 type FileInputProps = {
-  setValue: UseFormSetValue<SignupInputs>;
+  setValue: (name: "avatar", value: File | null) => void;
   isFullWidth?: boolean;
 };
 

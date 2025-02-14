@@ -6,13 +6,13 @@ import {
   signInWithPopup,
   updateProfile,
 } from "firebase/auth";
-import { SignupInputs } from "../features/authentication/SignupForm";
 import { onAuthStateChanged } from "firebase/auth";
 import { transfromUser } from "../utils/transformUser";
 import { LoginInputs } from "../features/authentication/LoginForm";
 import { addUserToFirebase } from "../utils/addUserToFirestore";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { uploadAvatar } from "./uploadAvatar";
+import { SignupAndProfileInputs } from "../features/authentication/SignupForm";
 
 export type UserInfo = {
   id: string;
@@ -28,7 +28,7 @@ export const signupWithEmailPassword = async ({
   firstName,
   lastName,
   avatar,
-}: SignupInputs): Promise<UserInfo> => {
+}: SignupAndProfileInputs): Promise<UserInfo> => {
   try {
     const { user } = await createUserWithEmailAndPassword(
       auth,

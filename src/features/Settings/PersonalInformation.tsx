@@ -3,31 +3,32 @@ import { UserInfo } from "../../services/authentication";
 import InformationInput from "./InformationInput";
 import { useEffect, useState } from "react";
 import FileInput from "../../components/FileInput";
-import { SignupInputs } from "../authentication/SignupForm";
 import { useForm } from "react-hook-form";
 import { auth } from "../../firebaseConfig";
-import { uploadAvatar } from "../../services/uploadAvatar";
 import PopUp from "../../components/PopUp";
+import { SignupAndProfileInputs } from "../authentication/SignupForm";
 
 function PersonalInformation({ user }: { user: UserInfo }) {
   const [editingStatus, setEditingStatus] = useState<
     "not-editing" | "editing" | "saving"
   >("not-editing");
   const { register, handleSubmit, setValue, watch, reset } =
-    useForm<SignupInputs>({
+    useForm<SignupAndProfileInputs>({
       defaultValues: {
         firstName: user.firstName,
         lastName: user.lastName,
         email: user.email,
-        confirmPassword: "",
+        password: "",
+        confirmOrNewPassword: "",
         avatar: null,
       },
     });
 
-  const handleSave = async (data: SignupInputs) => {
+  const handleSave = async (data: SignupAndProfileInputs) => {
     if (editingStatus === "editing") {
       const user = auth.currentUser;
-      await uploadAvatar(data?.avatar, user);
+      console.log(data);
+      // await uploadAvatar(data?.avatar, user);
     }
 
     setEditingStatus("saving");
@@ -38,7 +39,7 @@ function PersonalInformation({ user }: { user: UserInfo }) {
       user.firstName != watch("firstName") ||
       user.lastName != watch("lastName") ||
       watch("avatar") !== null ||
-      watch("confirmPassword") !== ""
+      watch("confirmOrNewPassword") !== ""
     ) {
       setEditingStatus("editing");
     } else {
@@ -50,7 +51,7 @@ function PersonalInformation({ user }: { user: UserInfo }) {
     watch("firstName"),
     watch("lastName"),
     watch("avatar"),
-    watch("confirmPassword"),
+    watch("confirmOrNewPassword"),
   ]);
 
   useEffect(() => {
@@ -95,7 +96,7 @@ function PersonalInformation({ user }: { user: UserInfo }) {
         <div>
           <p className="font-medium">New Password</p>
           <InformationInput
-            {...register("confirmPassword")}
+            {...register("confirmOrNewPassword")}
             placeholder="*********"
           />
         </div>
