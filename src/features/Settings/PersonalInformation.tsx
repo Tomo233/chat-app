@@ -4,8 +4,8 @@ import InformationInput from "./InformationInput";
 import { useEffect, useState } from "react";
 import FileInput from "../../components/FileInput";
 import { useForm } from "react-hook-form";
-import PopUp from "../../components/PopUp";
 import { SignupAndProfileInputs } from "../authentication/SignupForm";
+import ConfirmPasswordPopup from "../authentication/ConfirmPasswordPopUp";
 
 function PersonalInformation({ user }: { user: UserInfo }) {
   const [editingStatus, setEditingStatus] = useState<
@@ -92,7 +92,7 @@ function PersonalInformation({ user }: { user: UserInfo }) {
         </div>
       </form>
       {editingStatus === "saving" && (
-        <PopUp
+        <ConfirmPasswordPopup
           handleClose={() => setEditingStatus("not-editing")}
           isEditing={editingStatus}
           control={control}

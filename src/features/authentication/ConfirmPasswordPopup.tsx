@@ -6,10 +6,10 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import { createPortal } from "react-dom";
 import { Control, Controller, UseFormHandleSubmit } from "react-hook-form";
-import { SignupAndProfileInputs } from "../features/authentication/SignupForm";
+import { SignupAndProfileInputs } from "./SignupForm";
 import { BaseSyntheticEvent } from "react";
 
-const PopUp = function PopUp({
+const ConfirmPasswordPopup = function ({
   isEditing,
   handleClose,
   control,
@@ -95,7 +95,10 @@ const PopUp = function PopUp({
       <DialogActions>
         <button
           className="bg-secondaryPurple p-3 text-white font-semibold outline-none"
-          onClick={handleClose}
+          onClick={(e) => {
+            e.preventDefault();
+            handleClose();
+          }}
         >
           Cancel
         </button>
@@ -112,4 +115,4 @@ const PopUp = function PopUp({
   );
 };
 
-export default PopUp;
+export default ConfirmPasswordPopup;
