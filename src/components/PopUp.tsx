@@ -1,18 +1,31 @@
-import { createPortal } from "react-dom";
 import TextField from "@mui/material/TextField";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
+import { createPortal } from "react-dom";
+import { Control, Controller, UseFormHandleSubmit } from "react-hook-form";
+import { SignupAndProfileInputs } from "../features/authentication/SignupForm";
+import { BaseSyntheticEvent } from "react";
 
-export default function PopUp({
+const PopUp = function PopUp({
   isEditing,
   handleClose,
+  control,
+  handleSubmit,
 }: {
   isEditing: "saving" | "not-editing" | "editing";
   handleClose: () => void;
+  control: Control<SignupAndProfileInputs>;
+  handleSubmit: UseFormHandleSubmit<SignupAndProfileInputs>;
 }) {
+  const submit = (data: any, e?: BaseSyntheticEvent) => {
+    e?.preventDefault();
+    console.log(data);
+    handleClose();
+  };
+
   return createPortal(
     <Dialog
       open={isEditing === "saving" ? true : false}
@@ -20,14 +33,7 @@ export default function PopUp({
       PaperProps={{
         component: "form",
         sx: { backgroundColor: "#3f3568", color: "white" },
-        onSubmit: (event: React.FormEvent<HTMLFormElement>) => {
-          event.preventDefault();
-          const formData = new FormData(event.currentTarget);
-          const formJson = Object.fromEntries((formData as any).entries());
-          const email = formJson.email;
-          console.log(email);
-          handleClose();
-        },
+        onSubmit: handleSubmit(submit),
       }}
     >
       <DialogTitle>Enter Your Password</DialogTitle>
@@ -36,51 +42,57 @@ export default function PopUp({
           To change personal information, please enter your current password
           here. We will send updates occasionally.
         </DialogContentText>
-        <TextField
-          autoFocus
-          required
-          margin="dense"
-          id="name"
-          name="password"
-          label="Password"
-          type="text"
-          fullWidth
-          variant="standard"
-          slotProps={{
-            input: {
-              sx: {
-                color: "white",
-                "&::placeholder": { color: "white" },
-              },
-            },
-            inputLabel: {
-              sx: {
-                color: "white",
-                "&.Mui-focused": { color: "white" },
-              },
-            },
-          }}
-          sx={{
-            "& .MuiInput-underline:before": {
-              borderBottomColor: "white",
-            },
-            "& .MuiInput-underline:after": {
-              borderBottomColor: "transparent",
-            },
-            "& .MuiInput-underline:hover:not(.Mui-disabled):before": {
-              borderBottomColor: "white",
-            },
-            "&.Mui-focused .MuiInput-underline:before": {
-              borderBottomColor: "transparent",
-            },
-            "&.Mui-focused": {
-              borderColor: "transparent",
-            },
-          }}
+        <Controller
+          name={"password"}
+          control={control}
+          render={({ field: { onChange } }) => (
+            <TextField
+              autoFocus
+              required
+              margin="dense"
+              id="name"
+              name="password"
+              onChange={(e) => onChange(e.target.value)}
+              label="Password"
+              type="text"
+              fullWidth
+              variant="standard"
+              slotProps={{
+                input: {
+                  sx: {
+                    color: "white",
+                    "&::placeholder": { color: "white" },
+                  },
+                },
+                inputLabel: {
+                  sx: {
+                    color: "white",
+                    "&.Mui-focused": { color: "white" },
+                  },
+                },
+              }}
+              sx={{
+                "& .MuiInput-underline:before": {
+                  borderBottomColor: "white",
+                },
+                "& .MuiInput-underline:after": {
+                  borderBottomColor: "transparent",
+                },
+                "& .MuiInput-underline:hover:not(.Mui-disabled):before": {
+                  borderBottomColor: "white",
+                },
+                "&.Mui-focused .MuiInput-underline:before": {
+                  borderBottomColor: "transparent",
+                },
+                "&.Mui-focused": {
+                  borderColor: "transparent",
+                },
+              }}
+            />
+          )}
         />
       </DialogContent>
       <DialogActions>
-        {/* <Button onClick={handleClose}>Cancel</Button> */}
         <button
           className="bg-secondaryPurple p-3 text-white font-semibold outline-none"
           onClick={handleClose}
@@ -90,6 +102,7 @@ export default function PopUp({
         <button
           className="bg-secondaryPurple p-3 text-white font-semibold outline-none"
           type="submit"
+          onSubmit={handleSubmit(submit)}
         >
           Submit
         </button>
@@ -97,4 +110,6 @@ export default function PopUp({
     </Dialog>,
     document.body
   );
-}
+};
+
+export default PopUp;

@@ -4,7 +4,6 @@ import InformationInput from "./InformationInput";
 import { useEffect, useState } from "react";
 import FileInput from "../../components/FileInput";
 import { useForm } from "react-hook-form";
-import { auth } from "../../firebaseConfig";
 import PopUp from "../../components/PopUp";
 import { SignupAndProfileInputs } from "../authentication/SignupForm";
 
@@ -12,7 +11,7 @@ function PersonalInformation({ user }: { user: UserInfo }) {
   const [editingStatus, setEditingStatus] = useState<
     "not-editing" | "editing" | "saving"
   >("not-editing");
-  const { register, handleSubmit, setValue, watch, reset } =
+  const { register, handleSubmit, setValue, watch, reset, control } =
     useForm<SignupAndProfileInputs>({
       defaultValues: {
         firstName: user.firstName,
@@ -24,15 +23,6 @@ function PersonalInformation({ user }: { user: UserInfo }) {
       },
     });
 
-  const handleSave = async (data: SignupAndProfileInputs) => {
-    if (editingStatus === "editing") {
-      const user = auth.currentUser;
-      console.log(data);
-      // await uploadAvatar(data?.avatar, user);
-    }
-
-    setEditingStatus("saving");
-  };
   useEffect(() => {
     if (
       user.email != watch("email") ||
@@ -65,7 +55,7 @@ function PersonalInformation({ user }: { user: UserInfo }) {
         {editingStatus !== "not-editing" && (
           <button
             className="border border-secondaryPurple px-9 py-3 flex gap-2 rounded-3xl"
-            onClick={handleSubmit(handleSave)}
+            onClick={() => setEditingStatus("saving")}
           >
             <span>
               <EditIcon />
@@ -105,6 +95,8 @@ function PersonalInformation({ user }: { user: UserInfo }) {
         <PopUp
           handleClose={() => setEditingStatus("not-editing")}
           isEditing={editingStatus}
+          control={control}
+          handleSubmit={handleSubmit}
         />
       )}
     </section>
