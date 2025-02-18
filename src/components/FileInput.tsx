@@ -1,13 +1,14 @@
 import CloseIcon from "@mui/icons-material/Close";
-import { ChangeEvent, forwardRef, useState } from "react";
+import { ChangeEvent, forwardRef, useEffect, useState } from "react";
 
 type FileInputProps = {
   setValue: (name: "avatar", value: File | null) => void;
   isFullWidth?: boolean;
+  editingStatus?: "not-editing" | "editing" | "saving";
 };
 
 const FileInput = forwardRef<HTMLInputElement, FileInputProps>(function (
-  { setValue, isFullWidth },
+  { setValue, isFullWidth, editingStatus },
   ref
 ) {
   const [file, setFile] = useState<string>();
@@ -25,6 +26,10 @@ const FileInput = forwardRef<HTMLInputElement, FileInputProps>(function (
       setFile(fileURL);
     }
   };
+
+  useEffect(() => {
+    if (editingStatus === "not-editing") setFile("");
+  }, [editingStatus]);
   return (
     <div
       className={`${isFullWidth ? "w-full" : "max-w-56"} flex justify-between`}

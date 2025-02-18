@@ -81,7 +81,11 @@ function PersonalInformation({ user }: { user: UserInfo }) {
         </div>
 
         <div>
-          <FileInput {...register("avatar")} setValue={setValue} />
+          <FileInput
+            {...register("avatar")}
+            setValue={setValue}
+            editingStatus={editingStatus}
+          />
         </div>
         <div>
           <p>Email</p>
@@ -93,6 +97,7 @@ function PersonalInformation({ user }: { user: UserInfo }) {
           <InformationInput
             {...register("confirmOrNewPassword")}
             placeholder="*********"
+            type="password"
           />
         </div>
       </form>

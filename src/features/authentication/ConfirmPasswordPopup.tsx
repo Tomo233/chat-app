@@ -58,7 +58,7 @@ const ConfirmPasswordPopup = function ({
               name="password"
               onChange={(e) => onChange(e.target.value)}
               label="Password"
-              type="text"
+              type="password"
               fullWidth
               variant="standard"
               slotProps={{
