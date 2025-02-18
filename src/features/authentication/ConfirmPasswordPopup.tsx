@@ -9,20 +9,24 @@ import { Control, Controller, UseFormHandleSubmit } from "react-hook-form";
 import { SignupAndProfileInputs } from "./SignupForm";
 import { BaseSyntheticEvent } from "react";
 
+type PopupProps = {
+  isEditing: "saving" | "not-editing" | "editing";
+  handleClose: () => void;
+  control: Control<SignupAndProfileInputs>;
+  handleSubmit: UseFormHandleSubmit<SignupAndProfileInputs>;
+  editUser: (data: SignupAndProfileInputs) => void;
+};
+
 const ConfirmPasswordPopup = function ({
   isEditing,
   handleClose,
   control,
   handleSubmit,
-}: {
-  isEditing: "saving" | "not-editing" | "editing";
-  handleClose: () => void;
-  control: Control<SignupAndProfileInputs>;
-  handleSubmit: UseFormHandleSubmit<SignupAndProfileInputs>;
-}) {
+  editUser,
+}: PopupProps) {
   const submit = (data: any, e?: BaseSyntheticEvent) => {
     e?.preventDefault();
-    console.log(data);
+    editUser(data);
     handleClose();
   };
 
@@ -92,6 +96,7 @@ const ConfirmPasswordPopup = function ({
           )}
         />
       </DialogContent>
+
       <DialogActions>
         <button
           className="bg-secondaryPurple p-3 text-white font-semibold outline-none"
@@ -99,13 +104,14 @@ const ConfirmPasswordPopup = function ({
             e.preventDefault();
             handleClose();
           }}
+          type="button"
         >
           Cancel
         </button>
         <button
           className="bg-secondaryPurple p-3 text-white font-semibold outline-none"
           type="submit"
-          onSubmit={handleSubmit(submit)}
+          // onSubmit={handleSubmit(submit)}
         >
           Submit
         </button>

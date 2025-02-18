@@ -1,16 +1,28 @@
 import { auth, db } from "../firebaseConfig";
 import {
   createUserWithEmailAndPassword,
+  EmailAuthProvider,
   GoogleAuthProvider,
+  reauthenticateWithCredential,
   signInWithEmailAndPassword,
   signInWithPopup,
+  updateEmail,
+  updatePassword,
   updateProfile,
 } from "firebase/auth";
 import { onAuthStateChanged } from "firebase/auth";
 import { transfromUser } from "../utils/transformUser";
 import { LoginInputs } from "../features/authentication/LoginForm";
 import { addUserToFirebase } from "../utils/addUserToFirestore";
-import { collection, getDocs, query, where } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  query,
+  updateDoc,
+  where,
+} from "firebase/firestore";
 import { uploadAvatar } from "./uploadAvatar";
 import { SignupAndProfileInputs } from "../features/authentication/SignupForm";
 
@@ -116,6 +128,44 @@ export const loginWithPassword = async ({ email, password }: LoginInputs) => {
   } catch (error: unknown) {
     if (error instanceof Error) {
       throw new Error("Account with this email and password does not exist");
+    }
+  }
+};
+
+export const editUserInformation = async (data: SignupAndProfileInputs) => {
+  try {
+    const user = auth.currentUser!;
+    const userDocRef = doc(db, "users", user.uid);
+    const userDocSnapshot = await getDoc(userDocRef);
+    const userData = userDocSnapshot.data() as UserInfo;
+    const photoURL = await uploadAvatar(data.avatar);
+
+    await updateProfile(user, {
+      displayName: `${data.firstName || userData.firstName} ${
+        data.lastName || userData.lastName
+      }`,
+      photoURL: photoURL || user.photoURL,
+    });
+
+    const credential = EmailAuthProvider.credential(user.email!, data.password);
+    await reauthenticateWithCredential(user, credential);
+
+    if (data.email) {
+      // Update the email after successful reauthentication`
+      await updateEmail(user, data.email);
+    }
+
+    await updatePassword(user, data.confirmOrNewPassword);
+
+    await updateDoc(userDocRef, {
+      firstName: data.firstName || userData.firstName,
+      lastName: data.lastName || userData.lastName,
+      email: data.email || userData.email,
+      photoURL: photoURL || userData.photoURL,
+    });
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      throw new Error(error.message);
     }
   }
 };

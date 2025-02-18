@@ -5,12 +5,15 @@ import { useEffect, useState } from "react";
 import FileInput from "../../components/FileInput";
 import { useForm } from "react-hook-form";
 import { SignupAndProfileInputs } from "../authentication/SignupForm";
-import ConfirmPasswordPopup from "../authentication/ConfirmPasswordPopUp";
-
+import { useEditUser } from "../authentication/useEditUser";
+import Loader from "../../components/Loader";
+import ConfirmPasswordPopup from "../authentication/ConfirmPasswordPopup";
 function PersonalInformation({ user }: { user: UserInfo }) {
+  const { isEditingUser, editUser } = useEditUser(); // Move this to top-level so all children share the same mutation state
   const [editingStatus, setEditingStatus] = useState<
     "not-editing" | "editing" | "saving"
   >("not-editing");
+
   const { register, handleSubmit, setValue, watch, reset, control } =
     useForm<SignupAndProfileInputs>({
       defaultValues: {
@@ -25,9 +28,9 @@ function PersonalInformation({ user }: { user: UserInfo }) {
 
   useEffect(() => {
     if (
-      user.email != watch("email") ||
-      user.firstName != watch("firstName") ||
-      user.lastName != watch("lastName") ||
+      user.email !== watch("email") ||
+      user.firstName !== watch("firstName") ||
+      user.lastName !== watch("lastName") ||
       watch("avatar") !== null ||
       watch("confirmOrNewPassword") !== ""
     ) {
@@ -47,6 +50,8 @@ function PersonalInformation({ user }: { user: UserInfo }) {
   useEffect(() => {
     if (editingStatus === "not-editing") reset();
   }, [editingStatus]);
+
+  if (isEditingUser) return <Loader />;
 
   return (
     <section className="border border-secondaryPurple rounded-lg p-3 pb-10 pl-7">
@@ -97,6 +102,7 @@ function PersonalInformation({ user }: { user: UserInfo }) {
           isEditing={editingStatus}
           control={control}
           handleSubmit={handleSubmit}
+          editUser={editUser}
         />
       )}
     </section>

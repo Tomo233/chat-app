@@ -32,7 +32,7 @@ function SignUpForm() {
       avatar: null,
     },
   });
-
+  console.log(isPending);
   const submitHandler: SubmitHandler<SignupAndProfileInputs> = (
     data,
     e?: BaseSyntheticEvent
