@@ -140,30 +140,33 @@ export const editUserInformation = async (data: SignupAndProfileInputs) => {
     const userData = userDocSnapshot.data() as UserInfo;
     const photoURL = await uploadAvatar(data.avatar);
 
-    await updateProfile(user, {
-      displayName: `${data.firstName || userData.firstName} ${
-        data.lastName || userData.lastName
-      }`,
-      photoURL: photoURL || user.photoURL,
-    });
-
     const credential = EmailAuthProvider.credential(user.email!, data.password);
     await reauthenticateWithCredential(user, credential);
 
-    if (data.email) {
-      // Update the email after successful reauthentication`
-      await updateEmail(user, data.email);
+    if (credential) {
+      await updateProfile(user, {
+        displayName: `${data.firstName || userData.firstName} ${
+          data.lastName || userData.lastName
+        }`,
+        photoURL: photoURL || user.photoURL,
+      });
+
+      if (data.email) {
+        // Update the email after successful reauthentication`
+        await updateEmail(user, data.email);
+      }
+
+      await updatePassword(user, data.confirmOrNewPassword);
+
+      await updateDoc(userDocRef, {
+        firstName: data.firstName || userData.firstName,
+        lastName: data.lastName || userData.lastName,
+        email: data.email || userData.email,
+        photoURL: photoURL || userData.photoURL,
+      });
     }
-
-    await updatePassword(user, data.confirmOrNewPassword);
-
-    await updateDoc(userDocRef, {
-      firstName: data.firstName || userData.firstName,
-      lastName: data.lastName || userData.lastName,
-      email: data.email || userData.email,
-      photoURL: photoURL || userData.photoURL,
-    });
   } catch (error: unknown) {
+    console.log(error);
     if (error instanceof Error) {
       throw new Error(error.message);
     }
