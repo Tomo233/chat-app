@@ -67,7 +67,6 @@ function SignUpForm() {
               <LoginInput
                 type="text"
                 placeholder="First Name"
-                pr="p-3"
                 {...register("firstName", {
                   required: "This field is required",
                   minLength: {
@@ -88,7 +87,6 @@ function SignUpForm() {
               <LoginInput
                 type="text"
                 placeholder="Last Name"
-                pr="p-3"
                 {...register("lastName", {
                   required: "This field is required",
                   minLength: {
