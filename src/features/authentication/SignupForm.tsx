@@ -7,6 +7,7 @@ import { useLoginWithGoogle } from "./useLoginWithGoogle";
 import FormTitle from "./FormTitle";
 import FormFooter from "./FormFooter";
 import FileInput from "../../components/FileInput";
+import CloseIcon from "@mui/icons-material/Close";
 
 export type SignupAndProfileInputs = {
   firstName: string;
@@ -15,6 +16,7 @@ export type SignupAndProfileInputs = {
   password: string;
   confirmOrNewPassword: string;
   avatar: File | null;
+  city?: string;
 };
 
 function SignUpForm() {
@@ -32,7 +34,6 @@ function SignUpForm() {
       avatar: null,
     },
   });
-  console.log(isPending);
   const submitHandler: SubmitHandler<SignupAndProfileInputs> = (
     data,
     e?: BaseSyntheticEvent
@@ -107,7 +108,6 @@ function SignUpForm() {
             )}
             <LoginInput
               type="email"
-              className="col-span-1"
               placeholder="Email"
               {...register("email", {
                 required: "This field is required",
@@ -126,58 +126,74 @@ function SignUpForm() {
               })}
             />
           </div>
-          <div>
-            {errors.password && (
-              <p className="text-white">{errors.password.message}</p>
-            )}
-            <LoginInput
-              type="password"
-              className="col-span-1"
-              placeholder="Password"
-              {...register("password", {
-                required: "This field is required",
-                minLength: {
-                  value: 5,
-                  message: "Field value is too short",
-                },
-                maxLength: {
-                  value: 20,
-                  message: "Field value is too long",
-                },
-                validate: (value) =>
-                  value === getValues("confirmOrNewPassword") ||
-                  "Passwords do not match",
-              })}
-            />
-          </div>
-          <div>
-            {errors.confirmOrNewPassword && (
-              <p className="text-white">
-                {errors.confirmOrNewPassword.message}
-              </p>
-            )}
-            <LoginInput
-              type="password"
-              className="col-span-1"
-              placeholder="Confirm Password"
-              {...register("confirmOrNewPassword", {
-                required: "This field is required",
-                minLength: {
-                  value: 5,
-                  message: "Field value is too short",
-                },
-                maxLength: {
-                  value: 20,
-                  message: "Field value is too long",
-                },
-              })}
-            />
+          <div className="grid grid-cols-2 gap-4 place-items-end">
+            <div>
+              {errors.password && (
+                <p className="text-white">{errors.password.message}</p>
+              )}
+              <LoginInput
+                type="password"
+                placeholder="Password"
+                {...register("password", {
+                  required: "This field is required",
+                  minLength: {
+                    value: 5,
+                    message: "Field value is too short",
+                  },
+                  maxLength: {
+                    value: 20,
+                    message: "Field value is too long",
+                  },
+                  validate: (value) =>
+                    value === getValues("confirmOrNewPassword") ||
+                    "Passwords do not match",
+                })}
+              />
+            </div>
+            <div>
+              {errors.confirmOrNewPassword && (
+                <p className="text-white">
+                  {errors.confirmOrNewPassword.message}
+                </p>
+              )}
+              <LoginInput
+                type="password"
+                placeholder="Confirm Password"
+                {...register("confirmOrNewPassword", {
+                  required: "This field is required",
+                  minLength: {
+                    value: 5,
+                    message: "Field value is too short",
+                  },
+                  maxLength: {
+                    value: 20,
+                    message: "Field value is too long",
+                  },
+                })}
+              />
+            </div>
           </div>
           <FileInput
             {...register("avatar")}
             setValue={setValue}
             isFullWidth={true}
           />
+          <div className="flex">
+            <button className="col-span-1 bg-backgroundColor border-2 border-solid cursor-default  border-secondaryPurple  py-3 w-full text-[#9996a1] rounded-md focus:outline-none">
+              Nevesinje Bosnia And Herzegovina
+            </button>
+
+            {true && (
+              <button>
+                <CloseIcon
+                  sx={{
+                    color: "white",
+                    fontSize: "2rem",
+                  }}
+                />
+              </button>
+            )}
+          </div>
 
           <button
             type="submit"
