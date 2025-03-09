@@ -1,4 +1,4 @@
-import { BaseSyntheticEvent } from "react";
+import { BaseSyntheticEvent, useState } from "react";
 import Loader from "../../components/Loader";
 import LoginInput from "./LoginInput";
 import { useSignUp } from "./useSignUp";
@@ -8,6 +8,8 @@ import FormTitle from "./FormTitle";
 import FormFooter from "./FormFooter";
 import FileInput from "../../components/FileInput";
 import CloseIcon from "@mui/icons-material/Close";
+import { getUserLocation } from "../../services/authentication";
+import toast from "react-hot-toast";
 
 export type SignupAndProfileInputs = {
   firstName: string;
@@ -16,12 +18,14 @@ export type SignupAndProfileInputs = {
   password: string;
   confirmOrNewPassword: string;
   avatar: File | null;
-  city?: string;
+  location?: string;
 };
 
 function SignUpForm() {
   const { signUp, isPending } = useSignUp();
   const { isPendingGoogle } = useLoginWithGoogle();
+  const [isLoadingLocation, setIsLoadingLocation] = useState(false);
+
   const {
     register,
     handleSubmit,
@@ -34,6 +38,7 @@ function SignUpForm() {
       avatar: null,
     },
   });
+
   const submitHandler: SubmitHandler<SignupAndProfileInputs> = (
     data,
     e?: BaseSyntheticEvent
@@ -47,6 +52,23 @@ function SignUpForm() {
   if (isPending || isPendingGoogle) {
     return <Loader />;
   }
+  const handleUserLocation = async (e?: BaseSyntheticEvent) => {
+    if (e) e.preventDefault();
+
+    if (navigator.geolocation)
+      navigator.geolocation.getCurrentPosition(
+        async ({ coords: { latitude, longitude } }) => {
+          setIsLoadingLocation(true);
+          const userLocation = await getUserLocation(latitude, longitude);
+          setValue("location", userLocation);
+          setIsLoadingLocation(false);
+          toast.success("User location is fetched");
+        },
+        () => {
+          toast.error("User rejected to share his location");
+        }
+      );
+  };
 
   return (
     <div className="py-10  border-secondaryPurple border px-24  rounded-lg mt-10">
@@ -179,12 +201,20 @@ function SignUpForm() {
             isFullWidth={true}
           />
           <div className="flex">
-            <button className="col-span-1 bg-backgroundColor border-2 border-solid cursor-default  border-secondaryPurple  py-3 w-full text-[#9996a1] rounded-md focus:outline-none">
-              Nevesinje Bosnia And Herzegovina
+            <button
+              className={`col-span-1 bg-backgroundColor border-2 border-solid  border-secondaryPurple  py-3 w-full text-[#9996a1] rounded-md focus:outline-none`}
+              disabled={false}
+              onClick={handleUserLocation}
+            >
+              {isLoadingLocation
+                ? "Loading..."
+                : !getValues("location")
+                ? "Get Your location"
+                : getValues("location")}
             </button>
 
-            {true && (
-              <button>
+            {getValues("location") && (
+              <button onClick={() => setValue("location", "")}>
                 <CloseIcon
                   sx={{
                     color: "white",

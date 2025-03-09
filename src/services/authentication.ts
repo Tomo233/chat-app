@@ -26,6 +26,8 @@ import {
 import { uploadAvatar } from "./uploadAvatar";
 import { SignupAndProfileInputs } from "../features/authentication/SignupForm";
 
+const apiKey = import.meta.env.VITE_LOCATIONIQ_API_KEY;
+
 export type UserInfo = {
   id: string;
   email: string;
@@ -167,6 +169,22 @@ export const editUserInformation = async (data: SignupAndProfileInputs) => {
     }
   } catch (error: unknown) {
     console.log(error);
+    if (error instanceof Error) {
+      throw new Error(error.message);
+    }
+  }
+};
+
+export const getUserLocation = async (latitude: number, longitude: number) => {
+  try {
+    const res = await fetch(
+      `https://us1.locationiq.com/v1/reverse?key=${apiKey}&lat=${latitude}&lon=${longitude}&format=json&`
+    );
+
+    const { address } = await res.json();
+
+    return `${address.city_district} ${address.country}`;
+  } catch (error: unknown) {
     if (error instanceof Error) {
       throw new Error(error.message);
     }
