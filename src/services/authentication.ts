@@ -33,7 +33,8 @@ export type UserInfo = {
   email: string;
   firstName: string;
   lastName: string;
-  photoURL: string | null;
+  photoURL?: string | null;
+  location?: string | null;
 };
 
 export const signupWithEmailPassword = async ({
@@ -42,6 +43,7 @@ export const signupWithEmailPassword = async ({
   firstName,
   lastName,
   avatar,
+  location,
 }: SignupAndProfileInputs): Promise<UserInfo> => {
   try {
     const { user } = await createUserWithEmailAndPassword(
@@ -64,10 +66,19 @@ export const signupWithEmailPassword = async ({
       });
     }
 
-    const userInfo = transfromUser(user);
+    // const userInfo = transfromUser(user);
+
+    const userInfo: UserInfo = {
+      id: user.uid,
+      email,
+      firstName,
+      lastName,
+      photoURL: user.photoURL,
+      location,
+    };
 
     await addUserToFirebase(userInfo);
-
+    console.log(userInfo);
     return userInfo;
   } catch (error: unknown) {
     if (error instanceof Error) {

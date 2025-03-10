@@ -10,6 +10,7 @@ export const addUserToFirebase = async (user: UserInfo) => {
       lastName: user.lastName,
       email: user.email,
       photoURL: user.photoURL,
+      location: user.location,
     });
   } catch (error) {
     console.error("Error adding user to Firebase:", error);

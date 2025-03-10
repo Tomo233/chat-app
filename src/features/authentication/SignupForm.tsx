@@ -18,7 +18,7 @@ export type SignupAndProfileInputs = {
   password: string;
   confirmOrNewPassword: string;
   avatar: File | null;
-  location?: string;
+  location?: string | null;
 };
 
 function SignUpForm() {
