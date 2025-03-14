@@ -93,13 +93,48 @@ const provider = new GoogleAuthProvider();
 export const loginWithGoogle = async (): Promise<UserInfo | undefined> => {
   try {
     const { user } = await signInWithPopup(auth, provider);
-    const userInfo = transfromUser(user);
-    const usersCollectionRef = collection(db, "users");
 
+    let location: string;
+
+    if (navigator.geolocation) {
+      location = await new Promise<string>((resolve, reject) => {
+        navigator.geolocation.getCurrentPosition(
+          async ({ coords: { latitude, longitude } }) => {
+            try {
+              const userLocation = await getUserLocation(latitude, longitude);
+              if (userLocation !== undefined) {
+                resolve(userLocation);
+              }
+            } catch (error) {
+              reject("error");
+            }
+          },
+          () => resolve("not-allowed") // If user denies location access
+        );
+      }).catch((error) => {
+        return error;
+      });
+    } else {
+      location = "error"; // Handle browsers that don't support geolocation
+    }
+    const userInfo2 = transfromUser(user);
+
+    const userInfo = {
+      ...userInfo2,
+      location: location,
+    };
+    const usersCollectionRef = collection(db, "users");
     const userQuery = query(usersCollectionRef, where("id", "==", userInfo.id));
     const querySnapshot = await getDocs(userQuery);
+    let userFromFirestore: UserInfo = userInfo;
+    querySnapshot.forEach((q) => {
+      userFromFirestore = q.data() as UserInfo;
+    });
 
-    if (querySnapshot.empty) {
+    if (
+      querySnapshot.empty ||
+      location?.trim() !== userFromFirestore.location?.trim()
+    ) {
       await addUserToFirebase(userInfo);
     }
 
@@ -188,12 +223,15 @@ export const editUserInformation = async (data: SignupAndProfileInputs) => {
 
 export const getUserLocation = async (latitude: number, longitude: number) => {
   try {
+    // const res2 = await fetch(
+    //   `https://us1.locatidsoeniq.com/v1/reverdase?dadkey=${apiKey}&lat=${latitude}&lon=${longitude}&format=json&`
+    // );
+
     const res = await fetch(
       `https://us1.locationiq.com/v1/reverse?key=${apiKey}&lat=${latitude}&lon=${longitude}&format=json&`
     );
 
     const { address } = await res.json();
-
     return `${address.city_district} ${address.country}`;
   } catch (error: unknown) {
     if (error instanceof Error) {
