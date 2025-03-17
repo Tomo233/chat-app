@@ -146,25 +146,13 @@ export const loginWithGoogle = async (): Promise<UserInfo | undefined> => {
   }
 };
 
-export const getCurrentUser = (): Promise<UserInfo | null> => {
-  return new Promise((resolve, reject) => {
-    const unsubscribe = onAuthStateChanged(
-      auth,
-      (user) => {
-        if (user) {
-          const userInfo = transfromUser(user);
-          resolve(userInfo);
-        } else {
-          resolve(null); // No user logged in
-        }
-        unsubscribe();
-      },
-      (error) => {
-        reject(error);
-        unsubscribe();
-      }
-    );
-  });
+export const getCurrentUser = async (id: string | undefined | null) => {
+  if (!id) return null;
+  const docRef = doc(db, "users", id);
+  const docSnap = await getDoc(docRef);
+  const userInfo = docSnap.data() as UserInfo;
+
+  return userInfo;
 };
 
 export const loginWithPassword = async ({ email, password }: LoginInputs) => {

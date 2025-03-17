@@ -14,12 +14,16 @@ export const useLoginWithGoogle = () => {
     mutationFn: loginWithGoogleApi,
     onSuccess: (user) => {
       queryClient.setQueryData(["user"], user);
+
+      toast.success("User successfully logged in");
+
       if (user?.location === "not-allowed")
         toast.error("You have disabled sharing your own location");
 
       if (user?.location === "error")
-        toast.error("Something went wrong getting user location try again");
-      toast.success("User successfully logged in");
+        toast.error(
+          "Something went wrong while getting user location try again"
+        );
 
       navigate("/", { replace: true });
     },
