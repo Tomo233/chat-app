@@ -10,7 +10,6 @@ import {
   updatePassword,
   updateProfile,
 } from "firebase/auth";
-import { onAuthStateChanged } from "firebase/auth";
 import { transfromUser } from "../utils/transformUser";
 import { LoginInputs } from "../features/authentication/LoginForm";
 import { addUserToFirebase } from "../utils/addUserToFirestore";
@@ -25,6 +24,7 @@ import {
 } from "firebase/firestore";
 import { uploadAvatar } from "./uploadAvatar";
 import { SignupAndProfileInputs } from "../features/authentication/SignupForm";
+import { getUserCoords } from "../utils/getUserCoords";
 
 const apiKey = import.meta.env.VITE_LOCATIONIQ_API_KEY;
 
@@ -94,29 +94,9 @@ export const loginWithGoogle = async (): Promise<UserInfo | undefined> => {
   try {
     const { user } = await signInWithPopup(auth, provider);
 
-    let location: string;
+    const coords = await getUserCoords();
+    const location = await getUserLocation(coords);
 
-    if (navigator.geolocation) {
-      location = await new Promise<string>((resolve, reject) => {
-        navigator.geolocation.getCurrentPosition(
-          async ({ coords: { latitude, longitude } }) => {
-            try {
-              const userLocation = await getUserLocation(latitude, longitude);
-              if (userLocation !== undefined) {
-                resolve(userLocation);
-              }
-            } catch (error) {
-              reject("error");
-            }
-          },
-          () => resolve("not-allowed") // If user denies location access
-        );
-      }).catch((error) => {
-        return error;
-      });
-    } else {
-      location = "error"; // Handle browsers that don't support geolocation
-    }
     const userInfo2 = transfromUser(user);
 
     const userInfo = {
@@ -209,21 +189,19 @@ export const editUserInformation = async (data: SignupAndProfileInputs) => {
   }
 };
 
-export const getUserLocation = async (latitude: number, longitude: number) => {
-  try {
-    // const res2 = await fetch(
-    //   `https://us1.locatidsoeniq.com/v1/reverdase?dadkey=${apiKey}&lat=${latitude}&lon=${longitude}&format=json&`
-    // );
+export const getUserLocation = async (coords: string) => {
+  if (coords === "not-allowed") return null;
 
+  const [latitude, longitude] = coords.split(" ");
+
+  try {
     const res = await fetch(
-      `https://us1.locationiq.com/v1/reverse?key=${apiKey}&lat=${latitude}&lon=${longitude}&format=json&`
+      `https://us1.locationiq.com/v1/reverse?key=${apiKey}&lat=${latitude}&lon=${longitude}&format=json`
     );
 
     const { address } = await res.json();
     return `${address.city_district} ${address.country}`;
   } catch (error: unknown) {
-    if (error instanceof Error) {
-      throw new Error(error.message);
-    }
+    return null;
   }
 };

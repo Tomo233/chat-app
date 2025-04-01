@@ -10,6 +10,7 @@ import FileInput from "../../components/FileInput";
 import CloseIcon from "@mui/icons-material/Close";
 import { getUserLocation } from "../../services/authentication";
 import toast from "react-hot-toast";
+import { getUserCoords } from "../../utils/getUserCoords";
 
 export type SignupAndProfileInputs = {
   firstName: string;
@@ -55,19 +56,25 @@ function SignUpForm() {
   const handleUserLocation = async (e?: BaseSyntheticEvent) => {
     if (e) e.preventDefault();
 
-    if (navigator.geolocation)
-      navigator.geolocation.getCurrentPosition(
-        async ({ coords: { latitude, longitude } }) => {
-          setIsLoadingLocation(true);
-          const userLocation = await getUserLocation(latitude, longitude);
-          setValue("location", userLocation);
-          setIsLoadingLocation(false);
-          toast.success("User location is fetched");
-        },
-        () => {
-          toast.error("User rejected to share his location");
-        }
-      );
+    const coords = await getUserCoords();
+    try {
+      setIsLoadingLocation(true);
+      const userLocation = await getUserLocation(coords);
+
+      if (!userLocation) {
+        toast.error(
+          "Something went wrong while getting user location. Try again :("
+        );
+        return;
+      }
+
+      setValue("location", userLocation);
+      toast.success("User location is fetched");
+    } finally {
+      setIsLoadingLocation(false);
+    }
+
+    setIsLoadingLocation(false);
   };
 
   return (
