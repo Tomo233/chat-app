@@ -17,14 +17,6 @@ export const useLoginWithGoogle = () => {
 
       toast.success("User successfully logged in");
 
-      if (user?.location === "not-allowed")
-        toast.error("You have disabled sharing your own location");
-
-      if (user?.location === "error")
-        toast.error(
-          "Something went wrong while getting user location try again"
-        );
-
       navigate("/", { replace: true });
     },
     onError: (error) => {

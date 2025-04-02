@@ -94,31 +94,30 @@ export const loginWithGoogle = async (): Promise<UserInfo | undefined> => {
   try {
     const { user } = await signInWithPopup(auth, provider);
 
-    const coords = await getUserCoords();
-    const location = await getUserLocation(coords);
-
     const userInfo2 = transfromUser(user);
 
-    const userInfo = {
-      ...userInfo2,
-      location: location,
-    };
     const usersCollectionRef = collection(db, "users");
-    const userQuery = query(usersCollectionRef, where("id", "==", userInfo.id));
+    const userQuery = query(
+      usersCollectionRef,
+      where("id", "==", userInfo2.id)
+    );
     const querySnapshot = await getDocs(userQuery);
-    let userFromFirestore: UserInfo = userInfo;
-    querySnapshot.forEach((q) => {
-      userFromFirestore = q.data() as UserInfo;
-    });
 
-    if (
-      querySnapshot.empty ||
-      location?.trim() !== userFromFirestore.location?.trim()
-    ) {
+    if (querySnapshot.empty) {
+      const coords = await getUserCoords();
+      const location = await getUserLocation(coords);
+      const userInfo = {
+        ...userInfo2,
+        location: location,
+      };
       await addUserToFirebase(userInfo);
+      return userInfo;
     }
 
-    return userInfo;
+    querySnapshot.forEach((q) => {
+      console.log(q.data());
+      return q.data() as UserInfo;
+    });
   } catch (error: unknown) {
     if (error instanceof Error) {
       throw new Error(error.message);
