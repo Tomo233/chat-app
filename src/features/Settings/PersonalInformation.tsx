@@ -4,8 +4,8 @@ import { UserInfo } from "../../services/authentication";
 import { SignupAndProfileInputs } from "../authentication/SignupForm";
 import { useEditUser } from "../authentication/useEditUser";
 import Loader from "../../components/Loader";
-import ConfirmPasswordPopup from "../authentication/ConfirmPasswordPopup";
 import EditIcon from "@mui/icons-material/Edit";
+import EditUserInformation from "../authentication/EditUserInformation";
 
 function PersonalInformation({ user }: { user: UserInfo }) {
   const { email, firstName, lastName, location } = user;
@@ -69,7 +69,8 @@ function PersonalInformation({ user }: { user: UserInfo }) {
         </div>
       </form>
       {editingStatus === "saving" && (
-        <ConfirmPasswordPopup
+        <EditUserInformation
+          user={user}
           handleClose={() => setEditingStatus("not-editing")}
           isEditing={editingStatus}
           control={control}
