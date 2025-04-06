@@ -3,29 +3,33 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import { createPortal } from "react-dom";
-import { Control, useForm, UseFormHandleSubmit } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { SignupAndProfileInputs } from "./SignupForm";
-import { BaseSyntheticEvent, useState } from "react";
+import { BaseSyntheticEvent } from "react";
 import InformationInput from "../settings/InformationInput";
 import { UserInfo } from "../../services/authentication";
 import FileInput from "../../components/FileInput";
+import { EditingStatusType } from "../settings/PersonalInformation";
 
 type PopupProps = {
-  isEditing: "saving" | "not-editing" | "editing";
-  handleClose: () => void;
-  control: Control<SignupAndProfileInputs>;
-  handleSubmit: UseFormHandleSubmit<SignupAndProfileInputs>;
-  editUser: (data: SignupAndProfileInputs) => void;
+  editingStatus: EditingStatusType;
+  handleChange: (status: EditingStatusType) => void;
   user: UserInfo;
+  editUser: (data: SignupAndProfileInputs) => void;
 };
 
 const EditUserInformation = function ({
-  isEditing,
-  handleClose,
-  editUser,
+  editingStatus,
+  handleChange,
   user,
+  editUser,
 }: PopupProps) {
-  const { register, handleSubmit, setValue } = useForm<SignupAndProfileInputs>({
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors, isDirty },
+  } = useForm<SignupAndProfileInputs>({
     defaultValues: {
       firstName: user.firstName,
       lastName: user.lastName,
@@ -35,23 +39,26 @@ const EditUserInformation = function ({
       avatar: null,
     },
   });
-  const [editingStatus] = useState<"not-editing" | "editing" | "saving">(
-    "not-editing"
-  );
+
   const submit = (data: any, e?: BaseSyntheticEvent) => {
     e?.preventDefault();
     editUser(data);
-    handleClose();
+    handleChange("not-editing");
   };
 
   return createPortal(
     <Dialog
-      open={isEditing === "saving" ? true : false}
-      onClose={handleClose}
+      open={editingStatus !== "not-editing"}
+      onClose={() => handleChange("not-editing")}
       PaperProps={{
         component: "form",
         sx: { backgroundColor: "#3f3568", color: "white" },
-        onSubmit: handleSubmit(submit),
+        onSubmit: (e: any) => {
+          e.preventDefault();
+          if (editingStatus === "saving") handleSubmit(submit)();
+
+          handleChange("saving");
+        },
       }}
     >
       <DialogTitle
@@ -61,72 +68,97 @@ const EditUserInformation = function ({
           fontSize: "23px",
         }}
       >
-        {true ? "Change User Information" : "Enter Current Password"}
+        {editingStatus === "editing"
+          ? "Change User Information"
+          : "Enter Current Password"}
       </DialogTitle>
 
       <DialogContent>
-        <div className="grid gap-y-2">
-          <div className="flex gap-3">
-            <div>
-              <p>First Name</p>
-              <InformationInput {...register("firstName")} />
+        {editingStatus === "editing" ? (
+          <div className="grid gap-y-2">
+            <div className="flex gap-3">
+              <div>
+                <p>First Name</p>
+                <InformationInput {...register("firstName")} />
+              </div>
+              <div>
+                <p>Last Name</p>
+                <InformationInput {...register("lastName")} />
+              </div>
             </div>
-            <div>
-              <p>Last Name</p>
-              <InformationInput {...register("lastName")} />
-            </div>
-          </div>
 
-          <div className="flex justify-between">
-            <div>
-              <p>Email</p>
-              <InformationInput {...register("email")} />
+            <div className="flex justify-between">
+              <div>
+                <p>Email</p>
+                <InformationInput {...register("email")} />
+              </div>
+              <div>
+                <p>New Password</p>
+                <InformationInput
+                  {...register("confirmOrNewPassword")}
+                  placeholder="*********"
+                  type="password"
+                />
+              </div>
             </div>
+
             <div>
-              <p>New Password</p>
-              <InformationInput
-                {...register("confirmOrNewPassword")}
-                placeholder="*********"
-                type="password"
+              <p>Avatar</p>
+              <FileInput
+                isFullWidth={true}
+                {...register("avatar")}
+                setValue={setValue}
+                editingStatus={editingStatus}
               />
             </div>
+            <div>
+              <p>Location</p>
+              <button className="border border-secondaryPurple border-dashed py-3 rounded-md w-full">
+                Get Location
+              </button>
+            </div>
           </div>
-
+        ) : (
           <div>
-            <p>Avatar</p>
-            <FileInput
+            <p className="mb-3">
+              To change personal information, please enter your current password
+              here. We will send updates occasionally.
+            </p>
+
+            <p className="text-white">{errors?.password?.message}</p>
+            <InformationInput
+              {...register("password", {
+                required: "This field is required",
+              })}
+              placeholder="Current Password"
+              type="password"
               isFullWidth={true}
-              {...register("avatar")}
-              setValue={setValue}
-              editingStatus={editingStatus}
             />
           </div>
-          <div>
-            <p>Location</p>
-            <button className="border border-secondaryPurple border-dashed py-3 rounded-md w-full">
-              Get Location
-            </button>
-          </div>
-        </div>
+        )}
       </DialogContent>
 
       <DialogActions>
         <button
           className="bg-secondaryPurple p-3 text-white font-semibold outline-none"
-          onClick={(e) => {
-            e.preventDefault();
-            handleClose();
-          }}
           type="button"
+          onClick={() => {
+            editingStatus === "editing"
+              ? handleChange("not-editing")
+              : handleChange("editing");
+          }}
         >
-          Cancel
+          {editingStatus === "editing" ? "Cancel" : "Back"}
         </button>
         <button
           className="bg-secondaryPurple p-3 text-white font-semibold outline-none"
           type="submit"
-          // onSubmit={handleSubmit(submit)}
+          disabled={!isDirty}
+          onClick={() => {
+            if (editingStatus !== "saving") handleChange("saving");
+          }}
         >
-          Submit
+          {editingStatus === "editing" ? "Next Step" : "Submit"}
         </button>
       </DialogActions>
     </Dialog>,

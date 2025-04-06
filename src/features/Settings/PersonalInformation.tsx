@@ -1,29 +1,17 @@
 import { useState } from "react";
-import { useForm } from "react-hook-form";
 import { UserInfo } from "../../services/authentication";
-import { SignupAndProfileInputs } from "../authentication/SignupForm";
-import { useEditUser } from "../authentication/useEditUser";
-import Loader from "../../components/Loader";
 import EditIcon from "@mui/icons-material/Edit";
 import EditUserInformation from "../authentication/EditUserInformation";
+import { useEditUser } from "../authentication/useEditUser";
+import Loader from "../../components/Loader";
+
+export type EditingStatusType = "saving" | "not-editing" | "editing";
 
 function PersonalInformation({ user }: { user: UserInfo }) {
   const { email, firstName, lastName, location } = user;
-  const { isEditingUser, editUser } = useEditUser();
-  const [editingStatus, setEditingStatus] = useState<
-    "not-editing" | "editing" | "saving"
-  >("not-editing");
-
-  const { handleSubmit, control } = useForm<SignupAndProfileInputs>({
-    defaultValues: {
-      firstName: user.firstName,
-      lastName: user.lastName,
-      email: user.email,
-      password: "",
-      confirmOrNewPassword: "",
-      avatar: null,
-    },
-  });
+  const [editingStatus, setEditingStatus] =
+    useState<EditingStatusType>("not-editing");
+  const { editUser, isEditingUser } = useEditUser();
 
   if (isEditingUser) return <Loader />;
 
@@ -33,7 +21,7 @@ function PersonalInformation({ user }: { user: UserInfo }) {
         <h2 className="font-bold text-3xl py-7">Personal Information</h2>
         <button
           className="border border-secondaryPurple px-12 py-3 flex gap-2 rounded-3xl"
-          onClick={() => setEditingStatus("saving")}
+          onClick={() => setEditingStatus("editing")}
         >
           <span>
             <EditIcon />
@@ -68,14 +56,12 @@ function PersonalInformation({ user }: { user: UserInfo }) {
           )}
         </div>
       </form>
-      {editingStatus === "saving" && (
+      {editingStatus !== "not-editing" && (
         <EditUserInformation
-          user={user}
-          handleClose={() => setEditingStatus("not-editing")}
-          isEditing={editingStatus}
-          control={control}
-          handleSubmit={handleSubmit}
           editUser={editUser}
+          user={user}
+          handleChange={(status: EditingStatusType) => setEditingStatus(status)}
+          editingStatus={editingStatus}
         />
       )}
     </section>
