@@ -1,10 +1,11 @@
 import CloseIcon from "@mui/icons-material/Close";
 import { ChangeEvent, forwardRef, useEffect, useState } from "react";
+import { EditingStatusType } from "../features/settings/PersonalInformation";
 
 type FileInputProps = {
   setValue: (name: "avatar", value: File | null) => void;
   isFullWidth?: boolean;
-  editingStatus?: "not-editing" | "editing" | "saving";
+  editingStatus?: EditingStatusType;
 };
 
 const FileInput = forwardRef<HTMLInputElement, FileInputProps>(function (

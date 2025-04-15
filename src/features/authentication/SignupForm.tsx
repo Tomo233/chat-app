@@ -37,6 +37,7 @@ function SignUpForm() {
   } = useForm<SignupAndProfileInputs>({
     defaultValues: {
       avatar: null,
+      location: null,
     },
   });
 
@@ -73,8 +74,6 @@ function SignUpForm() {
     } finally {
       setIsLoadingLocation(false);
     }
-
-    setIsLoadingLocation(false);
   };
 
   return (
