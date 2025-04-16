@@ -1,9 +1,7 @@
 import DefaultUserImage from "../../assets/default-user.png";
-import { useGetUserById } from "../authentication/useGetUserById";
+import { UserInfo } from "../../services/authentication";
 
-function ProfileBar() {
-  const { user } = useGetUserById();
-
+function ProfileBar({ user }: { user: UserInfo | null }) {
   return (
     <div className="flex justify-between border-b border-borderColor p-3 h-20">
       <div className="flex gap-3">
