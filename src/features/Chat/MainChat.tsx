@@ -1,11 +1,11 @@
 import ProfileBar from "./ProfileBar";
 import SendMessage from "./SendMessage";
-import { useParams } from "react-router-dom";
-import EmptyChat from "./EmptyChat";
-import { useGetUserById } from "../authentication/useGetUserById";
 import Loader from "../../components/Loader";
-import { useChatMessages } from "./useChatMessages";
 import ChatMessages from "./ChatMessages";
+import NoConversation from "./NoConversation";
+import { useParams } from "react-router-dom";
+import { useGetUserById } from "../authentication/useGetUserById";
+import { useChatMessages } from "./useChatMessages";
 
 function MainChat() {
   const { id } = useParams();
@@ -19,7 +19,7 @@ function MainChat() {
       </div>
     );
   }
-  if (!id) return <EmptyChat />;
+  if (!id) return <NoConversation />;
 
   return (
     <div className="bg-primaryPurple rounded-2xl w-2/3 grid grid-rows-[100px_auto_100px]">

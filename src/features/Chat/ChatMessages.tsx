@@ -17,7 +17,7 @@ function ChatMessages({ chats, isLoadingChats, user }: ChatMessagesProps) {
   if (chats.length === 0) return <EmptyChat />;
 
   return (
-    <div className="w-full">
+    <div className="h-[500px] w-full">
       {chats.map((msg, index) => {
         const isLastMessageByUser =
           index === chats.length - 1 ||
