@@ -1,4 +1,3 @@
-import { useState } from "react";
 import DefaultUserImage from "../../assets/default-user.png";
 import ProfileBar from "./ProfileBar";
 import SendMessage from "./SendMessage";
@@ -6,22 +5,13 @@ import { useParams } from "react-router-dom";
 import EmptyChat from "./EmptyChat";
 import { useGetUserById } from "../authentication/useGetUserById";
 import Loader from "../../components/Loader";
+import { useChatMessages } from "./useChatMessages";
+import { auth } from "../../firebaseConfig";
 
 function MainChat() {
-  const [messages] = useState([
-    { status: "sender", message: "Hi there I'm sender" },
-    { status: "sender", message: "Hi there I'm sender again" },
-    { status: "receiver", message: "Hi there I'm receiver" },
-    { status: "receiver", message: "Hi there I'm sender again" },
-    { status: "sender", message: "Hi there I'm sender once more 15" },
-    { status: "receiver", message: "Hi there I'm sender again" },
-    { status: "receiver", message: "Hi there I'm sender again" },
-    { status: "receiver", message: "Hi there I'm sender again" },
-    { status: "sender", message: "Hi there I'm sender once more 15" },
-    { status: "receiver", message: "Hi there I'm receiver again" },
-  ]);
   const { id } = useParams();
   const { user, isLoading } = useGetUserById();
+  const { chats, isLoading: isLoadingChatsContent } = useChatMessages();
 
   if (isLoading) {
     return (
@@ -30,47 +20,52 @@ function MainChat() {
       </div>
     );
   }
-
   if (!id) return <EmptyChat />;
+  // place - self - end;
 
   return (
     <div className="bg-primaryPurple rounded-2xl w-2/3 grid grid-rows-[100px_auto_100px]">
       <ProfileBar />
 
-      <div className="max-h-[550px] overflow-auto p-5">
-        {messages.map((msg, index) => {
+      <div className="h-[500px] overflow-auto p-5">
+        {chats.map((msg, index) => {
           const isLastMessageByUser =
-            index === messages.length - 1 ||
-            messages[index + 1].status !== msg.status;
-
+            index === chats.length - 1 ||
+            chats?.at(index + 1)?.senderId !== msg?.senderId;
+          console.log(chats[1].receiverId === user?.id);
+          console.log(chats[1]);
           return (
             <div
               key={index}
-              className={`flex gap-5 items-end text-white mb-3 ${
-                msg.status === "sender" ? "justify-start" : "justify-end"
-              }
-              ${!isLastMessageByUser && "pl-[67px]"}
-              `}
+              className={`flex gap-5 items-end text-white mb-3
+          ${!isLastMessageByUser && "pl-[67px]"}
+            ${
+              msg?.senderId === auth.currentUser?.uid
+                ? "place-self-end"
+                : "place-self-start"
+            }
+            
+            `}
             >
-              {msg.status === "sender" && isLastMessageByUser && (
-                <div>
-                  <img
-                    src={user?.photoURL || DefaultUserImage}
-                    alt="DefaultUserImage Image"
-                    className="h-12 rounded-3xl"
-                  />
-                  <p className="text-white text-center">9:00</p>
-                </div>
-              )}
+              {msg.receiverId === auth.currentUser?.uid &&
+                isLastMessageByUser && (
+                  <div>
+                    <img
+                      src={user?.photoURL || DefaultUserImage}
+                      alt="DefaultUserImage Image"
+                      className="h-12 rounded-3xl"
+                    />
+                    <p className="text-white text-center">9:00</p>
+                  </div>
+                )}
 
               <div className="bg-backgroundColor p-5 rounded-lg  max-w-72  break-words">
-                <p>Hi there, How are you</p>
+                <p>{msg?.message}</p>
               </div>
             </div>
           );
         })}
       </div>
-
       {/* Send Message Input and button */}
       <SendMessage />
     </div>
