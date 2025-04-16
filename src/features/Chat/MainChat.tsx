@@ -2,11 +2,11 @@ import DefaultUserImage from "../../assets/default-user.png";
 import ProfileBar from "./ProfileBar";
 import SendMessage from "./SendMessage";
 import { useParams } from "react-router-dom";
-import EmptyChat from "./EmptyChat";
 import { useGetUserById } from "../authentication/useGetUserById";
 import Loader from "../../components/Loader";
 import { useChatMessages } from "./useChatMessages";
 import { auth } from "../../firebaseConfig";
+import NoConversation from "./NoConversation";
 
 function MainChat() {
   const { id } = useParams();
@@ -20,8 +20,7 @@ function MainChat() {
       </div>
     );
   }
-  if (!id) return <EmptyChat />;
-  // place - self - end;
+  if (!id) return <NoConversation />;
 
   return (
     <div className="bg-primaryPurple rounded-2xl w-2/3 grid grid-rows-[100px_auto_100px]">
@@ -32,8 +31,7 @@ function MainChat() {
           const isLastMessageByUser =
             index === chats.length - 1 ||
             chats?.at(index + 1)?.senderId !== msg?.senderId;
-          console.log(chats[1].receiverId === user?.id);
-          console.log(chats[1]);
+
           return (
             <div
               key={index}

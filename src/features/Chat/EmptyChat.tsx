@@ -1,14 +1,9 @@
-import { useLocation } from "react-router-dom";
-
 function EmptyChat() {
-  const location = useLocation();
-  const id = location.pathname.split("/")[2];
-
   return (
-    <div className="bg-primaryPurple rounded-2xl w-2/3 flex justify-center items-center">
-      <h2 className="text-white font-semibold text-3xl text-center uppercase">
-        {!id ? "No conversation is opened" : "This chat is empty"}
-      </h2>
+    <div className="flex flex-col items-center justify-center h-full text-center text-gray-500 p-4">
+      <div className="text-4xl mb-2">💬</div>
+      <p className="text-lg font-semibold">No messages yet</p>
+      <p className="text-sm">Start the conversation by sending a message!</p>
     </div>
   );
 }
