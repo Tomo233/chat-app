@@ -7,6 +7,7 @@ import SwapVertIcon from "@mui/icons-material/SwapVert";
 import { Box, Menu, MenuItem } from "@mui/material";
 import { useSearchParams } from "react-router-dom";
 import Loader from "../../components/Loader";
+import { auth } from "../../firebaseConfig";
 
 export default function Contacts() {
   const [page, setPage] = useState(0);
@@ -15,6 +16,10 @@ export default function Contacts() {
     "users",
     "firstName"
   );
+  const filteredUsers = users.filter(
+    (user) => user.id !== auth.currentUser?.uid
+  );
+
   const rowsPerPage = 8;
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -40,10 +45,12 @@ export default function Contacts() {
 
   // Calculate empty rows for pagination
   const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - (users?.length ?? 0)) : 0;
+    page > 0
+      ? Math.max(0, (1 + page) * rowsPerPage - (filteredUsers?.length ?? 0))
+      : 0;
 
   // Slice rows based on current paged
-  const paginatedRows = users?.slice(
+  const paginatedRows = filteredUsers?.slice(
     page * rowsPerPage,
     page * rowsPerPage + rowsPerPage
   );
@@ -133,7 +140,7 @@ export default function Contacts() {
               <td className="p-2">
                 <div className="flex items-center gap-3">
                   <img
-                    src={DefaultUserImage}
+                    src={row.photoURL || DefaultUserImage}
                     className="h-12 w-12 rounded-full"
                     alt="DefaultUserImage"
                   />
@@ -163,7 +170,7 @@ export default function Contacts() {
                 }}
                 component="div"
                 rowsPerPageOptions={[]} // Disable dropdown for rows per page
-                count={users?.length ?? 0}
+                count={filteredUsers?.length ?? 0}
                 rowsPerPage={rowsPerPage} // Fixed to 10 rows per page
                 page={page}
                 onPageChange={handleChangePage}
