@@ -15,13 +15,11 @@ export const useSendMessages = () => {
     mutationFn: (message: string) =>
       sendMessageApi(receiverId!, senderId, message),
     mutationKey: ["messages"],
-    onSuccess: () => {
-      reset();
-    },
+    onSuccess: () => {},
     onError: () => {
       console.error("Error sending message try again");
     },
   });
 
-  return { sendMessage, isPending };
+  return { sendMessage, isPending, reset };
 };

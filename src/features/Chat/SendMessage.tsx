@@ -5,11 +5,12 @@ import { useSendMessages } from "./useSendMessages";
 
 function SendMessage() {
   const [message, setMessage] = useState<string>("");
-  const { sendMessage } = useSendMessages();
+  const { sendMessage, isPending, reset } = useSendMessages();
 
   const handleSendMessage = async (e: BaseSyntheticEvent) => {
     e.preventDefault();
     sendMessage(message);
+    reset();
   };
 
   return (
@@ -24,13 +25,14 @@ function SendMessage() {
         className="w-full h-14 rounded-2xl pl-3 outline-none"
         onChange={(e) => setMessage(e.target.value)}
         required
+        disabled={isPending}
       />
-      <button>
+      <button disabled={isPending}>
         <SendRoundedIcon
           sx={{
             color: "#fff",
             fontSize: "3.5rem",
-            backgroundColor: "#2b2738",
+            backgroundColor: message ? "#6e54b5" : "#2b2738",
             padding: "10px",
             borderRadius: "25px",
           }}
