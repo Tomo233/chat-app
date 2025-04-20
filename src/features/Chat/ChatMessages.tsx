@@ -4,6 +4,8 @@ import { ChatDataProps } from "./useChatMessages";
 import DefaultUserImage from "../../assets/default-user.png";
 import { UserInfo } from "../../services/authentication";
 import EmptyChat from "./EmptyChat";
+import MessageMenu from "./MessageMenu";
+import { useState } from "react";
 
 type ChatMessagesProps = {
   chats: ChatDataProps[];
@@ -12,6 +14,8 @@ type ChatMessagesProps = {
 };
 
 function ChatMessages({ chats, isLoadingChats, user }: ChatMessagesProps) {
+  const [isHovered, setIsHovered] = useState<number | null>();
+
   if (isLoadingChats) return <Loader />;
 
   if (chats.length === 0) return <EmptyChat />;
@@ -35,6 +39,8 @@ function ChatMessages({ chats, isLoadingChats, user }: ChatMessagesProps) {
             }
             
             `}
+            onMouseEnter={() => setIsHovered(index)}
+            onMouseLeave={() => setIsHovered(null)}
           >
             {msg.receiverId === auth.currentUser?.uid &&
               isLastMessageByUser && (
@@ -48,8 +54,12 @@ function ChatMessages({ chats, isLoadingChats, user }: ChatMessagesProps) {
                 </div>
               )}
 
-            <div className="bg-backgroundColor p-5 rounded-lg  max-w-72  break-words">
-              <p>{msg?.message}</p>
+            <div className="flex items-center">
+              {msg.senderId === auth.currentUser!.uid &&
+                isHovered === index && <MessageMenu />}
+              <div className="bg-backgroundColor p-5 rounded-lg  max-w-72  break-words">
+                <p>{msg?.message}</p>
+              </div>
             </div>
           </div>
         );
