@@ -56,7 +56,7 @@ function ChatMessages({ chats, isLoadingChats, user }: ChatMessagesProps) {
 
             <div className="flex items-center">
               {msg.senderId === auth.currentUser!.uid &&
-                isHovered === index && <MessageMenu />}
+                isHovered === index && <MessageMenu message={msg.message} />}
               <div className="bg-backgroundColor p-5 rounded-lg  max-w-72  break-words">
                 <p>{msg?.message}</p>
               </div>

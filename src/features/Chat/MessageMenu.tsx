@@ -5,8 +5,9 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { IconButton } from "@mui/material";
+import toast from "react-hot-toast";
 
-export default function MessageMenu() {
+export default function MessageMenu({ message }: { message: string }) {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 
@@ -63,7 +64,7 @@ export default function MessageMenu() {
                 right: 14,
                 width: 10,
                 height: 10,
-                bgcolor: "#6e54b5", // also red to match the paper
+                bgcolor: "#6e54b5",
                 transform: "translateY(-50%) rotate(45deg)",
                 zIndex: 0,
               },
@@ -73,7 +74,19 @@ export default function MessageMenu() {
         transformOrigin={{ horizontal: "right", vertical: "top" }}
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
       >
-        <MenuItem onClick={handleClose}>
+        <MenuItem
+          onClick={() => {
+            handleClose();
+            navigator.clipboard.writeText(message);
+            toast("Copied to clipboard", {
+              icon: "📋",
+              style: {
+                backgroundColor: "#3f3568",
+                color: "#fff",
+              },
+            });
+          }}
+        >
           <ContentCopyIcon />
           <span>Copy</span>
         </MenuItem>
