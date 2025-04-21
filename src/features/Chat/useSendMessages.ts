@@ -3,7 +3,7 @@ import { auth } from "../../firebaseConfig";
 import { useParams } from "react-router-dom";
 import { sendMessage as sendMessageApi } from "../../services/messages";
 
-export const useSendMessages = () => {
+export const useSendMessage = () => {
   const { id: receiverId } = useParams<{ id: string }>();
   const senderId = auth.currentUser!.uid;
 

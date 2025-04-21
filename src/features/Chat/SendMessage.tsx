@@ -1,11 +1,11 @@
 import SendRoundedIcon from "@mui/icons-material/SendRounded";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
 import { BaseSyntheticEvent, useState } from "react";
-import { useSendMessages } from "./useSendMessages";
+import { useSendMessage } from "./useSendMessages";
 
 function SendMessage() {
   const [message, setMessage] = useState<string>("");
-  const { sendMessage, isPending, reset } = useSendMessages();
+  const { sendMessage, isPending, reset } = useSendMessage();
 
   const handleSendMessage = async (e: BaseSyntheticEvent) => {
     e.preventDefault();

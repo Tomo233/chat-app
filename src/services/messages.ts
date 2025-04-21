@@ -1,4 +1,4 @@
-import { addDoc, collection, Timestamp } from "firebase/firestore";
+import { doc, setDoc, Timestamp } from "firebase/firestore";
 import { db } from "../firebaseConfig";
 
 export const sendMessage = async (
@@ -9,7 +9,9 @@ export const sendMessage = async (
   try {
     const currentTime = Timestamp.fromDate(new Date());
 
-    await addDoc(collection(db, "messages"), {
+    const randomId = window.crypto.randomUUID();
+    await setDoc(doc(db, "messages", randomId), {
+      id: randomId,
       senderId,
       receiverId,
       message,

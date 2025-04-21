@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 export type ChatDataProps = {
+  id: string;
   senderId: string;
   receiverId: string;
   message: string;
