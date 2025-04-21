@@ -21,6 +21,8 @@ function MainChat() {
   }
   if (!id) return <NoConversation />;
 
+  console.log(chats);
+
   return (
     <div className="bg-primaryPurple rounded-2xl w-2/3 grid grid-rows-[100px_auto_100px]">
       <ProfileBar user={user} />

@@ -6,16 +6,27 @@ import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { IconButton } from "@mui/material";
 import toast from "react-hot-toast";
+import { useDeleteMessage } from "./useDeleteMessage";
 
-export default function MessageMenu({ message }: { message: string }) {
+type MessageMenuProps = {
+  message: string;
+  id: string;
+};
+
+export default function MessageMenu({ message, id }: MessageMenuProps) {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
-
+  const { deleteMessage, isPending } = useDeleteMessage();
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
     setAnchorEl(null);
+  };
+
+  const handleDeleteMessage = () => {
+    deleteMessage(id);
+    handleClose();
   };
 
   return (
@@ -90,9 +101,9 @@ export default function MessageMenu({ message }: { message: string }) {
           <ContentCopyIcon />
           <span>Copy</span>
         </MenuItem>
-        <MenuItem onClick={handleClose}>
+        <MenuItem onClick={handleDeleteMessage} disabled={isPending}>
           <DeleteIcon />
-          <span>Delete</span>
+          <span>Delete </span>
         </MenuItem>
       </Menu>
     </div>

@@ -30,34 +30,33 @@ function ChatMessages({ chats, isLoadingChats, user }: ChatMessagesProps) {
         return (
           <div
             key={index}
-            className={`flex gap-5 items-end text-white mb-3
-          ${!isLastMessageByUser && "pl-[67px]"}
+            className={`flex gap-2 items-center text-white pb-1
+             ${!isLastMessageByUser && "pl-14"}
             ${
               msg?.senderId === auth.currentUser?.uid
                 ? "place-self-end"
                 : "place-self-start"
             }
-            
             `}
             onMouseEnter={() => setIsHovered(index)}
             onMouseLeave={() => setIsHovered(null)}
           >
             {msg.receiverId === auth.currentUser?.uid &&
               isLastMessageByUser && (
-                <div>
-                  <img
-                    src={user?.photoURL || DefaultUserImage}
-                    alt="DefaultUserImage Image"
-                    className="h-12 rounded-3xl"
-                  />
-                  <p className="text-white text-center">9:00</p>
-                </div>
+                <img
+                  src={user?.photoURL || DefaultUserImage}
+                  alt="DefaultUserImage Image"
+                  className="h-12 rounded-3xl"
+                />
               )}
 
             <div className="flex items-center">
               {msg.senderId === auth.currentUser!.uid &&
-                isHovered === index && <MessageMenu message={msg.message} />}
-              <div className="bg-backgroundColor p-5 rounded-lg  max-w-72  break-words">
+                isHovered === index && (
+                  <MessageMenu message={msg.message} id={msg.id} />
+                )}
+
+              <div className="bg-backgroundColor p-4 rounded-lg max-w-64 break-words">
                 <p>{msg?.message}</p>
               </div>
             </div>
