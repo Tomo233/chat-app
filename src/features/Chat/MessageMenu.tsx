@@ -2,32 +2,53 @@ import * as React from "react";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import { IconButton } from "@mui/material";
+import { Box, IconButton } from "@mui/material";
 import toast from "react-hot-toast";
 import { useDeleteMessage } from "./useDeleteMessage";
+import { ChatDataProps } from "./useChatMessages";
+import { auth } from "../../firebaseConfig";
+import ForwardMessageDialog from "./ForwardMessageDialog";
 
 type MessageMenuProps = {
-  message: string;
-  id: string;
+  message: ChatDataProps;
 };
 
-export default function MessageMenu({ message, id }: MessageMenuProps) {
+export default function MessageMenu({ message }: MessageMenuProps) {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const { deleteMessage, isPending } = useDeleteMessage();
+
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
+
   const handleClose = () => {
     setAnchorEl(null);
   };
 
   const handleDeleteMessage = () => {
-    deleteMessage(id);
+    deleteMessage(message.id);
     handleClose();
   };
+
+  const handleCopyMessage = () => {
+    navigator.clipboard.writeText(message.message);
+
+    toast("Copied to clipboard", {
+      icon: "📋",
+      style: {
+        backgroundColor: "#3f3568",
+        color: "#fff",
+      },
+    });
+    handleClose();
+  };
+
+  const alignStyle =
+    message.senderId === auth?.currentUser?.uid ? "right" : "left";
 
   return (
     <div>
@@ -51,7 +72,7 @@ export default function MessageMenu({ message, id }: MessageMenuProps) {
         onClose={() => {
           handleClose();
         }}
-        onClick={handleClose}
+        // onClick={handleClose}
         slotProps={{
           paper: {
             elevation: 0,
@@ -60,19 +81,24 @@ export default function MessageMenu({ message, id }: MessageMenuProps) {
               color: "#fff",
               overflow: "visible",
               filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
-              mt: 1.5,
+              mt: 2,
+              pb: 0,
               "& .MuiAvatar-root": {
                 width: 32,
                 height: 32,
                 ml: -0.5,
                 mr: 1,
               },
+              "& .MuiMenuItem-root:last-child": {
+                mb: 0,
+                pb: 0,
+              },
               "&::before": {
                 content: '""',
                 display: "block",
                 position: "absolute",
                 top: 0,
-                right: 14,
+                [alignStyle]: 13,
                 width: 10,
                 height: 10,
                 bgcolor: "#6e54b5",
@@ -82,29 +108,36 @@ export default function MessageMenu({ message, id }: MessageMenuProps) {
             },
           },
         }}
-        transformOrigin={{ horizontal: "right", vertical: "top" }}
-        anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
+        transformOrigin={{ horizontal: "left", vertical: "top" }}
+        anchorOrigin={{ horizontal: "left", vertical: "bottom" }}
       >
-        <MenuItem
-          onClick={() => {
-            handleClose();
-            navigator.clipboard.writeText(message);
-            toast("Copied to clipboard", {
-              icon: "📋",
-              style: {
-                backgroundColor: "#3f3568",
-                color: "#fff",
-              },
-            });
-          }}
-        >
-          <ContentCopyIcon />
+        <p className="text-center text-sm font-medium pb-1">9:00</p>
+        <Box sx={{ borderBottom: 1 }} />
+
+        <MenuItem onClick={() => handleCopyMessage()}>
+          <ContentCopyIcon fontSize="small" />
           <span>Copy</span>
         </MenuItem>
-        <MenuItem onClick={handleDeleteMessage} disabled={isPending}>
-          <DeleteIcon />
-          <span>Delete </span>
-        </MenuItem>
+        <Box sx={{ borderBottom: 1 }} />
+
+        <ForwardMessageDialog message={message.message} />
+
+        {message.senderId === auth?.currentUser?.uid && [
+          <Box sx={{ borderBottom: 1 }} />,
+          <MenuItem key="edit">
+            <EditIcon fontSize="small" />
+            <span>Edit</span>
+          </MenuItem>,
+          <Box sx={{ borderBottom: 1 }} />,
+          <MenuItem
+            key="delete"
+            onClick={handleDeleteMessage}
+            disabled={isPending}
+          >
+            <DeleteIcon fontSize="small" />
+            <span>Delete</span>
+          </MenuItem>,
+        ]}
       </Menu>
     </div>
   );

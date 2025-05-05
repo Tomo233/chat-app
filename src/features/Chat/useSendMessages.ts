@@ -3,6 +3,11 @@ import { auth } from "../../firebaseConfig";
 import { useParams } from "react-router-dom";
 import { sendMessage as sendMessageApi } from "../../services/messages";
 
+type SendMessageProps = {
+  message: string;
+  forwardedToUserId?: string;
+};
+
 export const useSendMessage = () => {
   const { id: receiverId } = useParams<{ id: string }>();
   const senderId = auth.currentUser!.uid;
@@ -12,8 +17,8 @@ export const useSendMessage = () => {
     isPending,
     reset,
   } = useMutation({
-    mutationFn: (message: string) =>
-      sendMessageApi(receiverId!, senderId, message),
+    mutationFn: ({ message, forwardedToUserId }: SendMessageProps) =>
+      sendMessageApi(forwardedToUserId || receiverId!, senderId, message),
     mutationKey: ["messages"],
     onSuccess: () => {},
     onError: () => {

@@ -9,7 +9,7 @@ function SendMessage() {
 
   const handleSendMessage = async (e: BaseSyntheticEvent) => {
     e.preventDefault();
-    sendMessage(message);
+    sendMessage({ message });
     reset();
   };
 

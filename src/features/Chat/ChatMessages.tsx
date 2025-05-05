@@ -30,7 +30,8 @@ function ChatMessages({ chats, isLoadingChats, user }: ChatMessagesProps) {
         return (
           <div
             key={index}
-            className={`flex gap-2 items-center text-white pb-1
+            className={`flex gap-2 items-center text-white pb-1 
+             
              ${!isLastMessageByUser && "pl-14"}
             ${
               msg?.senderId === auth.currentUser?.uid
@@ -50,12 +51,14 @@ function ChatMessages({ chats, isLoadingChats, user }: ChatMessagesProps) {
                 />
               )}
 
-            <div className="flex items-center">
-              {msg.senderId === auth.currentUser!.uid &&
-                isHovered === index && (
-                  <MessageMenu message={msg.message} id={msg.id} />
-                )}
-
+            <div
+              className={`flex items-center ${
+                msg.senderId !== auth.currentUser!.uid &&
+                isHovered === index &&
+                "flex-row-reverse"
+              }`}
+            >
+              {isHovered === index && <MessageMenu message={msg} />}
               <div className="bg-backgroundColor p-4 rounded-lg max-w-64 break-words">
                 <p>{msg?.message}</p>
               </div>
