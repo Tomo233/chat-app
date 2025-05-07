@@ -18,22 +18,28 @@ import { useSendMessage } from "./useSendMessages";
 
 export default function ForwardMessageDialog({ message }: { message: string }) {
   const [open, setOpen] = useState(false);
+  const [disabledButtons, setDisabledButtons] = useState<{
+    [key: number]: boolean;
+  }>({});
   const { data: users, isLoading } = useFirestoreCollection<UserInfo>("users");
   const { id } = useParams();
   const filteredUsers = users.filter(
     (user) => user.id !== auth.currentUser?.uid && user.id !== id
   );
-  const { sendMessage } = useSendMessage();
+  const { sendMessage, isPending } = useSendMessage();
 
   const handleClose = () => {
     setOpen(false);
+    setDisabledButtons({});
   };
 
   const handleClickOpen = () => {
     setOpen(true);
   };
 
-  const handleForwardMessage = (receiverId: string) => {
+  const handleForwardMessage = (index: number, receiverId: string) => {
+    setDisabledButtons((prev) => ({ ...prev, [index]: true }));
+
     sendMessage({
       message,
       forwardedToUserId: receiverId,
@@ -70,33 +76,40 @@ export default function ForwardMessageDialog({ message }: { message: string }) {
                     <Loader fontSize="text-3xl" circularProgressSize={40} />
                   </div>
                 ) : (
-                  filteredUsers.map((user) => (
-                    <ListItem
-                      key={user.id}
-                      disablePadding
-                      className="w-96 border-b p-2 flex items-center gap-4"
-                    >
-                      <ListItemAvatar>
-                        <Avatar>
-                          <img
-                            src={user.photoURL || DefaultUserImage}
-                            alt={`${user.firstName} ${user.lastName}`}
-                          />
-                        </Avatar>
-                      </ListItemAvatar>
+                  filteredUsers.map((user, index) => {
+                    const isDisabled = disabledButtons[index] || isPending;
 
-                      <ListItemText
-                        primary={`${user.firstName} ${user.lastName}`}
-                      />
-
-                      <button
-                        className="bg-primaryPurple text-white px-4 py-2 rounded"
-                        onClick={() => handleForwardMessage(user.id)}
+                    return (
+                      <ListItem
+                        key={user.id}
+                        disablePadding
+                        className="w-96 border-b p-2 flex items-center gap-4"
                       >
-                        Send
-                      </button>
-                    </ListItem>
-                  ))
+                        <ListItemAvatar>
+                          <Avatar>
+                            <img
+                              src={user.photoURL || DefaultUserImage}
+                              alt={`${user.firstName} ${user.lastName}`}
+                            />
+                          </Avatar>
+                        </ListItemAvatar>
+
+                        <ListItemText
+                          primary={`${user.firstName} ${user.lastName}`}
+                        />
+
+                        <button
+                          className={`bg-primaryPurple text-white px-4 py-2 rounded ${
+                            isDisabled && "cursor-not-allowed"
+                          }`}
+                          onClick={() => handleForwardMessage(index, user.id)}
+                          disabled={isDisabled}
+                        >
+                          {isDisabled ? "Sent" : "Send"}
+                        </button>
+                      </ListItem>
+                    );
+                  })
                 )}
               </List>
             </div>

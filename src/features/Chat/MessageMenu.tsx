@@ -72,7 +72,6 @@ export default function MessageMenu({ message }: MessageMenuProps) {
         onClose={() => {
           handleClose();
         }}
-        // onClick={handleClose}
         slotProps={{
           paper: {
             elevation: 0,
@@ -112,23 +111,23 @@ export default function MessageMenu({ message }: MessageMenuProps) {
         anchorOrigin={{ horizontal: "left", vertical: "bottom" }}
       >
         <p className="text-center text-sm font-medium pb-1">9:00</p>
-        <Box sx={{ borderBottom: 1 }} />
+        <Box key="divider-1" sx={{ borderBottom: 1 }} />
 
         <MenuItem onClick={() => handleCopyMessage()}>
           <ContentCopyIcon fontSize="small" />
           <span>Copy</span>
         </MenuItem>
-        <Box sx={{ borderBottom: 1 }} />
+        <Box key="divider-2" sx={{ borderBottom: 1 }} />
 
         <ForwardMessageDialog message={message.message} />
 
         {message.senderId === auth?.currentUser?.uid && [
-          <Box sx={{ borderBottom: 1 }} />,
+          <Box key="divider-3" sx={{ borderBottom: 1 }} />,
           <MenuItem key="edit">
             <EditIcon fontSize="small" />
             <span>Edit</span>
           </MenuItem>,
-          <Box sx={{ borderBottom: 1 }} />,
+          <Box key="divider-4" sx={{ borderBottom: 1 }} />,
           <MenuItem
             key="delete"
             onClick={handleDeleteMessage}

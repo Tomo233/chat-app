@@ -31,7 +31,6 @@ function ChatMessages({ chats, isLoadingChats, user }: ChatMessagesProps) {
           <div
             key={index}
             className={`flex gap-2 items-center text-white pb-1 
-             
              ${!isLastMessageByUser && "pl-14"}
             ${
               msg?.senderId === auth.currentUser?.uid
