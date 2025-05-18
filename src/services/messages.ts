@@ -1,5 +1,6 @@
-import { deleteDoc, doc, setDoc, Timestamp } from "firebase/firestore";
+import { deleteDoc, doc, getDoc, setDoc, Timestamp } from "firebase/firestore";
 import { db } from "../firebaseConfig";
+import { ChatDataProps } from "../features/chat/useChatMessages";
 
 export const sendMessage = async (
   receiverId: string,
@@ -19,7 +20,9 @@ export const sendMessage = async (
     });
     console.log("Message successfully added to Firestore");
   } catch (error) {
-    console.error("Error sending message to Firestore:", error);
+    if (error instanceof Error) {
+      throw new Error(error.message);
+    }
   }
 };
 
@@ -30,6 +33,20 @@ export const deleteMessage = async (messageId: string) => {
     if (error instanceof Error) {
       throw new Error(error.message);
     }
-    throw new Error("Something went wrong, try again later!");
+  }
+};
+
+export const getMessageById = async (messageId: string | null) => {
+  try {
+    if (!messageId) throw new Error("there is no message selected");
+
+    const docRef = doc(db, "messages", messageId);
+    const docSnap = await getDoc(docRef);
+
+    return docSnap.data() as ChatDataProps;
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      throw new Error(error.message);
+    }
   }
 };
