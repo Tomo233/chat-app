@@ -11,6 +11,7 @@ import { useDeleteMessage } from "./useDeleteMessage";
 import { ChatDataProps } from "./useChatMessages";
 import { auth } from "../../firebaseConfig";
 import ForwardMessageDialog from "./ForwardMessageDialog";
+import { useSearchParams } from "react-router-dom";
 
 type MessageMenuProps = {
   message: ChatDataProps;
@@ -20,6 +21,7 @@ export default function MessageMenu({ message }: MessageMenuProps) {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const { deleteMessage, isPending } = useDeleteMessage();
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -27,6 +29,11 @@ export default function MessageMenu({ message }: MessageMenuProps) {
 
   const handleClose = () => {
     setAnchorEl(null);
+  };
+
+  const handleMessageId = () => {
+    searchParams.set("messageId", message.id);
+    setSearchParams(searchParams);
   };
 
   const handleDeleteMessage = () => {
@@ -123,7 +130,7 @@ export default function MessageMenu({ message }: MessageMenuProps) {
 
         {message.senderId === auth?.currentUser?.uid && [
           <Box key="divider-3" sx={{ borderBottom: 1 }} />,
-          <MenuItem key="edit">
+          <MenuItem key="edit" onClick={handleMessageId}>
             <EditIcon fontSize="small" />
             <span>Edit</span>
           </MenuItem>,
