@@ -26,8 +26,8 @@ export const sendMessage = async (
       time: currentTime,
       edited: false,
     });
-    console.log("Message successfully added to Firestore");
   } catch (error) {
+    console.log(error);
     if (error instanceof Error) {
       throw new Error(error.message);
     }

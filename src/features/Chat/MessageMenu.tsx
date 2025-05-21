@@ -34,6 +34,7 @@ export default function MessageMenu({ message }: MessageMenuProps) {
   const handleMessageId = () => {
     searchParams.set("messageId", message.id);
     setSearchParams(searchParams);
+    handleClose();
   };
 
   const handleDeleteMessage = () => {
