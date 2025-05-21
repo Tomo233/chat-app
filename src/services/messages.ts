@@ -1,4 +1,11 @@
-import { deleteDoc, doc, getDoc, setDoc, Timestamp } from "firebase/firestore";
+import {
+  deleteDoc,
+  doc,
+  getDoc,
+  setDoc,
+  Timestamp,
+  updateDoc,
+} from "firebase/firestore";
 import { db } from "../firebaseConfig";
 import { ChatDataProps } from "../features/chat/useChatMessages";
 
@@ -17,6 +24,7 @@ export const sendMessage = async (
       receiverId,
       message,
       time: currentTime,
+      edited: false,
     });
     console.log("Message successfully added to Firestore");
   } catch (error) {

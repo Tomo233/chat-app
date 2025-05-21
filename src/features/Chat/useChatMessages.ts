@@ -16,6 +16,7 @@ export type ChatDataProps = {
   message: string;
   time: Timestamp;
   file: File | null;
+  edited: boolean;
 };
 
 export const useChatMessages = () => {

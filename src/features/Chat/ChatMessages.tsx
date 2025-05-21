@@ -19,7 +19,6 @@ function ChatMessages({ chats, isLoadingChats, user }: ChatMessagesProps) {
   if (isLoadingChats) return <Loader />;
 
   if (chats.length === 0) return <EmptyChat />;
-
   return (
     <div className="h-[500px] w-full">
       {chats.map((msg, index) => {
@@ -30,7 +29,7 @@ function ChatMessages({ chats, isLoadingChats, user }: ChatMessagesProps) {
         return (
           <div
             key={index}
-            className={`flex gap-2 items-center text-white pb-1 
+            className={`flex gap-2 items-end text-white pb-1 
              ${!isLastMessageByUser && "pl-14"}
             ${
               msg?.senderId === auth.currentUser?.uid
@@ -50,16 +49,27 @@ function ChatMessages({ chats, isLoadingChats, user }: ChatMessagesProps) {
                 />
               )}
 
-            <div
-              className={`flex items-center ${
-                msg.senderId !== auth.currentUser!.uid &&
-                isHovered === index &&
-                "flex-row-reverse"
-              }`}
-            >
-              {isHovered === index && <MessageMenu message={msg} />}
-              <div className="bg-backgroundColor p-4 rounded-lg max-w-64 break-words">
-                <p>{msg?.message}</p>
+            <div>
+              {msg.edited && (
+                <p
+                  className={`text-sm ${
+                    msg.receiverId === user?.id ? "text-end" : "text-start"
+                  } text-secondaryPurple font-semibold`}
+                >
+                  edited
+                </p>
+              )}
+              <div
+                className={`flex items-center ${
+                  msg.senderId !== auth.currentUser!.uid &&
+                  isHovered === index &&
+                  "flex-row-reverse"
+                }`}
+              >
+                {isHovered === index && <MessageMenu message={msg} />}
+                <div className="bg-backgroundColor p-4 rounded-lg max-w-64 break-words">
+                  <p>{msg?.message}</p>
+                </div>
               </div>
             </div>
           </div>
