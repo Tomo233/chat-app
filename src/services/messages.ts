@@ -58,3 +58,25 @@ export const getMessageById = async (messageId: string | null) => {
     }
   }
 };
+
+export const editMessage = async (
+  messageId: string | null,
+  message: string
+) => {
+  try {
+    if (!messageId) {
+      throw new Error("No messageId provided");
+    }
+
+    const docRef = doc(db, "messages", messageId);
+
+    await updateDoc(docRef, {
+      message,
+      edited: true,
+    });
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      throw new Error(error.message);
+    }
+  }
+};

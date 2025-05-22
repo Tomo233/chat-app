@@ -5,6 +5,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import { useSearchParams } from "react-router-dom";
 import { useSendMessage } from "./useSendMessages";
 import { useMessageById } from "./useMessageById";
+import { useEditMessage } from "./useEditMessage";
 
 function SendMessage() {
   const [message, setMessage] = useState<string>("");
@@ -13,11 +14,26 @@ function SendMessage() {
   const messageId = searchParams.get("messageId");
   const { sendMessage, isPending } = useSendMessage();
   const { editingMessage, isLoading } = useMessageById();
+  const { editMessage, isEditingMessage } = useEditMessage();
 
   const handleSendMessage = (e: BaseSyntheticEvent) => {
     e.preventDefault();
     sendMessage({ message });
     setMessage("");
+  };
+
+  const handleEditMessage = (e: BaseSyntheticEvent) => {
+    e.preventDefault();
+    editMessage(message);
+    handleStopEditing();
+  };
+
+  const handleMessages = (e: BaseSyntheticEvent) => {
+    if (isEditing) {
+      handleEditMessage(e);
+    } else {
+      handleSendMessage(e);
+    }
   };
 
   const handleStopEditing = () => {
@@ -40,11 +56,11 @@ function SendMessage() {
         isEditing ? "place-items-start" : "place-items-center"
       }`}
     >
-      <form className="w-full" onSubmit={(e) => handleSendMessage(e)}>
+      <form className="w-full" onSubmit={(e) => handleMessages(e)}>
         {isEditing && (
           <div className="flex justify-between pt-1 w-3/4 mx-auto  text-white">
             <p>Edit Message</p>
-            <button onClick={handleStopEditing}>
+            <button type="button" onClick={handleStopEditing}>
               <CloseIcon fontSize="medium" />
             </button>
           </div>
@@ -59,7 +75,7 @@ function SendMessage() {
             value={message}
             required
           />
-          <button disabled={isPending || isLoading}>
+          <button disabled={isPending || isLoading || isEditingMessage}>
             <SendRoundedIcon
               sx={{
                 color: "#fff",
