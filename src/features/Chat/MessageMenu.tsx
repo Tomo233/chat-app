@@ -22,6 +22,10 @@ export default function MessageMenu({ message }: MessageMenuProps) {
   const open = Boolean(anchorEl);
   const { deleteMessage, isPending } = useDeleteMessage();
   const [searchParams, setSearchParams] = useSearchParams();
+  const date = new Date(message?.time.seconds * 1000);
+  const formattedDate = `${date.getHours()}:${String(
+    date.getMinutes()
+  ).padStart(2, "0")}`;
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -118,7 +122,7 @@ export default function MessageMenu({ message }: MessageMenuProps) {
         transformOrigin={{ horizontal: "left", vertical: "top" }}
         anchorOrigin={{ horizontal: "left", vertical: "bottom" }}
       >
-        <p className="text-center text-sm font-medium pb-1">9:00</p>
+        <p className="text-center text-sm font-medium pb-1">{formattedDate}</p>
         <Box key="divider-1" sx={{ borderBottom: 1 }} />
 
         <MenuItem onClick={() => handleCopyMessage()}>
