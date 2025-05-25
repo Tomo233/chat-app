@@ -8,6 +8,8 @@ import {
 } from "firebase/firestore";
 import { db } from "../firebaseConfig";
 import { ChatDataProps } from "../features/chat/useChatMessages";
+import { generateRandomId } from "../utils/generateRandomId";
+import { getCurrentTime } from "../utils/getCurrentTime";
 
 export const sendMessage = async (
   receiverId: string,
@@ -15,9 +17,9 @@ export const sendMessage = async (
   message: string
 ) => {
   try {
-    const currentTime = Timestamp.fromDate(new Date());
+    const currentTime = getCurrentTime();
+    const randomId = generateRandomId();
 
-    const randomId = window.crypto.randomUUID();
     await setDoc(doc(db, "messages", randomId), {
       id: randomId,
       senderId,
