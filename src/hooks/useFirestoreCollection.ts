@@ -9,6 +9,7 @@ export const useFirestoreCollection = <T>(
 ) => {
   const [data, setData] = useState<T[]>([]);
   const [searchParams] = useSearchParams();
+  const sortParamValue = paramName ? searchParams.get(paramName) : null;
 
   useEffect(() => {
     let sortBy: "asc" | "desc" = "asc";
@@ -29,7 +30,7 @@ export const useFirestoreCollection = <T>(
     });
 
     return () => unsubscribe();
-  }, [collectionName, searchParams, paramName]);
+  }, [collectionName, sortParamValue, paramName]);
 
   return { data, isLoading: !data.length };
 };
