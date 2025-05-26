@@ -22,10 +22,10 @@ function MainChat() {
   if (!id) return <NoConversation />;
 
   return (
-    <div className="bg-primaryPurple rounded-2xl w-2/3 grid grid-rows-[100px_auto_110px] ">
+    <div className="bg-primaryPurple rounded-2xl w-2/3 grid grid-rows-[100px_500px_auto] ">
       <ProfileBar user={user} />
 
-      <div className="h-[500px] overflow-auto p-5 flex justify-center items-center">
+      <div className="overflow-auto p-5 flex justify-center items-center">
         <ChatMessages
           chats={chats}
           isLoadingChats={isLoadingChatsContent}

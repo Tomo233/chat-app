@@ -6,6 +6,7 @@ import { useSearchParams } from "react-router-dom";
 import { useSendMessage } from "./useSendMessages";
 import { useMessageById } from "./useMessageById";
 import { useEditMessage } from "./useEditMessage";
+import Image from "../../assets/phone.png";
 
 function SendMessage() {
   const [message, setMessage] = useState<string>("");
@@ -54,7 +55,8 @@ function SendMessage() {
     <div
       className={`border-t border-borderColor grid ${
         isEditing ? "place-items-start" : "place-items-center"
-      }`}
+      }
+      `}
     >
       <form className="w-full" onSubmit={(e) => handleMessages(e)}>
         {isEditing && (
@@ -65,12 +67,33 @@ function SendMessage() {
             </button>
           </div>
         )}
-        <div className="flex gap-5 px-10 pt-1 items-center">
+        {false && (
+          <div className="flex items-center pl-24 pt-1">
+            <div className="flex gap-3 relative">
+              <div className="relative">
+                <img src={Image} alt="Sample" className="w-12 rounded-lg" />
+                <div className="absolute inset-0 bg-black/25 flex items-center justify-center rounded-lg" />
+                <CloseIcon
+                  sx={{
+                    color: "white",
+                    top: "0",
+                    right: "-10px",
+                    position: "absolute",
+                    backgroundColor: "#59498b",
+                    borderRadius: "10px",
+                    fontSize: 17,
+                  }}
+                />
+              </div>
+            </div>
+          </div>
+        )}
+        <div className="flex gap-5 px-10 py-5 items-center">
           <UploadFileIcon sx={{ color: "white", fontSize: 40 }} />
           <input
             type="text"
             placeholder="Send Message"
-            className="w-full h-14 rounded-2xl pl-3 outline-none"
+            className="w-full h-14 rounded-xl pl-3 outline-none"
             onChange={(e) => setMessage(e.target.value)}
             value={message}
             required
