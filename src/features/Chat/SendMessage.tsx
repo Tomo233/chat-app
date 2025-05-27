@@ -1,4 +1,4 @@
-import { BaseSyntheticEvent, useEffect, useState } from "react";
+import { BaseSyntheticEvent, ChangeEvent, useEffect, useState } from "react";
 import SendRoundedIcon from "@mui/icons-material/SendRounded";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
 import CloseIcon from "@mui/icons-material/Close";
@@ -7,9 +7,13 @@ import { useSendMessage } from "./useSendMessages";
 import { useMessageById } from "./useMessageById";
 import { useEditMessage } from "./useEditMessage";
 import Image from "../../assets/phone.png";
+import { generateRandomId } from "../../utils/generateRandomId";
 
 function SendMessage() {
   const [message, setMessage] = useState<string>("");
+  const [files, setFiles] = useState<{ fileURL: string; id: string }[] | []>(
+    []
+  );
   const [isEditing, setIsEditing] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
   const messageId = searchParams.get("messageId");
@@ -44,6 +48,20 @@ function SendMessage() {
     setSearchParams(searchParams);
   };
 
+  const handleFiles = (e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0] || null;
+    const randomNumber = generateRandomId();
+
+    if (file) {
+      const fileURL = URL.createObjectURL(file);
+      setFiles((files) => [...files, { fileURL, id: randomNumber }]);
+    }
+  };
+
+  const handleRemoveFile = (id: string) => {
+    setFiles((files) => files.filter((f) => f.id !== id));
+  };
+
   useEffect(() => {
     if (!editingMessage || !editingMessage.message) return;
 
@@ -67,29 +85,47 @@ function SendMessage() {
             </button>
           </div>
         )}
-        {false && (
+        {files.length > 0 && (
           <div className="flex items-center pl-24 pt-1">
-            <div className="flex gap-3 relative">
-              <div className="relative">
-                <img src={Image} alt="Sample" className="w-12 rounded-lg" />
-                <div className="absolute inset-0 bg-black/25 flex items-center justify-center rounded-lg" />
-                <CloseIcon
-                  sx={{
-                    color: "white",
-                    top: "0",
-                    right: "-10px",
-                    position: "absolute",
-                    backgroundColor: "#59498b",
-                    borderRadius: "10px",
-                    fontSize: 17,
-                  }}
-                />
-              </div>
+            <div className="flex gap-3 items-center relative">
+              {files.map((file) => {
+                return (
+                  <div className="relative" key={file.id}>
+                    <img
+                      src={file.fileURL}
+                      alt="Sample"
+                      className="w-12 rounded-lg"
+                    />
+                    <button
+                      className="absolute -top-1 -right-3"
+                      type="button"
+                      onClick={() => handleRemoveFile(file.id)}
+                    >
+                      <CloseIcon
+                        sx={{
+                          color: "white",
+                          backgroundColor: "#59498b",
+                          borderRadius: "10px",
+                          fontSize: 17,
+                        }}
+                      />
+                    </button>
+                  </div>
+                );
+              })}
             </div>
           </div>
         )}
         <div className="flex gap-5 px-10 py-5 items-center">
-          <UploadFileIcon sx={{ color: "white", fontSize: 40 }} />
+          <label className="cursor-pointer">
+            <UploadFileIcon sx={{ color: "white", fontSize: 40 }} />
+            <input
+              type="file"
+              className="hidden"
+              accept="image/*"
+              onChange={handleFiles}
+            />
+          </label>
           <input
             type="text"
             placeholder="Send Message"
