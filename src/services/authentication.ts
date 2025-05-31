@@ -22,7 +22,6 @@ import {
   updateDoc,
   where,
 } from "firebase/firestore";
-import { uploadAvatar } from "./uploadAvatar";
 import { SignupAndProfileInputs } from "../features/authentication/SignupForm";
 import { getUserCoords } from "../utils/getUserCoords";
 import { uploadFile } from "./uploadFile";

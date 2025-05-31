@@ -69,14 +69,12 @@ export const editMessage = async (
     if (!messageId) {
       throw new Error("No messageId provided");
     }
-    const currentTime = Timestamp.fromDate(new Date());
 
     const docRef = doc(db, "messages", messageId);
 
     await updateDoc(docRef, {
       message,
       edited: true,
-      time: currentTime,
     });
   } catch (error: unknown) {
     if (error instanceof Error) {
