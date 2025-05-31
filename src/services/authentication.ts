@@ -25,6 +25,7 @@ import {
 import { uploadAvatar } from "./uploadAvatar";
 import { SignupAndProfileInputs } from "../features/authentication/SignupForm";
 import { getUserCoords } from "../utils/getUserCoords";
+import { uploadFile } from "./uploadFile";
 
 const apiKey = import.meta.env.VITE_LOCATIONIQ_API_KEY;
 
@@ -59,7 +60,7 @@ export const signupWithEmailPassword = async ({
     });
 
     if (avatar && avatar instanceof File) {
-      const photoURL = await uploadAvatar(avatar);
+      const photoURL = await uploadFile(avatar);
 
       await updateProfile(user, {
         photoURL,
@@ -78,7 +79,7 @@ export const signupWithEmailPassword = async ({
     };
 
     await addUserToFirebase(userInfo);
-    console.log(userInfo);
+
     return userInfo;
   } catch (error: unknown) {
     if (error instanceof Error) {
@@ -153,7 +154,7 @@ export const editUserInformation = async (data: SignupAndProfileInputs) => {
     const userDocRef = doc(db, "users", user.uid);
     const userDocSnapshot = await getDoc(userDocRef);
     const userData = userDocSnapshot.data() as UserInfo;
-    const photoURL = await uploadAvatar(data.avatar);
+    const photoURL = await uploadFile(data.avatar);
 
     const credential = EmailAuthProvider.credential(user.email!, data.password);
     await reauthenticateWithCredential(user, credential);
