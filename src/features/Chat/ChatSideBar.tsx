@@ -35,7 +35,7 @@ function ChatSideBar() {
                   <img
                     src={item?.photoURL || DefaultUserImage}
                     alt="Profile Image"
-                    className="h-12  rounded-full"
+                    className="h-12 w-12  rounded-full"
                   />
                   <h3 className="text-white">{item.firstName}</h3>
                   <p className="text-white">Hi there,How are you?</p>

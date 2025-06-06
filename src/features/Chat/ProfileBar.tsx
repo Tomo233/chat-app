@@ -3,12 +3,12 @@ import { UserInfo } from "../../services/authentication";
 
 function ProfileBar({ user }: { user: UserInfo | null }) {
   return (
-    <div className="flex justify-between border-b border-borderColor p-3 h-20">
-      <div className="flex gap-3">
+    <div className="flex justify-between  border-b border-borderColor p-3 h-20">
+      <div className="flex items-center gap-3">
         <img
           src={user?.photoURL || DefaultUserImage}
           alt="Profile Image"
-          className="h-12 rounded-3xl"
+          className="h-12 w-12 rounded-3xl"
         />
         <div className="pt-2">
           <h3 className="text-white text-lg">

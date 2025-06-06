@@ -23,7 +23,7 @@ function AvatarSection({ user }: { user: UserInfo }) {
         <img
           src={user?.photoURL || DefaultUserImage}
           alt="User Image"
-          className="h-20 rounded-full"
+          className="h-20 w-20 rounded-full"
         />
         <h3 className="font-semibold">
           {user?.firstName} {user?.lastName}
