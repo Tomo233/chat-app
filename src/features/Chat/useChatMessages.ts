@@ -15,7 +15,7 @@ export type ChatDataProps = {
   receiverId: string;
   message: string;
   time: Timestamp;
-  file: File | null;
+  fileURL: File | null;
   edited: boolean;
 };
 

@@ -27,48 +27,48 @@ function ChatMessages({ chats, isLoadingChats, user }: ChatMessagesProps) {
         const isLastMessageByUser =
           index === chats.length - 1 ||
           chats?.at(index + 1)?.senderId !== msg?.senderId;
+        const isUserReceiver = msg.receiverId === auth.currentUser?.uid;
 
         return (
           <div
             key={index}
-            className={`flex gap-2 items-end text-white pb-1 
-             ${!isLastMessageByUser && "pl-14"}
-            ${
-              msg?.senderId === auth.currentUser?.uid
-                ? "place-self-end"
-                : "place-self-start"
+            className={`flex gap-2 items-end text-white pb-1  ${
+              !isLastMessageByUser && "pl-14"
             }
+            ${isUserReceiver ? "place-self-start" : "place-self-end"}
             `}
             onMouseEnter={() => setIsHovered(index)}
             onMouseLeave={() => setIsHovered(null)}
           >
-            {msg.receiverId === auth.currentUser?.uid &&
-              isLastMessageByUser && (
-                <img
-                  src={user?.photoURL || DefaultUserImage}
-                  alt="DefaultUserImage Image"
-                  className="h-12 w-12 rounded-3xl"
-                />
-              )}
+            {isUserReceiver && isLastMessageByUser && (
+              <img
+                src={user?.photoURL || DefaultUserImage}
+                alt="DefaultUserImage Image"
+                className="h-12 w-12 rounded-3xl"
+              />
+            )}
 
-            <div>
+            <div
+              className={`grid  ${
+                isUserReceiver ? "place-items-start" : "place-items-end"
+              }`}
+            >
               {msg.edited && (
                 <p
-                  className={`text-sm ${
-                    msg.receiverId === user?.id ? "text-end" : "text-start"
-                  } text-secondaryPurple font-semibold`}
+                  className={`text-sm text-secondaryPurple font-semibold ${
+                    isUserReceiver ? "text-end" : "text-start"
+                  }`}
                 >
                   edited
                 </p>
               )}
               <div
                 className={`flex items-center ${
-                  msg.senderId !== auth.currentUser!.uid &&
-                  isHovered === index &&
-                  "flex-row-reverse"
-                }`}
+                  isUserReceiver && isHovered === index && "flex-row-reverse"
+                }
+                `}
               >
-                {isHovered === index && <MessageMenu message={msg} />}
+                {isHovered == index && <MessageMenu message={msg} />}
 
                 {msg.message && (
                   <div className="bg-backgroundColor p-4 rounded-lg max-w-64 break-words">
@@ -76,11 +76,11 @@ function ChatMessages({ chats, isLoadingChats, user }: ChatMessagesProps) {
                   </div>
                 )}
               </div>
-              {/* {msg.fileUrl && (
+              {msg.fileURL && (
                 <div className="bg-secondaryPurple rounded-md">
                   <img src={Image1} className="max-w-64 max-h-80 rounded-md" />
                 </div>
-              )} */}
+              )}
             </div>
           </div>
         );
