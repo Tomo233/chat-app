@@ -7,6 +7,7 @@ import MessageMenu from "./MessageMenu";
 import Loader from "../../components/Loader";
 import DefaultUserImage from "../../assets/default-user.png";
 import Image1 from "../../assets/logo.png";
+import ChatImageModal from "./ChatImageModal";
 
 type ChatMessagesProps = {
   chats: ChatDataProps[];
@@ -16,6 +17,7 @@ type ChatMessagesProps = {
 
 function ChatMessages({ chats, isLoadingChats, user }: ChatMessagesProps) {
   const [isHovered, setIsHovered] = useState<number | null>();
+  const [open, setOpen] = useState(false);
 
   if (isLoadingChats) return <Loader />;
 
@@ -77,9 +79,21 @@ function ChatMessages({ chats, isLoadingChats, user }: ChatMessagesProps) {
                 )}
               </div>
               {msg.fileURL && (
-                <div className="bg-secondaryPurple rounded-md">
-                  <img src={Image1} className="max-w-64 max-h-80 rounded-md" />
-                </div>
+                <>
+                  <ChatImageModal
+                    open={open}
+                    handleClose={() => setOpen(false)}
+                  />
+                  <div
+                    className="bg-secondaryPurple rounded-md cursor-pointer"
+                    onClick={() => setOpen(true)}
+                  >
+                    <img
+                      src={Image1}
+                      className="max-w-64 max-h-80 rounded-md"
+                    />
+                  </div>
+                </>
               )}
             </div>
           </div>
