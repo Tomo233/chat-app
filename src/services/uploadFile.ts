@@ -1,49 +1,48 @@
-import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { auth, db, storage } from "../firebaseConfig";
 import { doc, setDoc } from "firebase/firestore";
 import { getCurrentTime } from "../utils/getCurrentTime";
 import { generateRandomId } from "../utils/generateRandomId";
+import { FileType } from "../features/chat/SendMessage";
 
 export const uploadFile = async (
-  file: File | null,
+  files: FileType | File | null,
   receiverId?: string | null
 ) => {
-  if (!file) {
+  if (!files) {
     return null;
   }
 
-  const user = auth.currentUser;
-  const randomNumber = Math.random();
-  const randomId = generateRandomId();
-  const currentTime = getCurrentTime();
-  const storageRef = ref(storage, `avatars/${file.name}-${randomNumber}`);
-
-  const fileURL = await new Promise<string>((resolve, reject) => {
-    const uploadTask = uploadBytesResumable(storageRef, file);
-
-    uploadTask.on(
-      "state_changed",
-      () => {},
-      (error) => {
-        console.error("Upload error:", error);
-        reject(new Error("Failed to upload avatar. Please try again."));
-      },
-      async () => {
-        const url = await getDownloadURL(uploadTask.snapshot.ref);
-        resolve(url);
-      }
+  if (files instanceof File) {
+    const randomNumber = Math.random();
+    const avatarStorageRef = ref(
+      storage,
+      `avatars/${files.name}-${randomNumber}`
     );
-  });
+    const snapshot = await uploadBytes(avatarStorageRef, files);
+    return await getDownloadURL(snapshot.ref);
+  } else {
+    const user = auth.currentUser!;
 
-  if (receiverId) {
-    await setDoc(doc(db, "messages", randomId), {
-      id: randomNumber,
-      senderId: user,
-      receiverId,
-      time: currentTime,
-      edited: false,
-    });
+    for (const file of files) {
+      const randomId = generateRandomId();
+      const currentTime = getCurrentTime();
+      const fileStorageRef = ref(
+        storage,
+        `chatFiles/${file.file.name}-${randomId}`
+      );
+
+      const snapshot = await uploadBytes(fileStorageRef, file.file);
+      const url = await getDownloadURL(snapshot.ref);
+
+      await setDoc(doc(db, "messages", randomId), {
+        id: randomId,
+        senderId: user.uid,
+        receiverId,
+        time: currentTime,
+        edited: false,
+        fileURL: url,
+      });
+    }
   }
-
-  return fileURL;
 };

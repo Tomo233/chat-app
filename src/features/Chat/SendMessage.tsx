@@ -6,39 +6,46 @@ import { useSearchParams } from "react-router-dom";
 import { useSendMessage } from "./useSendMessages";
 import { useMessageById } from "./useMessageById";
 import { useEditMessage } from "./useEditMessage";
-import Image from "../../assets/phone.png";
 import { generateRandomId } from "../../utils/generateRandomId";
+import { useUploadFile } from "./useUploadFile";
+
+export type FileType = {
+  fileURL: string;
+  id: string;
+  file: File;
+}[];
 
 function SendMessage() {
   const [message, setMessage] = useState<string>("");
-  const [files, setFiles] = useState<{ fileURL: string; id: string }[] | []>(
-    []
-  );
+  const [files, setFiles] = useState<FileType | []>([]);
   const [isEditing, setIsEditing] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
   const messageId = searchParams.get("messageId");
   const { sendMessage, isPending } = useSendMessage();
   const { editingMessage, isLoading } = useMessageById();
   const { editMessage, isEditingMessage } = useEditMessage();
+  const { uploadFile, isUploading } = useUploadFile();
 
-  const handleSendMessage = (e: BaseSyntheticEvent) => {
-    e.preventDefault();
+  const handleSendMessage = () => {
     sendMessage({ message });
     setMessage("");
   };
 
-  const handleEditMessage = (e: BaseSyntheticEvent) => {
-    e.preventDefault();
+  const handleEditMessage = () => {
     editMessage(message);
     handleStopEditing();
   };
 
+  const handleSendFile = () => {
+    uploadFile(files);
+    setFiles([]);
+  };
+
   const handleMessages = (e: BaseSyntheticEvent) => {
-    if (isEditing) {
-      handleEditMessage(e);
-    } else {
-      handleSendMessage(e);
-    }
+    e.preventDefault();
+    if (isEditing) return handleEditMessage();
+    if (message) handleSendMessage();
+    if (files.length > 0) handleSendFile();
   };
 
   const handleStopEditing = () => {
@@ -54,7 +61,7 @@ function SendMessage() {
 
     if (file) {
       const fileURL = URL.createObjectURL(file);
-      setFiles((files) => [...files, { fileURL, id: randomNumber }]);
+      setFiles((files) => [...files, { fileURL, id: randomNumber, file }]);
     }
   };
 
@@ -67,6 +74,7 @@ function SendMessage() {
 
     setMessage(editingMessage.message);
     setIsEditing(true);
+    setFiles([]);
   }, [messageId, editingMessage]);
 
   return (
@@ -117,13 +125,16 @@ function SendMessage() {
           </div>
         )}
         <div className="flex gap-5 px-10 py-5 items-center">
-          <label className="cursor-pointer">
+          <label
+            className={isEditing ? "cursor-not-allowed" : "cursor-pointer"}
+          >
             <UploadFileIcon sx={{ color: "white", fontSize: 40 }} />
             <input
               type="file"
               className="hidden"
               accept="image/*"
               onChange={handleFiles}
+              disabled={isEditing || isUploading}
             />
           </label>
           <input
@@ -132,14 +143,23 @@ function SendMessage() {
             className="w-full h-14 rounded-xl pl-3 outline-none"
             onChange={(e) => setMessage(e.target.value)}
             value={message}
-            required
+            required={files.length < 0}
           />
-          <button disabled={isPending || isLoading || isEditingMessage}>
+          <button
+            disabled={
+              isPending ||
+              isLoading ||
+              isEditingMessage ||
+              (files.length < 1 && !message)
+            }
+            type="submit"
+          >
             <SendRoundedIcon
               sx={{
                 color: "#fff",
                 fontSize: "3.5rem",
-                backgroundColor: message ? "#6e54b5" : "#2b2738",
+                backgroundColor:
+                  message || files.length > 0 ? "#6e54b5" : "#2b2738",
                 padding: "10px",
                 borderRadius: "25px",
               }}

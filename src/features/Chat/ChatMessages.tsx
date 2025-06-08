@@ -6,7 +6,6 @@ import EmptyChat from "./EmptyChat";
 import MessageMenu from "./MessageMenu";
 import Loader from "../../components/Loader";
 import DefaultUserImage from "../../assets/default-user.png";
-import Image1 from "../../assets/logo.png";
 import ChatImageModal from "./ChatImageModal";
 
 type ChatMessagesProps = {
@@ -81,6 +80,7 @@ function ChatMessages({ chats, isLoadingChats, user }: ChatMessagesProps) {
               {msg.fileURL && (
                 <>
                   <ChatImageModal
+                    fileURL={msg.fileURL}
                     open={open}
                     handleClose={() => setOpen(false)}
                   />
@@ -89,7 +89,8 @@ function ChatMessages({ chats, isLoadingChats, user }: ChatMessagesProps) {
                     onClick={() => setOpen(true)}
                   >
                     <img
-                      src={Image1}
+                      src={msg.fileURL}
+                      alt="Image"
                       className="max-w-64 max-h-80 rounded-md"
                     />
                   </div>

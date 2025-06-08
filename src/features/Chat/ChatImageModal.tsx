@@ -1,6 +1,5 @@
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
-import Image from "../../assets/phone.png";
 
 const style = {
   position: "absolute",
@@ -18,11 +17,13 @@ const style = {
 type ChatImageModalProps = {
   open: boolean;
   handleClose: () => void;
+  fileURL: string;
 };
 
 export default function ChatImageModal({
   open,
   handleClose,
+  fileURL,
 }: ChatImageModalProps) {
   return (
     <div>
@@ -33,7 +34,7 @@ export default function ChatImageModal({
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <img src={Image} alt="" />
+          <img src={fileURL} alt="Image" />
         </Box>
       </Modal>
     </div>
