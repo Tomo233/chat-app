@@ -128,7 +128,10 @@ export default function MessageMenu({ message }: MessageMenuProps) {
         <p className="text-center text-sm font-medium pb-1">{formattedDate}</p>
         <Box key="divider-1" sx={{ borderBottom: 1 }} />
 
-        <ForwardMessageDialog message={message.message} />
+        <ForwardMessageDialog
+          message={message.message}
+          fileURL={message.fileURL || null}
+        />
 
         <Box key="divider-2" sx={{ borderBottom: 1 }} />
 

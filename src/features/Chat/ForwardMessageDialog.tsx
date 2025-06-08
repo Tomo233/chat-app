@@ -15,8 +15,17 @@ import { createPortal } from "react-dom";
 import { auth } from "../../firebaseConfig";
 import { useParams } from "react-router-dom";
 import { useSendMessage } from "./useSendMessages";
+import { uploadFile } from "../../services/uploadFile";
 
-export default function ForwardMessageDialog({ message }: { message: string }) {
+type ForwardMessageDialogProps = {
+  message: string;
+  fileURL: string | null;
+};
+
+export default function ForwardMessageDialog({
+  message,
+  fileURL,
+}: ForwardMessageDialogProps) {
   const [open, setOpen] = useState(false);
   const [disabledButtons, setDisabledButtons] = useState<{
     [key: number]: boolean;
@@ -40,10 +49,14 @@ export default function ForwardMessageDialog({ message }: { message: string }) {
   const handleForwardMessage = (index: number, receiverId: string) => {
     setDisabledButtons((prev) => ({ ...prev, [index]: true }));
 
-    sendMessage({
-      message,
-      forwardedToUserId: receiverId,
-    });
+    if (fileURL) {
+      uploadFile(null, receiverId, fileURL);
+    } else {
+      sendMessage({
+        message,
+        forwardedToUserId: receiverId,
+      });
+    }
   };
 
   return (
