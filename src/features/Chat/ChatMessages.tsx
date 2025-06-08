@@ -76,26 +76,27 @@ function ChatMessages({ chats, isLoadingChats, user }: ChatMessagesProps) {
                     <p>{msg.message}</p>
                   </div>
                 )}
-              </div>
-              {msg.fileURL && (
-                <>
-                  <ChatImageModal
-                    fileURL={msg.fileURL}
-                    open={open}
-                    handleClose={() => setOpen(false)}
-                  />
-                  <div
-                    className="bg-secondaryPurple rounded-md cursor-pointer"
-                    onClick={() => setOpen(true)}
-                  >
-                    <img
-                      src={msg.fileURL}
-                      alt="Image"
-                      className="max-w-64 max-h-80 rounded-md"
+
+                {msg.fileURL && (
+                  <div>
+                    <ChatImageModal
+                      fileURL={msg.fileURL}
+                      open={open}
+                      handleClose={() => setOpen(false)}
                     />
+                    <div
+                      className="bg-secondaryPurple rounded-md cursor-pointer"
+                      onClick={() => setOpen(true)}
+                    >
+                      <img
+                        src={msg.fileURL}
+                        alt="Image"
+                        className="max-w-64 max-h-80 rounded-md"
+                      />
+                    </div>
                   </div>
-                </>
-              )}
+                )}
+              </div>
             </div>
           </div>
         );

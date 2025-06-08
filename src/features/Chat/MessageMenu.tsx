@@ -59,8 +59,11 @@ export default function MessageMenu({ message }: MessageMenuProps) {
     handleClose();
   };
 
-  const alignStyle =
-    message.senderId === auth?.currentUser?.uid ? "right" : "left";
+  const alignStyle = message.fileURL
+    ? message.senderId === auth?.currentUser?.uid
+      ? "right"
+      : "left"
+    : "top";
 
   return (
     <div>
@@ -125,30 +128,33 @@ export default function MessageMenu({ message }: MessageMenuProps) {
         <p className="text-center text-sm font-medium pb-1">{formattedDate}</p>
         <Box key="divider-1" sx={{ borderBottom: 1 }} />
 
-        <MenuItem onClick={() => handleCopyMessage()}>
-          <ContentCopyIcon fontSize="small" />
-          <span>Copy</span>
-        </MenuItem>
-        <Box key="divider-2" sx={{ borderBottom: 1 }} />
-
         <ForwardMessageDialog message={message.message} />
 
-        {message.senderId === auth?.currentUser?.uid && [
-          <Box key="divider-3" sx={{ borderBottom: 1 }} />,
-          <MenuItem key="edit" onClick={handleMessageId}>
-            <EditIcon fontSize="small" />
-            <span>Edit</span>
-          </MenuItem>,
-          <Box key="divider-4" sx={{ borderBottom: 1 }} />,
-          <MenuItem
-            key="delete"
-            onClick={handleDeleteMessage}
-            disabled={isPending}
-          >
-            <DeleteIcon fontSize="small" />
-            <span>Delete</span>
-          </MenuItem>,
-        ]}
+        <Box key="divider-2" sx={{ borderBottom: 1 }} />
+
+        {!message.fileURL && (
+          <MenuItem onClick={() => handleCopyMessage()}>
+            <ContentCopyIcon fontSize="small" />
+            <span>Copy</span>
+          </MenuItem>
+        )}
+
+        {message.senderId === auth?.currentUser?.uid && (
+          <Box component="span">
+            {!message.fileURL && (
+              <Box sx={{ borderTop: 1, borderBottom: 1, pb: "5px" }}>
+                <MenuItem onClick={handleMessageId}>
+                  <EditIcon fontSize="small" />
+                  <span>Edit</span>
+                </MenuItem>
+              </Box>
+            )}
+            <MenuItem onClick={handleDeleteMessage} disabled={isPending}>
+              <DeleteIcon fontSize="small" />
+              <span>Delete</span>
+            </MenuItem>
+          </Box>
+        )}
       </Menu>
     </div>
   );
