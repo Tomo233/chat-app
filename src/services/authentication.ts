@@ -1,4 +1,4 @@
-import { auth, db } from "../firebaseConfig";
+import { auth, db, storage } from "../firebaseConfig";
 import {
   createUserWithEmailAndPassword,
   EmailAuthProvider,
@@ -25,6 +25,9 @@ import {
 import { SignupAndProfileInputs } from "../features/authentication/SignupForm";
 import { getUserCoords } from "../utils/getUserCoords";
 import { uploadFile } from "./uploadFile";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import { generateRandomId } from "../utils/generateRandomId";
+import toast from "react-hot-toast";
 
 const apiKey = import.meta.env.VITE_LOCATIONIQ_API_KEY;
 
@@ -106,9 +109,31 @@ export const loginWithGoogle = async (): Promise<UserInfo | undefined> => {
     if (querySnapshot.empty) {
       const coords = await getUserCoords();
       const location = await getUserLocation(coords);
+      let url;
+      if (userInfo2.photoURL) {
+        try {
+          const res = await fetch(userInfo2.photoURL);
+
+          if (!res.ok) throw new Error("Failed to fetch photoURL");
+
+          const blob = await res.blob();
+          const avatarStorageRef = ref(
+            storage,
+            `avatars/googleImage-${userInfo2.id}.jpg`
+          );
+
+          const snapshot = await uploadBytes(avatarStorageRef, blob);
+          url = await getDownloadURL(snapshot.ref);
+        } catch (error: any) {
+          url = null;
+          toast.error(error.message);
+        }
+      }
+
       const userInfo = {
         ...userInfo2,
-        location: location,
+        location,
+        photoURL: url,
       };
       await addUserToFirebase(userInfo);
       return userInfo;
