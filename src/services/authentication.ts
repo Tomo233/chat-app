@@ -26,7 +26,6 @@ import { SignupAndProfileInputs } from "../features/authentication/SignupForm";
 import { getUserCoords } from "../utils/getUserCoords";
 import { uploadFile } from "./uploadFile";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import { generateRandomId } from "../utils/generateRandomId";
 import toast from "react-hot-toast";
 
 const apiKey = import.meta.env.VITE_LOCATIONIQ_API_KEY;
@@ -68,8 +67,6 @@ export const signupWithEmailPassword = async ({
         photoURL,
       });
     }
-
-    // const userInfo = transfromUser(user);
 
     const userInfo: UserInfo = {
       id: user.uid,

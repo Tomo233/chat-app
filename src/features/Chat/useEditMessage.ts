@@ -1,14 +1,16 @@
 import { useMutation } from "@tanstack/react-query";
 import { editMessage as editMessageApi } from "../../services/messages";
-import { useSearchParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 
 export const useEditMessage = () => {
   const [searchParams] = useSearchParams();
   const messageId = searchParams.get("messageId");
+  const { id: receiverId } = useParams();
 
   const { mutate: editMessage, isPending: isEditingMessage } = useMutation({
     mutationKey: ["messages", messageId],
-    mutationFn: (message: string) => editMessageApi(messageId, message),
+    mutationFn: (message: string) =>
+      editMessageApi(messageId, message, receiverId),
   });
 
   return { editMessage, isEditingMessage };

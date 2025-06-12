@@ -32,6 +32,11 @@ function SendMessage() {
   };
 
   const handleEditMessage = () => {
+    if (message === editingMessage?.message) {
+      console.log("e");
+    } else {
+      console.log("a");
+    }
     editMessage(message);
     handleStopEditing();
   };
@@ -76,6 +81,13 @@ function SendMessage() {
     setIsEditing(true);
     setFiles([]);
   }, [messageId, editingMessage]);
+
+  const isDisabled =
+    isPending ||
+    isLoading ||
+    isEditingMessage ||
+    (files.length < 1 && !message) ||
+    message === editingMessage?.message;
 
   return (
     <div
@@ -145,21 +157,12 @@ function SendMessage() {
             value={message}
             required={files.length < 0}
           />
-          <button
-            disabled={
-              isPending ||
-              isLoading ||
-              isEditingMessage ||
-              (files.length < 1 && !message)
-            }
-            type="submit"
-          >
+          <button disabled={isDisabled} type="submit">
             <SendRoundedIcon
               sx={{
                 color: "#fff",
                 fontSize: "3.5rem",
-                backgroundColor:
-                  message || files.length > 0 ? "#6e54b5" : "#2b2738",
+                backgroundColor: !isDisabled ? "#6e54b5" : "#2b2738",
                 padding: "10px",
                 borderRadius: "25px",
               }}

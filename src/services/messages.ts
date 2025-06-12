@@ -1,15 +1,8 @@
-import {
-  deleteDoc,
-  doc,
-  getDoc,
-  setDoc,
-  Timestamp,
-  updateDoc,
-} from "firebase/firestore";
-import { db } from "../firebaseConfig";
+import { deleteDoc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 import { ChatDataProps } from "../features/chat/useChatMessages";
 import { generateRandomId } from "../utils/generateRandomId";
 import { getCurrentTime } from "../utils/getCurrentTime";
+import { getChatRefs } from "../utils/chatUtils";
 
 export const sendMessage = async (
   receiverId: string,
@@ -19,8 +12,13 @@ export const sendMessage = async (
   try {
     const currentTime = getCurrentTime();
     const randomId = generateRandomId();
+    const { chatsRef, messageRef } = getChatRefs(receiverId, randomId);
 
-    await setDoc(doc(db, "messages", randomId), {
+    await setDoc(chatsRef, {
+      lastTimeUpdated: currentTime,
+    });
+
+    await setDoc(messageRef!, {
       id: randomId,
       senderId,
       receiverId,
@@ -36,9 +34,13 @@ export const sendMessage = async (
   }
 };
 
-export const deleteMessage = async (messageId: string) => {
+export const deleteMessage = async (
+  messageId: string,
+  receiverId: string | undefined
+) => {
   try {
-    await deleteDoc(doc(db, "messages", messageId));
+    const { messageRef } = getChatRefs(receiverId, messageId);
+    await deleteDoc(messageRef!);
   } catch (error: unknown) {
     if (error instanceof Error) {
       throw new Error(error.message);
@@ -46,12 +48,15 @@ export const deleteMessage = async (messageId: string) => {
   }
 };
 
-export const getMessageById = async (messageId: string | null) => {
+export const getMessageById = async (
+  messageId: string | null,
+  receiverId: string | undefined
+) => {
   try {
     if (!messageId) throw new Error("there is no message selected");
 
-    const docRef = doc(db, "messages", messageId);
-    const docSnap = await getDoc(docRef);
+    const { messageRef } = getChatRefs(receiverId, messageId);
+    const docSnap = await getDoc(messageRef!);
 
     return docSnap.data() as ChatDataProps;
   } catch (error: unknown) {
@@ -63,16 +68,17 @@ export const getMessageById = async (messageId: string | null) => {
 
 export const editMessage = async (
   messageId: string | null,
-  message: string
+  message: string,
+  receiverId: string | undefined
 ) => {
   try {
     if (!messageId) {
       throw new Error("No messageId provided");
     }
 
-    const docRef = doc(db, "messages", messageId);
+    const { messageRef } = getChatRefs(receiverId, messageId);
 
-    await updateDoc(docRef, {
+    await updateDoc(messageRef!, {
       message,
       edited: true,
     });

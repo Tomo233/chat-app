@@ -1,13 +1,8 @@
-import {
-  collection,
-  onSnapshot,
-  orderBy,
-  query,
-  Timestamp,
-} from "firebase/firestore";
-import { auth, db } from "../../firebaseConfig";
+import { onSnapshot, orderBy, query, Timestamp } from "firebase/firestore";
+import { auth } from "../../firebaseConfig";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { getChatRefs } from "../../utils/chatUtils";
 
 export type ChatDataProps = {
   id: string;
@@ -24,24 +19,16 @@ export const useChatMessages = () => {
   const [isLoading, setIsLoading] = useState(true);
   const { id: receiverId } = useParams();
   const senderId = auth.currentUser?.uid;
+  const { messageCollectionRef } = getChatRefs(receiverId);
 
   useEffect(() => {
     setIsLoading(true);
     setChats([]);
-
-    const collectionRef = collection(db, "messages");
-    const q = query(collectionRef, orderBy("time"));
+    const q = query(messageCollectionRef, orderBy("time"));
 
     const unsubscribe = onSnapshot(q, (snapshot) => {
-      const filteredMessages = snapshot.docs
-        .map((doc) => doc.data() as ChatDataProps)
-        .filter(
-          (m) =>
-            (m.senderId === senderId && m.receiverId === receiverId) ||
-            (m.senderId === receiverId && m.receiverId === senderId)
-        );
-
-      setChats(filteredMessages);
+      const messages = snapshot.docs.map((doc) => doc.data() as ChatDataProps);
+      setChats(messages);
       setIsLoading(false);
     });
 
