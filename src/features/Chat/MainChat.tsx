@@ -5,12 +5,10 @@ import ChatMessages from "./ChatMessages";
 import NoConversation from "./NoConversation";
 import { useParams } from "react-router-dom";
 import { useGetUserById } from "../authentication/useGetUserById";
-import { useChatMessages } from "./useChatMessages";
 
 function MainChat() {
   const { id } = useParams();
   const { user, isLoading } = useGetUserById();
-  const { chats, isLoading: isLoadingChatsContent } = useChatMessages();
 
   if (isLoading) {
     return (
@@ -19,6 +17,7 @@ function MainChat() {
       </div>
     );
   }
+
   if (!id) return <NoConversation />;
 
   return (
@@ -26,11 +25,7 @@ function MainChat() {
       <ProfileBar user={user} />
 
       <div className="overflow-auto p-5 flex justify-center items-center">
-        <ChatMessages
-          chats={chats}
-          isLoadingChats={isLoadingChatsContent}
-          user={user}
-        />
+        <ChatMessages user={user} />
       </div>
 
       {/* Send Message Input and button */}

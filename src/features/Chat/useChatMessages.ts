@@ -15,25 +15,26 @@ export type ChatDataProps = {
 };
 
 export const useChatMessages = () => {
-  const [chats, setChats] = useState<ChatDataProps[]>([]);
+  const [chatsMessages, setChatsMessages] = useState<ChatDataProps[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const { id: receiverId } = useParams();
-  const senderId = auth.currentUser?.uid;
   const { messageCollectionRef } = getChatRefs(receiverId);
+  const senderId = auth.currentUser?.uid;
 
   useEffect(() => {
     setIsLoading(true);
-    setChats([]);
+    setChatsMessages([]);
+
     const q = query(messageCollectionRef, orderBy("time"));
 
     const unsubscribe = onSnapshot(q, (snapshot) => {
       const messages = snapshot.docs.map((doc) => doc.data() as ChatDataProps);
-      setChats(messages);
+      setChatsMessages(messages);
       setIsLoading(false);
     });
 
     return () => unsubscribe();
   }, [senderId, receiverId]);
 
-  return { chats, isLoading };
+  return { chatsMessages, isLoading };
 };

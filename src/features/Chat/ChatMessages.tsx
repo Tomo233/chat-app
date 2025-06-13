@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { auth } from "../../firebaseConfig";
-import { ChatDataProps } from "./useChatMessages";
+import { useChatMessages } from "./useChatMessages";
 import { UserInfo } from "../../services/authentication";
 import EmptyChat from "./EmptyChat";
 import MessageMenu from "./MessageMenu";
@@ -8,26 +8,22 @@ import Loader from "../../components/Loader";
 import DefaultUserImage from "../../assets/default-user.png";
 import ChatImageModal from "./ChatImageModal";
 
-type ChatMessagesProps = {
-  chats: ChatDataProps[];
-  user: UserInfo | null;
-  isLoadingChats: boolean;
-};
-
-function ChatMessages({ chats, isLoadingChats, user }: ChatMessagesProps) {
+function ChatMessages({ user }: { user: UserInfo | null }) {
+  const { chatsMessages, isLoading: isLoadingChatsMessages } =
+    useChatMessages();
   const [isHovered, setIsHovered] = useState<number | null>();
   const [open, setOpen] = useState(false);
 
-  if (isLoadingChats) return <Loader />;
+  if (isLoadingChatsMessages) return <Loader />;
 
-  if (chats.length === 0) return <EmptyChat />;
+  if (chatsMessages.length === 0) return <EmptyChat />;
 
   return (
     <div className="h-[500px] w-full">
-      {chats.map((msg, index) => {
+      {chatsMessages.map((msg, index) => {
         const isLastMessageByUser =
-          index === chats.length - 1 ||
-          chats?.at(index + 1)?.senderId !== msg?.senderId;
+          index === chatsMessages.length - 1 ||
+          chatsMessages?.at(index + 1)?.senderId !== msg?.senderId;
         const isUserReceiver = msg.receiverId === auth.currentUser?.uid;
 
         return (
