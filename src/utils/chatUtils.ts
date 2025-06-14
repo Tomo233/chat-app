@@ -16,10 +16,10 @@ export function getChatRefs(
       ? `${senderId}-${receiverId}`
       : `${receiverId}-${senderId}`;
 
-  const chatsRef = doc(db, "chats", chatId);
-  const messageCollectionRef = collection(chatsRef, "messages");
+  const chatRef = doc(db, "chats", chatId);
+  const messageCollectionRef = collection(chatRef, "messages");
 
-  const messageRef = messageId ? doc(chatsRef, "messages", messageId) : null;
+  const messageRef = messageId ? doc(chatRef, "messages", messageId) : null;
 
-  return { chatId, chatsRef, messageRef, messageCollectionRef };
+  return { chatId, chatRef, messageRef, messageCollectionRef };
 }

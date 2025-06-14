@@ -20,9 +20,9 @@ export const sendMessage = async (
   try {
     const currentTime = getCurrentTime();
     const randomId = generateRandomId();
-    const { chatsRef, messageRef } = getChatRefs(receiverId, randomId);
+    const { chatRef, messageRef } = getChatRefs(receiverId, randomId);
 
-    await setDoc(chatsRef, {
+    await setDoc(chatRef, {
       lastMessage: message,
       lastTimeUpdated: currentTime,
     });
@@ -48,7 +48,7 @@ export const deleteMessage = async (
   receiverId: string | undefined
 ) => {
   try {
-    const { chatsRef, messageCollectionRef, messageRef } = getChatRefs(
+    const { chatRef, messageCollectionRef, messageRef } = getChatRefs(
       receiverId,
       messageId
     );
@@ -69,7 +69,7 @@ export const deleteMessage = async (
     await deleteDoc(messageRef!);
 
     if (!lastMessageSent) {
-      await updateDoc(chatsRef, {
+      await updateDoc(chatRef, {
         lastTimeUpdated: currentTime,
         lastMessage: "",
       });
@@ -77,12 +77,12 @@ export const deleteMessage = async (
     }
 
     if (currentMessage.time.seconds >= lastMessageSent.time.seconds) {
-      await updateDoc(chatsRef, {
+      await updateDoc(chatRef, {
         lastTimeUpdated: currentTime,
         lastMessage: lastMessageSent.message,
       });
     } else {
-      await updateDoc(chatsRef, {
+      await updateDoc(chatRef, {
         lastTimeUpdated: currentTime,
       });
     }
@@ -121,10 +121,10 @@ export const editMessage = async (
       throw new Error("No messageId provided");
     }
 
-    const { chatsRef, messageRef } = getChatRefs(receiverId, messageId);
+    const { chatRef, messageRef } = getChatRefs(receiverId, messageId);
     const currentTime = getCurrentTime();
 
-    await setDoc(chatsRef, {
+    await setDoc(chatRef, {
       lastMessage: message,
       lastTimeUpdated: currentTime,
     });
