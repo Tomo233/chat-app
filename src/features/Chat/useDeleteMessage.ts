@@ -10,8 +10,8 @@ export const useDeleteMessage = () => {
     mutationFn: (messageId: string) => deleteMessageApi(messageId, receiverId),
     mutationKey: ["messages"],
 
-    onError: () => {
-      toast.error("Error while deleting the message");
+    onError: (error) => {
+      toast.error(error.message);
     },
   });
 

@@ -1,4 +1,12 @@
-import { deleteDoc, getDoc, setDoc, updateDoc } from "firebase/firestore";
+import {
+  deleteDoc,
+  getDoc,
+  getDocs,
+  orderBy,
+  query,
+  setDoc,
+  updateDoc,
+} from "firebase/firestore";
 import { ChatDataProps } from "../features/chat/useChatMessages";
 import { generateRandomId } from "../utils/generateRandomId";
 import { getCurrentTime } from "../utils/getCurrentTime";
@@ -15,6 +23,7 @@ export const sendMessage = async (
     const { chatsRef, messageRef } = getChatRefs(receiverId, randomId);
 
     await setDoc(chatsRef, {
+      lastMessage: message,
       lastTimeUpdated: currentTime,
     });
 
@@ -39,8 +48,44 @@ export const deleteMessage = async (
   receiverId: string | undefined
 ) => {
   try {
-    const { messageRef } = getChatRefs(receiverId, messageId);
+    const { chatsRef, messageCollectionRef, messageRef } = getChatRefs(
+      receiverId,
+      messageId
+    );
+    const currentTime = getCurrentTime();
+
+    const messagesQuery = query(messageCollectionRef, orderBy("time", "desc"));
+
+    const messagesQuerySnapshot = await getDocs(messagesQuery);
+    const currentMessage = (await getDoc(messageRef!)).data() as ChatDataProps;
+
+    const messages = messagesQuerySnapshot.docs.filter((d) => {
+      const data = d.data() as ChatDataProps;
+      return data.id !== currentMessage.id;
+    });
+
+    const lastMessageSent = messages?.at(0)?.data() || null;
+
     await deleteDoc(messageRef!);
+
+    if (!lastMessageSent) {
+      await updateDoc(chatsRef, {
+        lastTimeUpdated: currentTime,
+        lastMessage: "",
+      });
+      return;
+    }
+
+    if (currentMessage.time.seconds >= lastMessageSent.time.seconds) {
+      await updateDoc(chatsRef, {
+        lastTimeUpdated: currentTime,
+        lastMessage: lastMessageSent.message,
+      });
+    } else {
+      await updateDoc(chatsRef, {
+        lastTimeUpdated: currentTime,
+      });
+    }
   } catch (error: unknown) {
     if (error instanceof Error) {
       throw new Error(error.message);
@@ -76,7 +121,13 @@ export const editMessage = async (
       throw new Error("No messageId provided");
     }
 
-    const { messageRef } = getChatRefs(receiverId, messageId);
+    const { chatsRef, messageRef } = getChatRefs(receiverId, messageId);
+    const currentTime = getCurrentTime();
+
+    await setDoc(chatsRef, {
+      lastMessage: message,
+      lastTimeUpdated: currentTime,
+    });
 
     await updateDoc(messageRef!, {
       message,
