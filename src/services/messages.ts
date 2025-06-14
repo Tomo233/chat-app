@@ -23,7 +23,7 @@ export const sendMessage = async (
     const { chatRef, messageRef } = getChatRefs(receiverId, randomId);
 
     await setDoc(chatRef, {
-      lastMessage: message,
+      lastMessageId: randomId,
       lastTimeUpdated: currentTime,
     });
 
@@ -71,7 +71,7 @@ export const deleteMessage = async (
     if (!lastMessageSent) {
       await updateDoc(chatRef, {
         lastTimeUpdated: currentTime,
-        lastMessage: "",
+        lastMessageId: "",
       });
       return;
     }
@@ -79,7 +79,7 @@ export const deleteMessage = async (
     if (currentMessage.time.seconds >= lastMessageSent.time.seconds) {
       await updateDoc(chatRef, {
         lastTimeUpdated: currentTime,
-        lastMessage: lastMessageSent.message,
+        lastMessageId: lastMessageSent.id,
       });
     } else {
       await updateDoc(chatRef, {
@@ -125,7 +125,7 @@ export const editMessage = async (
     const currentTime = getCurrentTime();
 
     await setDoc(chatRef, {
-      lastMessage: message,
+      lastMessageId: messageId,
       lastTimeUpdated: currentTime,
     });
 
