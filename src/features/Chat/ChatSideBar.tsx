@@ -21,8 +21,6 @@ function ChatSideBar() {
           </div>
         ) : (
           recentChatsData?.map((item) => {
-            console.log(item.message.length);
-
             return (
               <div key={item.id}>
                 <Link

@@ -128,8 +128,7 @@ export const editMessage = async (
     const { chatRef, messageRef } = getChatRefs(receiverId, messageId);
     const currentTime = getCurrentTime();
 
-    await setDoc(chatRef, {
-      lastMessageId: messageId,
+    await updateDoc(chatRef, {
       lastTimeUpdated: currentTime,
     });
 
@@ -145,7 +144,6 @@ export const editMessage = async (
 };
 export const getRecentChatsData = async () => {
   const chatsRef = collection(db, "chats");
-
   const chatsQuery = query(chatsRef, orderBy("lastTimeUpdated", "desc"));
 
   const chatsQuerySnapshot = await getDocs(chatsQuery);
@@ -180,7 +178,7 @@ export const getRecentChatsData = async () => {
 
     const user = await getCurrentUser(id);
 
-    const date = new Date(message.time.seconds * 1000);
+    const date = new Date(data.lastTimeUpdated * 1000);
     const hours = date.getHours();
     const minutes = date.getMinutes();
     const time = `${hours}:${minutes < 10 ? `0${minutes}` : minutes}`;
