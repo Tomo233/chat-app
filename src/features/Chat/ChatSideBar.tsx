@@ -1,7 +1,8 @@
 import { Link } from "react-router-dom";
-import DefaultUserImage from "../../assets/default-user.png";
-import Loader from "../../components/Loader";
 import { useRecentChatsData } from "./useRecentChatsData";
+import DefaultUserImage from "../../assets/default-user.png";
+import Icon from "../../assets/seen.png";
+import Loader from "../../components/Loader";
 
 function ChatSideBar() {
   const { recentChatsData, isLoadingChatsData } = useRecentChatsData();
@@ -20,20 +21,35 @@ function ChatSideBar() {
           </div>
         ) : (
           recentChatsData?.map((item) => {
+            console.log(item.message.length);
+
             return (
               <div key={item.id}>
                 <Link
                   to={`/chat/${item.id}`}
-                  className="flex gap-5 items-center p-6 border-b border-borderColor"
+                  className="flex gap-5 items-center justify-between p-6 border-b border-borderColor"
                 >
-                  <img
-                    src={item?.photoURL || DefaultUserImage}
-                    alt="Profile Image"
-                    className="h-12 w-12  rounded-full"
-                  />
-                  <h3 className="text-white">{item.firstName}</h3>
-                  <p className="text-white">{item.message}</p>
-                  <p className="text-white">{item.time}</p>
+                  <div className="flex justify-between gap-4">
+                    <img
+                      src={item?.photoURL || DefaultUserImage}
+                      alt="Profile Image"
+                      className="h-12 w-12  rounded-full"
+                    />
+                    <div>
+                      <h3 className="text-white text-xl font-medium -tracking-tighter">
+                        {item.firstName}
+                      </h3>
+                      <p className="text-[#cfcbcb] text-sm -tracking-tighter">
+                        {item.message.length >= 20
+                          ? `${item.message.slice(0, 20)}...`
+                          : item.message}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="grid place-items-center">
+                    <p className="text-white -tracking-tighter">{item.time}</p>
+                    <img src={Icon} className="w-6" alt="" />
+                  </div>
                 </Link>
               </div>
             );
