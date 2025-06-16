@@ -1,5 +1,7 @@
 import {
+  collection,
   deleteDoc,
+  doc,
   getDoc,
   getDocs,
   orderBy,
@@ -11,6 +13,8 @@ import { ChatDataProps } from "../features/chat/useChatMessages";
 import { generateRandomId } from "../utils/generateRandomId";
 import { getCurrentTime } from "../utils/getCurrentTime";
 import { getChatRefs } from "../utils/chatUtils";
+import { auth, db } from "../firebaseConfig";
+import { getCurrentUser } from "./authentication";
 
 export const sendMessage = async (
   receiverId: string,
@@ -138,4 +142,59 @@ export const editMessage = async (
       throw new Error(error.message);
     }
   }
+};
+export const getRecentChatsData = async () => {
+  const chatsRef = collection(db, "chats");
+
+  const chatsQuery = query(chatsRef, orderBy("lastTimeUpdated", "desc"));
+
+  const chatsQuerySnapshot = await getDocs(chatsQuery);
+
+  const filteredChatsSnapshot = chatsQuerySnapshot.docs.filter((chat) => {
+    const firstId = chat.id.split("-")[0];
+    const secondId = chat.id.split("-")[1];
+    const currentUserId = auth.currentUser?.uid;
+
+    return (
+      (firstId === currentUserId && secondId !== currentUserId) ||
+      (firstId !== currentUserId && secondId === currentUserId)
+    );
+  });
+
+  const promises = filteredChatsSnapshot.map(async (chat) => {
+    const data = chat?.data();
+
+    const messageRef = doc(
+      db,
+      "chats",
+      chat.id,
+      "messages",
+      data.lastMessageId
+    );
+    const message = (await getDoc(messageRef)).data() as ChatDataProps;
+
+    const id =
+      message.senderId === auth.currentUser?.uid
+        ? message.receiverId
+        : message.senderId;
+
+    const user = await getCurrentUser(id);
+
+    const date = new Date(message.time.seconds * 1000);
+    const hours = date.getHours();
+    const minutes = date.getMinutes();
+    const time = `${hours}:${minutes < 10 ? `0${minutes}` : minutes}`;
+
+    const recentChatsData = {
+      id: user?.id,
+      firstName: user?.firstName,
+      photoURL: user?.photoURL,
+      message: message.message,
+      time,
+    };
+
+    return recentChatsData;
+  });
+
+  return await Promise.all(promises);
 };

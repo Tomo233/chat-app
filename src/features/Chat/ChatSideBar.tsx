@@ -1,16 +1,10 @@
 import { Link } from "react-router-dom";
 import DefaultUserImage from "../../assets/default-user.png";
 import Loader from "../../components/Loader";
-import { useFirestoreCollection } from "../../hooks/useFirestoreCollection";
-import { UserInfo } from "../../services/authentication";
-import { useCurrentUser } from "../authentication/useCurrentUser";
+import { useRecentChatsData } from "./useRecentChatsData";
 
 function ChatSideBar() {
-  const { data: users, isLoading: isLoadingUsers } =
-    useFirestoreCollection<UserInfo>("users");
-  const { user, isLoading } = useCurrentUser();
-
-  const filteredUsers = users?.filter((element) => element.id !== user?.id);
+  const { recentChatsData, isLoadingChatsData } = useRecentChatsData();
 
   return (
     <div>
@@ -20,12 +14,12 @@ function ChatSideBar() {
         className="bg-primaryPurple w-96 h-14 pl-3 rounded-2xl outline-none text-white "
       />
       <div className="mt-8 bg-primaryPurple max-w-96 max-h-[650px]  rounded-2xl p-2 overflow-y-auto">
-        {isLoading || isLoadingUsers ? (
+        {isLoadingChatsData ? (
           <div className="flex items-center p-20 justify-center">
             <Loader circularProgressSize={45} fontSize="text-3xl" />
           </div>
         ) : (
-          filteredUsers?.map((item) => {
+          recentChatsData?.map((item) => {
             return (
               <div key={item.id}>
                 <Link
@@ -38,8 +32,8 @@ function ChatSideBar() {
                     className="h-12 w-12  rounded-full"
                   />
                   <h3 className="text-white">{item.firstName}</h3>
-                  <p className="text-white">Hi there,How are you?</p>
-                  <p className="text-white">9:00</p>
+                  <p className="text-white">{item.message}</p>
+                  <p className="text-white">{item.time}</p>
                 </Link>
               </div>
             );
