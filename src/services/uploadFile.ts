@@ -1,6 +1,6 @@
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import { auth, db, storage } from "../firebaseConfig";
-import { doc, setDoc } from "firebase/firestore";
+import { auth, storage } from "../firebaseConfig";
+import { setDoc } from "firebase/firestore";
 import { getCurrentTime } from "../utils/getCurrentTime";
 import { generateRandomId } from "../utils/generateRandomId";
 import { FileType } from "../features/chat/SendMessage";
@@ -11,13 +11,15 @@ export const uploadFile = async (
   receiverId?: string | null,
   fileURL?: string | null
 ) => {
+  const randomId = generateRandomId();
   // Forwarding Files
   if (!files) {
     if (fileURL) {
-      const randomId = generateRandomId();
+      const { messageRef } = getChatRefs(receiverId, randomId);
+
       const currentTime = getCurrentTime();
       const user = auth.currentUser!;
-      await setDoc(doc(db, "messages", randomId), {
+      await setDoc(messageRef!, {
         id: randomId,
         senderId: user.uid,
         receiverId,
@@ -45,7 +47,7 @@ export const uploadFile = async (
   else {
     const user = auth.currentUser!;
     for (const file of files) {
-      const randomId = generateRandomId();
+      const { messageRef } = getChatRefs(receiverId, randomId);
       const currentTime = getCurrentTime();
       const fileStorageRef = ref(
         storage,
@@ -54,11 +56,8 @@ export const uploadFile = async (
 
       const snapshot = await uploadBytes(fileStorageRef, file.file);
       const url = await getDownloadURL(snapshot.ref);
-      const { messageRef } = getChatRefs(receiverId, randomId);
 
-      if (!messageRef) throw new Error("something went wrong with message ref");
-
-      await setDoc(messageRef, {
+      await setDoc(messageRef!, {
         id: randomId,
         senderId: user.uid,
         receiverId,
