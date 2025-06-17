@@ -7,6 +7,8 @@ import Loader from "../../components/Loader";
 function ChatSideBar() {
   const { recentChatsData, isLoadingChatsData } = useRecentChatsData();
 
+  console.log(recentChatsData);
+
   return (
     <div>
       <input
@@ -15,6 +17,12 @@ function ChatSideBar() {
         className="bg-primaryPurple w-96 h-14 pl-3 rounded-2xl outline-none text-white "
       />
       <div className="mt-8 bg-primaryPurple max-w-96 max-h-[650px]  rounded-2xl p-2 overflow-y-auto">
+        {recentChatsData?.length === 0 && (
+          <div className="p-20">
+            <p className="text-white text-lg uppercase">No Prevoius chats</p>
+          </div>
+        )}
+
         {isLoadingChatsData ? (
           <div className="flex items-center p-20 justify-center">
             <Loader circularProgressSize={45} fontSize="text-3xl" />
