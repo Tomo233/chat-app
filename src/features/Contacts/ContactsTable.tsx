@@ -5,7 +5,7 @@ import { useFirestoreCollection } from "../../hooks/useFirestoreCollection";
 import { UserInfo } from "../../services/authentication";
 import SwapVertIcon from "@mui/icons-material/SwapVert";
 import { Box, Menu, MenuItem } from "@mui/material";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import Loader from "../../components/Loader";
 import { auth } from "../../firebaseConfig";
 
@@ -19,6 +19,7 @@ export default function Contacts() {
   const filteredUsers = users.filter(
     (user) => user.id !== auth.currentUser?.uid
   );
+  const navigate = useNavigate();
 
   const rowsPerPage = 8;
   const [searchParams, setSearchParams] = useSearchParams();
@@ -129,9 +130,12 @@ export default function Contacts() {
         <thead className="bg-secondaryPurple">
           <tr>
             <th className="p-2">User Name & Avatar</th>
-            <th className="p-2">First Name</th>
-            <th className="p-2">Last Name</th>
             <th className="p-2">Email</th>
+            <th className="p-2">
+              <span className="pr-1">💬</span>
+              Get in touch
+              <span className="pl-1">💬</span>
+            </th>
           </tr>
         </thead>
         <tbody>
@@ -149,9 +153,15 @@ export default function Contacts() {
                   </span>
                 </div>
               </td>
-              <td className="p-2">{row.firstName}</td>
-              <td className="p-2">{row.lastName}</td>
               <td className="p-2">{row.email}</td>
+              <td>
+                <button
+                  className="px-5 py-2 rounded-md bg-secondaryPurple"
+                  onClick={() => navigate(`/chat/${row.id}`)}
+                >
+                  Send Message
+                </button>
+              </td>
             </tr>
           ))}
           {emptyRows > 0 && (
