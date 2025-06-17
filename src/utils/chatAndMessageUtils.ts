@@ -12,7 +12,7 @@ import { auth, db } from "../firebaseConfig";
 import { ChatDataProps } from "../features/chat/useChatMessages";
 
 export function getChatRefs(
-  receiverId: string | undefined,
+  receiverId: string | undefined | null,
   messageId?: string
 ) {
   const senderId = auth.currentUser?.uid;

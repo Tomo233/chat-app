@@ -4,6 +4,7 @@ import { doc, setDoc } from "firebase/firestore";
 import { getCurrentTime } from "../utils/getCurrentTime";
 import { generateRandomId } from "../utils/generateRandomId";
 import { FileType } from "../features/chat/SendMessage";
+import { getChatRefs } from "../utils/chatAndMessageUtils";
 
 export const uploadFile = async (
   files: FileType | File | null,
@@ -53,8 +54,11 @@ export const uploadFile = async (
 
       const snapshot = await uploadBytes(fileStorageRef, file.file);
       const url = await getDownloadURL(snapshot.ref);
+      const { messageRef } = getChatRefs(receiverId, randomId);
 
-      await setDoc(doc(db, "messages", randomId), {
+      if (!messageRef) throw new Error("something went wrong with message ref");
+
+      await setDoc(messageRef, {
         id: randomId,
         senderId: user.uid,
         receiverId,
