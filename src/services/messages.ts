@@ -12,7 +12,10 @@ import {
 import { ChatDataProps } from "../features/chat/useChatMessages";
 import { generateRandomId } from "../utils/generateRandomId";
 import { getCurrentTime } from "../utils/getCurrentTime";
-import { getChatRefs } from "../utils/chatUtils";
+import {
+  getChatRefs,
+  getLastAndCurrentMessages,
+} from "../utils/chatAndMessageUtils";
 import { auth, db } from "../firebaseConfig";
 import { getCurrentUser } from "./authentication";
 
@@ -58,38 +61,25 @@ export const deleteMessage = async (
     );
     const currentTime = getCurrentTime();
 
-    const messagesQuery = query(messageCollectionRef, orderBy("time", "desc"));
-
-    const messagesQuerySnapshot = await getDocs(messagesQuery);
-    const currentMessage = (await getDoc(messageRef!)).data() as ChatDataProps;
-
-    const messages = messagesQuerySnapshot.docs.filter((d) => {
-      const data = d.data() as ChatDataProps;
-      return data.id !== currentMessage.id;
-    });
-
-    const lastMessageSent = messages?.at(0)?.data() || null;
+    const { currentMessage, latestMessageExcludingCurrent } =
+      await getLastAndCurrentMessages(messageCollectionRef, messageRef);
 
     await deleteDoc(messageRef!);
 
-    if (!lastMessageSent) {
-      await updateDoc(chatRef, {
-        lastTimeUpdated: currentTime,
-        lastMessageId: "",
-      });
-      return;
+    if (!latestMessageExcludingCurrent) {
+      await deleteDoc(chatRef);
+      return true;
     }
 
-    if (currentMessage.time.seconds >= lastMessageSent.time.seconds) {
+    if (
+      currentMessage.time.seconds >= latestMessageExcludingCurrent.time.seconds
+    ) {
       await updateDoc(chatRef, {
         lastTimeUpdated: currentTime,
-        lastMessageId: lastMessageSent.id,
-      });
-    } else {
-      await updateDoc(chatRef, {
-        lastTimeUpdated: currentTime,
+        lastMessageId: latestMessageExcludingCurrent.id,
       });
     }
+    return false;
   } catch (error: unknown) {
     if (error instanceof Error) {
       throw new Error(error.message);
@@ -125,12 +115,23 @@ export const editMessage = async (
       throw new Error("No messageId provided");
     }
 
-    const { chatRef, messageRef } = getChatRefs(receiverId, messageId);
+    const { chatRef, messageRef, messageCollectionRef } = getChatRefs(
+      receiverId,
+      messageId
+    );
     const currentTime = getCurrentTime();
 
-    await updateDoc(chatRef, {
-      lastTimeUpdated: currentTime,
-    });
+    const { currentMessage, latestMessage } = await getLastAndCurrentMessages(
+      messageCollectionRef,
+      messageRef
+    );
+
+    if (latestMessage?.id === currentMessage.id) {
+      await updateDoc(chatRef, {
+        lastMessageId: messageId,
+        lastTimeUpdated: currentTime,
+      });
+    }
 
     await updateDoc(messageRef!, {
       message,

@@ -2,7 +2,7 @@ import { onSnapshot, orderBy, query, Timestamp } from "firebase/firestore";
 import { auth } from "../../firebaseConfig";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { getChatRefs } from "../../utils/chatUtils";
+import { getChatRefs } from "../../utils/chatAndMessageUtils";
 
 export type ChatDataProps = {
   id: string;
