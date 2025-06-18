@@ -38,9 +38,7 @@ function ChatSideBar() {
               <div key={item.id}>
                 <Link
                   to={`/chat/${item.id}`}
-                  className={`flex gap-5 items-center justify-between p-6 border-b ${
-                    isSeen ? "border-borderColor" : "border-white"
-                  } `}
+                  className={`flex gap-5 items-center justify-between p-6 border-b border-borderColor`}
                 >
                   <div className="flex justify-between gap-4">
                     <img
