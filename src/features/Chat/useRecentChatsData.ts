@@ -18,16 +18,16 @@ type RecentChatsType = {
   photoURL: string | null | undefined;
   message: string;
   time: string;
-  // isSeen: boolean;
+  isSeen: boolean;
   sortTimestamp: number;
-  // notSeenMessagesLength: number;
+  notSeenMessagesLength: number;
 };
 
 type ChatsDataType = {
   chatId: string;
   messageId: string;
   lastTimeUpdated: number;
-  // notSeenMessagesLength: number;
+  notSeenMessagesLength: number;
 };
 
 export const useRecentChatsData = () => {
@@ -59,14 +59,14 @@ export const useRecentChatsData = () => {
         const data = chatDoc.data();
         const messageId = data.lastMessageId || "";
         const lastTimeUpdated = data.lastTimeUpdated || "";
-        // const notSeenMessagesLength = data.notSeenMessagesLength;
+        const notSeenMessagesLength = data.notSeenMessagesLength;
 
         return {
           chatId,
           messageId,
           data,
           lastTimeUpdated,
-          // notSeenMessagesLength,
+          notSeenMessagesLength,
         };
       });
 
@@ -120,9 +120,9 @@ export const useRecentChatsData = () => {
           photoURL: user.photoURL,
           message: message.message,
           time,
-          // isSeen: message.isSeen,
+          isSeen: message.isSeen,
           sortTimestamp,
-          // notSeenMessagesLength: chat.notSeenMessagesLength,
+          notSeenMessagesLength: chat.notSeenMessagesLength,
         };
 
         // Update state by adding/updating chatObj in the array

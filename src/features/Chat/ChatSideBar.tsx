@@ -29,11 +29,9 @@ function ChatSideBar() {
               </div>
             ) : (
               recentChatsData?.map((item) => {
-                const isSeen = false;
-
                 let style: string = "";
                 if (item.senderId !== auth.currentUser?.uid) {
-                  style = isSeen
+                  style = item.isSeen
                     ? "font-normal -tracking-tighter"
                     : "font-semibold tracking-wider";
                 }
@@ -64,12 +62,12 @@ function ChatSideBar() {
                       <div className="grid place-items-center">
                         <p className={`text-white ${style}`}>{item.time}</p>
                         {auth.currentUser?.uid === item.receiverId ? (
-                          !isSeen && (
+                          !item.isSeen && (
                             <div className="bg-secondaryPurple  w-6 h-6 text-center text-white font-bold rounded-full">
-                              1
+                              {item.notSeenMessagesLength}
                             </div>
                           )
-                        ) : isSeen ? (
+                        ) : item.isSeen ? (
                           <img src={seenIcon} className="w-6" alt="" />
                         ) : (
                           <img src={notSeenIcon} className="w-6" alt="" />

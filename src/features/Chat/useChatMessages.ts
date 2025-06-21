@@ -12,6 +12,7 @@ export type ChatDataProps = {
   time: Timestamp;
   fileURL: string | null;
   edited: boolean;
+  isSeen: boolean;
 };
 
 export const useChatMessages = () => {

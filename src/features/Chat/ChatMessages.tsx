@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { auth } from "../../firebaseConfig";
 import { useChatMessages } from "./useChatMessages";
 import { UserInfo } from "../../services/authentication";
@@ -7,14 +7,22 @@ import MessageMenu from "./MessageMenu";
 import Loader from "../../components/Loader";
 import DefaultUserImage from "../../assets/default-user.png";
 import ChatImageModal from "./ChatImageModal";
+import { useParams } from "react-router-dom";
+import { useGetMessagesSeen } from "./useGetMessagesSeen";
 
 function ChatMessages({ user }: { user: UserInfo | null }) {
   const { chatsMessages, isLoading: isLoadingChatsMessages } =
     useChatMessages();
   const [isHovered, setIsHovered] = useState<number | null>();
   const [open, setOpen] = useState(false);
+  const { id: receiverId } = useParams();
+  const { getMessageSeen, isPending } = useGetMessagesSeen();
 
-  if (isLoadingChatsMessages) return <Loader />;
+  useEffect(() => {
+    getMessageSeen(chatsMessages);
+  }, [receiverId, chatsMessages]);
+
+  if (isLoadingChatsMessages || isPending) return <Loader />;
 
   if (chatsMessages.length === 0) return <EmptyChat />;
 
@@ -94,11 +102,13 @@ function ChatMessages({ user }: { user: UserInfo | null }) {
                 )}
               </div>
 
-              <p
-                className={`text-sm text-secondaryPurple font-semibold text-end pr-2`}
-              >
-                seen
-              </p>
+              {false && (
+                <p
+                  className={`text-sm text-secondaryPurple font-semibold text-end pr-2`}
+                >
+                  seen
+                </p>
+              )}
             </div>
           </div>
         );
