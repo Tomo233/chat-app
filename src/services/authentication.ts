@@ -37,6 +37,7 @@ export type UserInfo = {
   lastName: string;
   photoURL?: string | null;
   location?: string | null;
+  status: "Online" | "Offline";
 };
 
 export const signupWithEmailPassword = async ({
@@ -75,6 +76,7 @@ export const signupWithEmailPassword = async ({
       lastName,
       photoURL: user.photoURL,
       location,
+      status: "Online",
     };
 
     await addUserToFirebase(userInfo);
@@ -94,7 +96,7 @@ export const loginWithGoogle = async (): Promise<UserInfo | undefined> => {
   try {
     const { user } = await signInWithPopup(auth, provider);
 
-    const userInfo2 = transfromUser(user);
+    const userInfo2 = transfromUser(user, "Online");
 
     const usersCollectionRef = collection(db, "users");
     const userQuery = query(
@@ -127,17 +129,21 @@ export const loginWithGoogle = async (): Promise<UserInfo | undefined> => {
         }
       }
 
-      const userInfo = {
+      const userInfo: UserInfo = {
         ...userInfo2,
         location,
         photoURL: url,
+        status: "Online",
       };
       await addUserToFirebase(userInfo);
       return userInfo;
     }
 
+    await updateDoc(doc(db, "users", user.uid), {
+      status: "Online",
+    });
+
     querySnapshot.forEach((q) => {
-      console.log(q.data());
       return q.data() as UserInfo;
     });
   } catch (error: unknown) {
@@ -159,7 +165,11 @@ export const getCurrentUser = async (id: string | undefined | null) => {
 export const loginWithPassword = async ({ email, password }: LoginInputs) => {
   try {
     const { user } = await signInWithEmailAndPassword(auth, email, password);
-    const userInfo = transfromUser(user);
+    const userInfo = transfromUser(user, "Online");
+
+    await updateDoc(doc(db, "users", user.uid), {
+      status: "Online",
+    });
 
     return userInfo;
   } catch (error: unknown) {

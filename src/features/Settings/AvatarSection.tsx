@@ -1,21 +1,15 @@
 import DefaultUserImage from "../../assets/default-user.png";
 import EditIcon from "@mui/icons-material/Edit";
 import { UserInfo } from "../../services/authentication";
-import { signOut } from "firebase/auth";
-import { auth } from "../../firebaseConfig";
-import { useQueryClient } from "@tanstack/react-query";
+import { useSignOut } from "./useSignOut";
+import Loader from "../../components/Loader";
 
 function AvatarSection({ user }: { user: UserInfo }) {
-  const queryClient = useQueryClient();
+  const { signOutUser, isSigningOut } = useSignOut();
 
-  const handleSignOut = async () => {
-    try {
-      await signOut(auth);
-      queryClient.refetchQueries({ queryKey: ["user"] });
-    } catch (error) {
-      console.error("Error signing out:", error);
-    }
-  };
+  if (isSigningOut) {
+    return <Loader />;
+  }
 
   return (
     <section className="flex justify-between items-center border border-secondaryPurple rounded-lg p-3">
@@ -31,7 +25,7 @@ function AvatarSection({ user }: { user: UserInfo }) {
       </div>
       <button
         className="border border-secondaryPurple px-9 py-3 flex gap-2 rounded-3xl"
-        onClick={handleSignOut}
+        onClick={() => signOutUser(user.id)}
       >
         <EditIcon />
         Sign out
