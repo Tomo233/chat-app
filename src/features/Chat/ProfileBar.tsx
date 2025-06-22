@@ -1,5 +1,6 @@
 import DefaultUserImage from "../../assets/default-user.png";
 import { UserInfo } from "../../services/authentication";
+import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 
 function ProfileBar({ user }: { user: UserInfo | null }) {
   return (
@@ -14,7 +15,22 @@ function ProfileBar({ user }: { user: UserInfo | null }) {
           <h3 className="text-white text-lg">
             {user?.firstName} {user?.lastName}
           </h3>
-          <p className="text-green-500">online</p>
+          <p
+            className={`font-bold  -tracking-tight ${
+              user?.status === "Online"
+                ? "text-secondaryPurple"
+                : "text-borderColor"
+            }`}
+          >
+            <FiberManualRecordIcon
+              sx={{
+                fontSize: "18px",
+                paddingRight: "2px",
+                paddingBottom: "1px",
+              }}
+            />
+            <span>{user?.status}</span>
+          </p>
         </div>
       </div>
       <button className="bg-backgroundColor text-white px-8  rounded-lg">
