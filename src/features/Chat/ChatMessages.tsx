@@ -130,13 +130,15 @@ function ChatMessages({ user }: { user: UserInfo | null }) {
                   )}
                 </div>
 
-                {!isNextMessageSeen && msg.isSeen && (
-                  <p
-                    className={`text-sm text-secondaryPurple font-semibold text-end pr-2`}
-                  >
-                    seen
-                  </p>
-                )}
+                {msg.senderId === auth.currentUser?.uid &&
+                  !isNextMessageSeen &&
+                  msg.isSeen && (
+                    <p
+                      className={`text-sm text-secondaryPurple font-semibold text-end pr-2`}
+                    >
+                      seen
+                    </p>
+                  )}
               </div>
             </div>
           </div>
