@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { auth } from "../../firebaseConfig";
 import { useChatMessages } from "./useChatMessages";
 import { UserInfo } from "../../services/authentication";
@@ -7,6 +7,7 @@ import MessageMenu from "./MessageMenu";
 import Loader from "../../components/Loader";
 import DefaultUserImage from "../../assets/default-user.png";
 import ChatImageModal from "./ChatImageModal";
+import { getMessagesSeen } from "../../services/messages";
 
 const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
@@ -15,6 +16,10 @@ function ChatMessages({ user }: { user: UserInfo | null }) {
     useChatMessages();
   const [isHovered, setIsHovered] = useState<number | null>();
   const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    getMessagesSeen(chatsMessages);
+  }, [chatsMessages]);
 
   if (isLoadingChatsMessages) return <Loader />;
 
@@ -27,6 +32,8 @@ function ChatMessages({ user }: { user: UserInfo | null }) {
           index === chatsMessages.length - 1 ||
           chatsMessages?.at(index + 1)?.senderId !== msg?.senderId;
         const isUserReceiver = msg.receiverId === auth.currentUser?.uid;
+
+        const isNextMessageSeen = chatsMessages?.at(index + 1)?.isSeen;
 
         let differenceInHours: number = 0;
 
@@ -123,11 +130,13 @@ function ChatMessages({ user }: { user: UserInfo | null }) {
                   )}
                 </div>
 
-                <p
-                  className={`text-sm text-secondaryPurple font-semibold text-end pr-2`}
-                >
-                  seen
-                </p>
+                {!isNextMessageSeen && msg.isSeen && (
+                  <p
+                    className={`text-sm text-secondaryPurple font-semibold text-end pr-2`}
+                  >
+                    seen
+                  </p>
+                )}
               </div>
             </div>
           </div>
